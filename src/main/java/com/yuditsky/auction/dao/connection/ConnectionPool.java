@@ -1,10 +1,16 @@
 package com.yuditsky.auction.dao.connection;
 
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import java.sql.*;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 
 public class ConnectionPool {
+    private final static Logger logger = LogManager.getLogger(ConnectionPool.class);
+
     private String driver;
     private String url;
     private String user;
@@ -38,12 +44,11 @@ public class ConnectionPool {
                 PooledConnection pooledConnection = new PooledConnection(connection);
                 connectionQueue.add(pooledConnection);
             }
-
         } catch (SQLException e) {
-            //logger
+            logger.log(Level.ERROR, "Can't init connection pool data", e);
             throw new ConnectionPoolException(e);
         } catch (ClassNotFoundException e) {
-            //loger
+            logger.log(Level.ERROR, "Can't find database driver class", e);
             throw new ConnectionPoolException(e);
         }
     }
@@ -57,7 +62,8 @@ public class ConnectionPool {
             closeConnectionsQueue(givenAwayConnectionQueue);
             closeConnectionsQueue(connectionQueue);
         } catch (SQLException e) {
-            //bez throw& logger.log(Level.ERROR, "Error closing the connection", e)
+            //bez throw&
+            logger.log(Level.ERROR, "Error closing the connection", e);
         }
     }
 
@@ -67,7 +73,7 @@ public class ConnectionPool {
             connection = connectionQueue.take();
             givenAwayConnectionQueue.add(connection);
         } catch (InterruptedException e) {
-            //logger
+            logger.log(Level.ERROR, "Error connecting to the datasource", e);
             throw new ConnectionPoolException(e);
         }
         return connection;
@@ -78,18 +84,21 @@ public class ConnectionPool {
         try {
             connection.close();
         } catch (SQLException e) {
-            //bez throw& logger.log(Level.ERROR, "Connection isn't return to the pool)
+            //bez throw&
+            logger.log(Level.ERROR, "Connection isn't return to the pool", e);
         }
 
         try {
             resultSet.close();
         } catch (SQLException e) {
             //
+            logger.log(Level.ERROR, "ResultSet isn't closed", e);
         }
 
         try {
             statement.close();
         } catch (SQLException e) {
+            logger.log(Level.ERROR, "Statement isn't closed", e);
             //
         }
     }
@@ -98,12 +107,14 @@ public class ConnectionPool {
         try {
             connection.close();
         } catch (SQLException e) {
+            logger.log(Level.ERROR, "Connection isn't return to the pool", e);
             //
         }
 
         try {
             statement.close();
         } catch (SQLException e) {
+            logger.log(Level.ERROR, "ResultSet isn't closed", e);
             //
         }
     }
@@ -120,11 +131,11 @@ public class ConnectionPool {
     }
 
     public void releaseConnection(Connection connection) throws SQLException {
-        if(!givenAwayConnectionQueue.remove(connection)){
+        if (!givenAwayConnectionQueue.remove(connection)) {
             throw new SQLException("Error deleting connection from the given away connections pool");
         }
 
-        if(!connectionQueue.offer(connection)){
+        if (!connectionQueue.offer(connection)) {
             throw new SQLException("Error allocating connection in the pool");
         }
     }
