@@ -16,6 +16,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 import static com.yuditsky.auction.Const.DATA_TIME_FORMATTER;
 
@@ -66,6 +68,34 @@ public class SQLBidDAO implements BidDAO {
             connectionPool.closeConnection(connection, preparedStatement);
 
             return bid;
+        } catch (SQLException e) {
+            logger.log(Level.ERROR, "Error compiling sql request", e);///ne tolko
+            throw new DAOException(e);
+        } catch (ConnectionPoolException e) {
+            logger.log(Level.ERROR, "Can't take connection", e);
+            throw new DAOException(e);
+        }
+    }
+
+    @Override
+    public List<Integer> findBidIdsByAuctionId(int auctionId) throws DAOException {
+        try {
+            Connection connection = connectionPool.takeConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement(Const.SELECT_BID_IDS_BY_AUCTION_ID);
+
+            preparedStatement.setString(1, String.valueOf(auctionId));
+
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            List<Integer> bidIds = new ArrayList<>();
+            while (resultSet.next()) {
+                Bid bid = createBid(resultSet);
+                bidIds.add(bid.getBidId());
+            }
+
+            connectionPool.closeConnection(connection, preparedStatement);
+
+            return bidIds;
         } catch (SQLException e) {
             logger.log(Level.ERROR, "Error compiling sql request", e);///ne tolko
             throw new DAOException(e);

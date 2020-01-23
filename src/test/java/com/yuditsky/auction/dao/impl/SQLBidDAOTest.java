@@ -11,6 +11,8 @@ import org.junit.Test;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 import static java.math.BigDecimal.ROUND_DOWN;
 import static org.junit.Assert.assertEquals;
@@ -36,6 +38,13 @@ public class SQLBidDAOTest {
     public void findLotByIdTest() throws DAOException {
         Bid expected = testBid;
         Bid actual = bidDAO.findBidById(testBid.getBidId());
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    public void findBidIdsByAuctionIdTest() throws DAOException {
+        List<Integer> expected = new ArrayList<>();
+        List<Integer> actual = bidDAO.findBidIdsByAuctionId(1);
         assertEquals(expected, actual);
     }
 
@@ -73,7 +82,7 @@ public class SQLBidDAOTest {
 
     @Test
     public void deleteLotByIdTest() throws DAOException {
-        bidDAO.deleteBidById(1);
+        bidDAO.deleteBidById(5);
     }
 
     @AfterClass

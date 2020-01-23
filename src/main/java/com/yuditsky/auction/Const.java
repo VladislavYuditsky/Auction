@@ -36,6 +36,7 @@ public class Const {
     public static final String ADD_NEW_BID = "INSERT INTO bid (bidder_id, sum, time, auction_id)" +
             " VALUES(?,?,?,?)";
     public static final String SELECT_BID_BY_ID = "SELECT * FROM bid WHERE bid_id=?";
+    public static final String SELECT_BID_IDS_BY_AUCTION_ID = "SELECT * FROM bid WHERE auction_id=?";
     public static final String UPDATE_BID_BIDDER_ID = "UPDATE bid SET bidder_id=? WHERE bid_id=?";
     public static final String UPDATE_BID_SUM = "UPDATE bid SET sum=? WHERE bid_id=?";
     public static final String UPDATE_BID_TIME = "UPDATE bid SET time=? WHERE bid_id=?";

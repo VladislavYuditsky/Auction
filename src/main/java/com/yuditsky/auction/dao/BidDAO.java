@@ -4,11 +4,14 @@ import com.yuditsky.auction.entity.Bid;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 
 public interface BidDAO {
     void addBid(Bid bid) throws DAOException;
 
     Bid findBidById(int bidId) throws DAOException;
+
+    List<Integer> findBidIdsByAuctionId(int auctionId) throws DAOException;
 
     void changeBidderId(int bidId, int newBidderId) throws DAOException;
 
