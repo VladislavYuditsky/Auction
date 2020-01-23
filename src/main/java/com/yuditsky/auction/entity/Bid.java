@@ -6,17 +6,17 @@ import java.util.Objects;
 
 public class Bid {
     private int bidId;
-    private User bidder;
+    private int bidderId;
     private BigDecimal sum;
     private LocalDateTime time;
-    private Lot lot; //id
+    private int auctionId;
 
-    public Bid(int bidId, User bidder, BigDecimal sum, LocalDateTime time, Lot lot) {
+    public Bid(int bidId, int bidderId, BigDecimal sum, LocalDateTime time, int auctionId) {
         this.bidId = bidId;
-        this.bidder = bidder;
+        this.bidderId = bidderId;
         this.sum = sum;
         this.time = time;
-        this.lot = lot;
+        this.auctionId = auctionId;
     }
 
     public Bid() {
@@ -30,12 +30,12 @@ public class Bid {
         this.bidId = bidId;
     }
 
-    public User getBidder() {
-        return bidder;
+    public int getBidderId() {
+        return bidderId;
     }
 
-    public void setBidder(User bidder) {
-        this.bidder = bidder;
+    public void setBidderId(int bidderId) {
+        this.bidderId = bidderId;
     }
 
     public BigDecimal getSum() {
@@ -54,12 +54,12 @@ public class Bid {
         this.time = time;
     }
 
-    public Lot getLot() {
-        return lot;
+    public int getAuctionId() {
+        return auctionId;
     }
 
-    public void setLot(Lot lot) {
-        this.lot = lot;
+    public void setAuctionId(int auctionId) {
+        this.auctionId = auctionId;
     }
 
     @Override
@@ -68,25 +68,25 @@ public class Bid {
         if (o == null || getClass() != o.getClass()) return false;
         Bid bid = (Bid) o;
         return bidId == bid.bidId &&
-                bidder.equals(bid.bidder) &&
+                bidderId == bid.bidderId &&
                 sum.equals(bid.sum) &&
                 time.equals(bid.time) &&
-                lot.equals(bid.lot);
+                auctionId == bid.auctionId;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(bidId, bidder, sum, time, lot);
+        return Objects.hash(bidId, bidderId, sum, time, auctionId);
     }
 
     @Override
     public String toString() {
         return "Bid{" +
                 "bidId=" + bidId +
-                ", bidder=" + bidder +
+                ", bidderId=" + bidderId +
                 ", sum=" + sum +
                 ", time=" + time +
-                ", lot=" + lot +
+                ", auctionId=" + auctionId +
                 '}';
     }
 }
