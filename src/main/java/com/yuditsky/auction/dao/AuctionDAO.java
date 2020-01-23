@@ -2,7 +2,6 @@ package com.yuditsky.auction.dao;
 
 import com.yuditsky.auction.entity.Auction;
 import com.yuditsky.auction.entity.AuctionType;
-import com.yuditsky.auction.entity.Lot;
 
 import java.time.LocalDateTime;
 
@@ -13,7 +12,7 @@ public interface AuctionDAO {
 
     void changeAuctionType(int auctionId, AuctionType newType) throws DAOException;
 
-    void changeLot(int auctionId, Lot newLot) throws DAOException;
+    void changeLotId(int auctionId, int newLotId) throws DAOException;
 
     void changeFinishTime(int auctionId, LocalDateTime newFinishTime) throws DAOException;
 
