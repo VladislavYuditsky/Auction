@@ -7,20 +7,18 @@ public class Lot {
     private int lotId;
     private String name;
     private String description;
-    private String photo;
     private String location;
-    private User seller;
-    private BigDecimal startPrice; //mb v auct
-    private BigDecimal minPrice; //mb v auct
+    private int sellerId;
+    private BigDecimal startPrice;
+    private BigDecimal minPrice;
 
-    public Lot(int lotId, String name, String description, String photo, String location, User seller,
-               BigDecimal startPrice, BigDecimal minPrice) {
+    public Lot(int lotId, String name, String description, String location, int sellerId, BigDecimal startPrice,
+               BigDecimal minPrice) {
         this.lotId = lotId;
         this.name = name;
         this.description = description;
-        this.photo = photo;
         this.location = location;
-        this.seller = seller;
+        this.sellerId = sellerId;
         this.startPrice = startPrice;
         this.minPrice = minPrice;
     }
@@ -52,14 +50,6 @@ public class Lot {
         this.description = description;
     }
 
-    public String getPhoto() {
-        return photo;
-    }
-
-    public void setPhoto(String photo) {
-        this.photo = photo;
-    }
-
     public String getLocation() {
         return location;
     }
@@ -68,12 +58,12 @@ public class Lot {
         this.location = location;
     }
 
-    public User getSeller() {
-        return seller;
+    public int getSellerId() {
+        return sellerId;
     }
 
-    public void setSeller(User seller) {
-        this.seller = seller;
+    public void setSellerId(int sellerId) {
+        this.sellerId = sellerId;
     }
 
     public BigDecimal getStartPrice() {
@@ -100,16 +90,15 @@ public class Lot {
         return lotId == lot.lotId &&
                 name.equals(lot.name) &&
                 description.equals(lot.description) &&
-                photo.equals(lot.photo) &&
                 location.equals(lot.location) &&
-                seller.equals(lot.seller) &&
+                sellerId == lot.sellerId &&
                 startPrice.equals(lot.startPrice) &&
                 minPrice.equals(lot.minPrice);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(lotId, name, description, photo, location, seller, startPrice, minPrice);
+        return Objects.hash(lotId, name, description, location, sellerId, startPrice, minPrice);
     }
 
     @Override
@@ -118,9 +107,8 @@ public class Lot {
                 "lotId=" + lotId +
                 ", name='" + name + '\'' +
                 ", description='" + description + '\'' +
-                ", photo='" + photo + '\'' +
                 ", location='" + location + '\'' +
-                ", seller=" + seller +
+                ", sellerId=" + sellerId +
                 ", startPrice=" + startPrice +
                 ", minPrice=" + minPrice +
                 '}';
