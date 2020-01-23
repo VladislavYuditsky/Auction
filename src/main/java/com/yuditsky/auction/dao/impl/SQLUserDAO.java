@@ -33,9 +33,9 @@ public class SQLUserDAO implements UserDAO {
 
             ResultSet resultSet = preparedStatement.executeQuery();
 
-            /*if (!resultSet.isBeforeFirst()) {
+            if (!resultSet.isBeforeFirst()) {
                 return null;
-            }*/
+            }
             resultSet.first();
             User user = createUser(resultSet);
 
@@ -82,6 +82,10 @@ public class SQLUserDAO implements UserDAO {
             preparedStatement.setString(1, login);
 
             ResultSet resultSet = preparedStatement.executeQuery();
+
+            if (!resultSet.isBeforeFirst()) {
+                return null;
+            }
             resultSet.first();
             User user = createUser(resultSet);
 
