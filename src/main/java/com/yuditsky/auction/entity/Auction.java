@@ -7,15 +7,21 @@ import java.util.Objects;
 public class Auction {
     private int auctionId;
     private AuctionType type;
-    private Lot lot;
-    private List<Bid> bids; //mb tolko last
+    private int lotId;
+    private List<Integer> bidIds;
     private LocalDateTime finishTime;
 
-    public Auction(int auctionId, AuctionType type, Lot lot, List<Bid> bids, LocalDateTime finishTime) {
+    public Auction(int auctionId, AuctionType type, int lotId, List<Integer> bidIds, LocalDateTime finishTime) {
         this.auctionId = auctionId;
         this.type = type;
-        this.lot = lot;
-        this.bids = bids;
+        this.lotId = lotId;
+        this.bidIds = bidIds;
+        this.finishTime = finishTime;
+    }
+
+    public Auction(AuctionType type, int lotId, LocalDateTime finishTime) {
+        this.type = type;
+        this.lotId = lotId;
         this.finishTime = finishTime;
     }
 
@@ -38,20 +44,20 @@ public class Auction {
         this.type = type;
     }
 
-    public Lot getLot() {
-        return lot;
+    public int getLotId() {
+        return lotId;
     }
 
-    public void setLot(Lot lot) {
-        this.lot = lot;
+    public void setLotId(int lotId) {
+        this.lotId = lotId;
     }
 
-    public List<Bid> getBids() {
-        return bids;
+    public List<Integer> getBidIds() {
+        return bidIds;
     }
 
-    public void setBids(List<Bid> bids) {
-        this.bids = bids;
+    public void setBids(List<Integer> bidIds) {
+        this.bidIds = bidIds;
     }
 
     public LocalDateTime getFinishTime() {
@@ -69,14 +75,14 @@ public class Auction {
         Auction auction = (Auction) o;
         return auctionId == auction.auctionId &&
                 type == auction.type &&
-                lot.equals(auction.lot) &&
-                bids.equals(auction.bids) &&
+                lotId == auction.lotId &&
+                bidIds.equals(auction.bidIds) &&
                 finishTime.equals(auction.finishTime);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(auctionId, type, lot, bids, finishTime);
+        return Objects.hash(auctionId, type, lotId, bidIds, finishTime);
     }
 
     @Override
@@ -84,8 +90,8 @@ public class Auction {
         return "Auction{" +
                 "auctionId=" + auctionId +
                 ", type=" + type +
-                ", lot=" + lot +
-                ", bids=" + bids +
+                ", lotId=" + lotId +
+                ", bidIds=" + bidIds +
                 ", finishTime=" + finishTime +
                 '}';
     }
