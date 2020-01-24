@@ -1,19 +1,22 @@
 package com.yuditsky.auction.entity;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 public class Payment {
     private int paymentId;
-    private User payer;
+    private int payerId;
     private BigDecimal sum;
-    private Lot lot;
+    private int lotId;
+    private LocalDateTime date;
 
-    public Payment(int paymentId, User payer, BigDecimal sum, Lot lot) {
+    public Payment(int paymentId, int payerId, BigDecimal sum, int lotId, LocalDateTime date) {
         this.paymentId = paymentId;
-        this.payer = payer;
+        this.payerId = payerId;
         this.sum = sum;
-        this.lot = lot;
+        this.lotId = lotId;
+        this.date = date;
     }
 
     public Payment() {
@@ -27,12 +30,12 @@ public class Payment {
         this.paymentId = paymentId;
     }
 
-    public User getPayer() {
-        return payer;
+    public int getPayerId() {
+        return payerId;
     }
 
-    public void setPayer(User payer) {
-        this.payer = payer;
+    public void setPayerId(int payerId) {
+        this.payerId = payerId;
     }
 
     public BigDecimal getSum() {
@@ -43,12 +46,20 @@ public class Payment {
         this.sum = sum;
     }
 
-    public Lot getLot() {
-        return lot;
+    public int getLotId() {
+        return lotId;
     }
 
-    public void setLot(Lot lot) {
-        this.lot = lot;
+    public void setLotId(int lotId) {
+        this.lotId = lotId;
+    }
+
+    public LocalDateTime getDate() {
+        return date;
+    }
+
+    public void setDate(LocalDateTime date) {
+        this.date = date;
     }
 
     @Override
@@ -57,23 +68,25 @@ public class Payment {
         if (o == null || getClass() != o.getClass()) return false;
         Payment payment = (Payment) o;
         return paymentId == payment.paymentId &&
-                payer.equals(payment.payer) &&
+                payerId == payment.payerId &&
+                lotId == payment.lotId &&
                 sum.equals(payment.sum) &&
-                lot.equals(payment.lot);
+                date.equals(payment.date);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(paymentId, payer, sum, lot);
+        return Objects.hash(paymentId, payerId, sum, lotId, date);
     }
 
     @Override
     public String toString() {
         return "Payment{" +
                 "paymentId=" + paymentId +
-                ", payer=" + payer +
+                ", payerId=" + payerId +
                 ", sum=" + sum +
-                ", lot=" + lot +
+                ", lotId=" + lotId +
+                ", date=" + date +
                 '}';
     }
 }
