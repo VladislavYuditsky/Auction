@@ -13,6 +13,8 @@ public interface BidDAO {
 
     List<Integer> findBidIdsByAuctionId(int auctionId) throws DAOException;
 
+    List<Integer> findBidIdsByBidderId(int bidderId) throws DAOException;
+
     void changeBidderId(int bidId, int newBidderId) throws DAOException;
 
     void changeSum(int bidId, BigDecimal newSum) throws DAOException;

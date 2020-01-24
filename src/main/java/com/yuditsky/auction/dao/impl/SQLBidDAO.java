@@ -106,6 +106,34 @@ public class SQLBidDAO implements BidDAO {
     }
 
     @Override
+    public List<Integer> findBidIdsByBidderId(int bidderId) throws DAOException {
+        try {
+            Connection connection = connectionPool.takeConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement(Const.SELECT_BID_IDS_BY_BIDDER_ID);
+
+            preparedStatement.setString(1, String.valueOf(bidderId));
+
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            List<Integer> bidIds = new ArrayList<>();
+            while (resultSet.next()) {
+                Bid bid = createBid(resultSet);
+                bidIds.add(bid.getBidId());
+            }
+
+            connectionPool.closeConnection(connection, preparedStatement);
+
+            return bidIds;
+        } catch (SQLException e) {
+            logger.log(Level.ERROR, "Error compiling sql request", e);///ne tolko
+            throw new DAOException(e);
+        } catch (ConnectionPoolException e) {
+            logger.log(Level.ERROR, "Can't take connection", e);
+            throw new DAOException(e);
+        }
+    }
+
+    @Override
     public void changeBidderId(int bidId, int newBidderId) throws DAOException {
         try {
             Connection connection = connectionPool.takeConnection();

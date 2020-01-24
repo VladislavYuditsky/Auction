@@ -21,7 +21,7 @@ public class SQLBidDAOTest {
     private static final ConnectionPool connectionPool = ConnectionPool.getInstance();
     private static final BidDAO bidDAO = new SQLBidDAO();
 
-    Bid testBid = new Bid(1, 1, new BigDecimal("2.345").setScale(4, ROUND_DOWN),
+    Bid testBid = new Bid(7, 1, new BigDecimal("2.345").setScale(4, ROUND_DOWN),
             LocalDateTime.now(), 1);
 
     @BeforeClass
@@ -35,7 +35,7 @@ public class SQLBidDAOTest {
     }
 
     @Test
-    public void findLotByIdTest() throws DAOException {
+    public void findBidByIdTest() throws DAOException {
         Bid expected = testBid;
         Bid actual = bidDAO.findBidById(testBid.getBidId());
         assertEquals(expected, actual);
@@ -44,6 +44,14 @@ public class SQLBidDAOTest {
     @Test
     public void findBidIdsByAuctionIdTest() throws DAOException {
         List<Integer> expected = new ArrayList<>();
+        List<Integer> actual = bidDAO.findBidIdsByAuctionId(1);
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    public void findBidIdsByBidderIdTest() throws DAOException {
+        List<Integer> expected = new ArrayList<>();
+        expected.add(7);
         List<Integer> actual = bidDAO.findBidIdsByAuctionId(1);
         assertEquals(expected, actual);
     }

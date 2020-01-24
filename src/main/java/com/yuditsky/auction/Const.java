@@ -29,7 +29,7 @@ public class Const {
             " VALUES(?,?,?)";
     public static final String SELECT_AUCTION_BY_ID = "SELECT * FROM auction WHERE auction_id=?";
     public static final String UPDATE_AUCTION_TYPE = "UPDATE auction SET auction_type=? WHERE auction_id=?";
-    public static final String UPDATE_AUCTION_LOT = "UPDATE auction SET lot_id=? WHERE auction_id=?";
+    public static final String UPDATE_AUCTION_LOT_ID = "UPDATE auction SET lot_id=? WHERE auction_id=?";
     public static final String UPDATE_AUCTION_FINISH_TIME = "UPDATE auction SET finish_time=? WHERE auction_id=?";
     public static final String DELETE_AUCTION_BY_ID = "DELETE FROM auction WHERE auction_id=?";
 
@@ -37,6 +37,7 @@ public class Const {
             " VALUES(?,?,?,?)";
     public static final String SELECT_BID_BY_ID = "SELECT * FROM bid WHERE bid_id=?";
     public static final String SELECT_BID_IDS_BY_AUCTION_ID = "SELECT * FROM bid WHERE auction_id=?";
+    public static final String SELECT_BID_IDS_BY_BIDDER_ID = "SELECT * FROM bid WHERE bidder_id=?";
     public static final String UPDATE_BID_BIDDER_ID = "UPDATE bid SET bidder_id=? WHERE bid_id=?";
     public static final String UPDATE_BID_SUM = "UPDATE bid SET sum=? WHERE bid_id=?";
     public static final String UPDATE_BID_TIME = "UPDATE bid SET time=? WHERE bid_id=?";
