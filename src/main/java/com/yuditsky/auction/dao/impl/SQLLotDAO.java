@@ -49,12 +49,12 @@ public class SQLLotDAO implements LotDAO {
     }
 
     @Override
-    public void deleteLotById(int lotId) throws DAOException {
+    public void deleteLot(Lot lot) throws DAOException {
         try {
             Connection connection = connectionPool.takeConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(Const.DELETE_LOT_BY_ID);
 
-            preparedStatement.setString(1, String.valueOf(lotId));
+            preparedStatement.setString(1, String.valueOf(lot.getLotId()));
 
             preparedStatement.executeUpdate();
 
@@ -125,13 +125,13 @@ public class SQLLotDAO implements LotDAO {
     }
 
     @Override
-    public void changeDescription(int lotId, String newDescription) throws DAOException {
+    public void changeDescription(Lot lot, String newDescription) throws DAOException {
         try {
             Connection connection = connectionPool.takeConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(Const.UPDATE_LOT_DESCRIPTION);
 
             preparedStatement.setString(1, newDescription);
-            preparedStatement.setString(2, String.valueOf(lotId));
+            preparedStatement.setString(2, String.valueOf(lot.getLotId()));
 
             preparedStatement.executeUpdate();
 
@@ -146,13 +146,13 @@ public class SQLLotDAO implements LotDAO {
     }
 
     @Override
-    public void changeLocation(int lotId, String newLocation) throws DAOException {
+    public void changeLocation(Lot lot, String newLocation) throws DAOException {
         try {
             Connection connection = connectionPool.takeConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(Const.UPDATE_LOT_LOCATION);
 
             preparedStatement.setString(1, newLocation);
-            preparedStatement.setString(2, String.valueOf(lotId));
+            preparedStatement.setString(2, String.valueOf(lot.getLotId()));
 
             preparedStatement.executeUpdate();
 
@@ -167,13 +167,13 @@ public class SQLLotDAO implements LotDAO {
     }
 
     @Override
-    public void changeStartPrice(int lotId, BigDecimal newStartPrice) throws DAOException {
+    public void changeStartPrice(Lot lot, BigDecimal newStartPrice) throws DAOException {
         try {
             Connection connection = connectionPool.takeConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(Const.UPDATE_LOT_START_PRICE);
 
             preparedStatement.setString(1, String.valueOf(newStartPrice));
-            preparedStatement.setString(2, String.valueOf(lotId));
+            preparedStatement.setString(2, String.valueOf(lot.getLotId()));
 
             preparedStatement.executeUpdate();
 
@@ -188,13 +188,13 @@ public class SQLLotDAO implements LotDAO {
     }
 
     @Override
-    public void changeMinPrice(int lotId, BigDecimal newMinPrice) throws DAOException {
+    public void changeMinPrice(Lot lot, BigDecimal newMinPrice) throws DAOException {
         try {
             Connection connection = connectionPool.takeConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(Const.UPDATE_LOT_MIN_PRICE);
 
             preparedStatement.setString(1, String.valueOf(newMinPrice));
-            preparedStatement.setString(2, String.valueOf(lotId));
+            preparedStatement.setString(2, String.valueOf(lot.getLotId()));
 
             preparedStatement.executeUpdate();
 

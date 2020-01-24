@@ -77,13 +77,13 @@ public class SQLAuctionDAO implements AuctionDAO {
     }
 
     @Override
-    public void changeAuctionType(int auctionId, AuctionType newType) throws DAOException {
+    public void changeAuctionType(Auction auction, AuctionType newType) throws DAOException {
         try {
             Connection connection = connectionPool.takeConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(Const.UPDATE_AUCTION_TYPE);
 
             preparedStatement.setString(1, String.valueOf(newType));
-            preparedStatement.setString(2, String.valueOf(auctionId));
+            preparedStatement.setString(2, String.valueOf(auction.getAuctionId()));
 
             preparedStatement.executeUpdate();
 
@@ -98,13 +98,13 @@ public class SQLAuctionDAO implements AuctionDAO {
     }
 
     @Override
-    public void changeLotId(int auctionId, int newLotId) throws DAOException {
+    public void changeLotId(Auction auction, int newLotId) throws DAOException {
         try {
             Connection connection = connectionPool.takeConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(Const.UPDATE_AUCTION_LOT_ID);
 
             preparedStatement.setString(1, String.valueOf(newLotId));
-            preparedStatement.setString(2, String.valueOf(auctionId));
+            preparedStatement.setString(2, String.valueOf(auction.getAuctionId()));
 
             preparedStatement.executeUpdate();
 
@@ -119,13 +119,13 @@ public class SQLAuctionDAO implements AuctionDAO {
     }
 
     @Override
-    public void changeFinishTime(int auctionId, LocalDateTime newFinishTime) throws DAOException {
+    public void changeFinishTime(Auction auction, LocalDateTime newFinishTime) throws DAOException {
         try {
             Connection connection = connectionPool.takeConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(Const.UPDATE_AUCTION_FINISH_TIME);
 
             preparedStatement.setString(1, String.valueOf(newFinishTime));
-            preparedStatement.setString(2, String.valueOf(auctionId));
+            preparedStatement.setString(2, String.valueOf(auction.getAuctionId()));
 
             preparedStatement.executeUpdate();
 
@@ -140,12 +140,12 @@ public class SQLAuctionDAO implements AuctionDAO {
     }
 
     @Override
-    public void deleteAuction(int auctionId) throws DAOException {
+    public void deleteAuction(Auction auction) throws DAOException {
         try {
             Connection connection = connectionPool.takeConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(Const.DELETE_AUCTION_BY_ID);
 
-            preparedStatement.setString(1, String.valueOf(auctionId));
+            preparedStatement.setString(1, String.valueOf(auction.getAuctionId()));
 
             preparedStatement.executeUpdate();
 

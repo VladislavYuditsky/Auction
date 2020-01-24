@@ -4,21 +4,24 @@ import com.yuditsky.auction.entity.User;
 import com.yuditsky.auction.entity.UserRole;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 public interface UserDAO {
-    User signIn(String login, String password) throws DAOException;
+    User findUserByLoginAndPassword(String login, String password) throws DAOException;
 
-    void signUp(User newUser) throws DAOException;
+    void save(User newUser) throws DAOException;
+
+    List<User> findAll() throws DAOException;
 
     User findUserByLogin(String login) throws DAOException;
 
-    void changePassword(String login, String newPassword) throws DAOException;
+    void changePassword(User user, String newPassword) throws DAOException;
 
-    void changeEmail(String login, String newEmail) throws DAOException;
+    void changeEmail(User user, String newEmail) throws DAOException;
 
-    void changeBalance(String login, BigDecimal newBalance) throws DAOException;
+    void changeBalance(User user, BigDecimal newBalance) throws DAOException;
 
-    void changeRole(String login, UserRole newUserRole) throws DAOException;
+    void changeRole(User user, UserRole newUserRole) throws DAOException;
 
-    void deleteUser(String login) throws DAOException;
+    void deleteUser(User user) throws DAOException;
 }

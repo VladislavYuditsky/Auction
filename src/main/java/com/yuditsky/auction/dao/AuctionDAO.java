@@ -10,11 +10,11 @@ public interface AuctionDAO {
 
     Auction findAuctionById(int auctionId) throws DAOException;
 
-    void changeAuctionType(int auctionId, AuctionType newType) throws DAOException;
+    void changeAuctionType(Auction auction, AuctionType newType) throws DAOException;
 
-    void changeLotId(int auctionId, int newLotId) throws DAOException;
+    void changeLotId(Auction auction, int newLotId) throws DAOException;
 
-    void changeFinishTime(int auctionId, LocalDateTime newFinishTime) throws DAOException;
+    void changeFinishTime(Auction auction, LocalDateTime newFinishTime) throws DAOException;
 
-    void deleteAuction(int auctionId) throws DAOException;
+    void deleteAuction(Auction auction) throws DAOException;
 }

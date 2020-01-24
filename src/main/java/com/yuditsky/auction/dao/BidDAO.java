@@ -15,13 +15,13 @@ public interface BidDAO {
 
     List<Integer> findBidIdsByBidderId(int bidderId) throws DAOException;
 
-    void changeBidderId(int bidId, int newBidderId) throws DAOException;
+    void changeBidderId(Bid bid, int newBidderId) throws DAOException;
 
-    void changeSum(int bidId, BigDecimal newSum) throws DAOException;
+    void changeSum(Bid bid, BigDecimal newSum) throws DAOException;
 
-    void changeTime(int bidId, LocalDateTime newTime) throws DAOException;
+    void changeTime(Bid bid, LocalDateTime newTime) throws DAOException;
 
-    void changeAuctionId(int bidId, int newAuctionId) throws DAOException;
+    void changeAuctionId(Bid bid, int newAuctionId) throws DAOException;
 
-    void deleteBidById(int bidId) throws DAOException;
+    void deleteBid(Bid bid) throws DAOException;
 }

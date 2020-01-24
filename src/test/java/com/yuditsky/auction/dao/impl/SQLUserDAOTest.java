@@ -20,7 +20,8 @@ public class SQLUserDAOTest {
     private static final ConnectionPool connectionPool = ConnectionPool.getInstance();
     private static final UserDAO userDAO = new SQLUserDAO();
 
-    User testUser = new User(2, "qwertry1", "12345", null, "qwe", null, true, new ArrayList<>(), new ArrayList<>());
+    User testUser = new User(2, "qwertry3", "12345", null, "qwe", null,
+            true, new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
 
     @BeforeClass
     public static void init() throws ConnectionPoolException {
@@ -29,13 +30,13 @@ public class SQLUserDAOTest {
 
     @Test
     public void signUpTest() throws DAOException {
-        userDAO.signUp(testUser);
+        userDAO.save(testUser);
     }
 
     @Test
     public void signInTest() throws DAOException {
         User expected = testUser;
-        User actual = userDAO.signIn(testUser.getLogin(), testUser.getPassword());
+        User actual = userDAO.findUserByLoginAndPassword(testUser.getLogin(), testUser.getPassword());
         assertEquals(expected, actual);
     }
 
@@ -49,7 +50,7 @@ public class SQLUserDAOTest {
     @Test
     public void changePasswordTest() throws DAOException {
         String expected = "5432111";
-        userDAO.changePassword(testUser.getLogin(), expected);
+        userDAO.changePassword(testUser, expected);
         String actual = userDAO.findUserByLogin(testUser.getLogin()).getPassword();
         assertEquals(expected, actual);
     }
@@ -57,7 +58,7 @@ public class SQLUserDAOTest {
     @Test
     public void changeEmailTest() throws DAOException {
         String expected = "123@gmail.com";
-        userDAO.changeEmail(testUser.getLogin(), expected);
+        userDAO.changeEmail(testUser, expected);
         String actual = userDAO.findUserByLogin(testUser.getLogin()).getEmail();
         assertEquals(expected, actual);
     }
@@ -67,7 +68,7 @@ public class SQLUserDAOTest {
     @Test
     public void changeBalanceTest() throws DAOException {
         BigDecimal expected = new BigDecimal("123.99987").setScale(4, ROUND_DOWN);
-        userDAO.changeBalance(testUser.getLogin(), expected);
+        userDAO.changeBalance(testUser, expected);
         BigDecimal actual = userDAO.findUserByLogin(testUser.getLogin()).getBalance();
         assertEquals(expected, actual);
     }
@@ -75,14 +76,14 @@ public class SQLUserDAOTest {
     @Test
     public void changeRoleTest() throws DAOException {
         UserRole expected = UserRole.USER;
-        userDAO.changeRole(testUser.getLogin(), expected);
+        userDAO.changeRole(testUser, expected);
         UserRole actual = userDAO.findUserByLogin(testUser.getLogin()).getRole();
         assertEquals(expected, actual);
     }
 
     @Test
     public void deleteUserTest() throws DAOException {
-        userDAO.deleteUser(testUser.getLogin());
+        userDAO.deleteUser(testUser);
     }
 
     @AfterClass

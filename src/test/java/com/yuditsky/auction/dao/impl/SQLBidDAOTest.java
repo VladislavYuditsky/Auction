@@ -52,14 +52,14 @@ public class SQLBidDAOTest {
     public void findBidIdsByBidderIdTest() throws DAOException {
         List<Integer> expected = new ArrayList<>();
         expected.add(7);
-        List<Integer> actual = bidDAO.findBidIdsByAuctionId(1);
+        List<Integer> actual = bidDAO.findBidIdsByBidderId(1);
         assertEquals(expected, actual);
     }
 
     @Test
     public void changeBidderIdTest() throws DAOException {
         int expected = 2;
-        bidDAO.changeBidderId(1, expected);
+        bidDAO.changeBidderId(testBid, expected);
         int actual = bidDAO.findBidById(1).getBidderId();
         assertEquals(expected, actual);
     }
@@ -67,7 +67,7 @@ public class SQLBidDAOTest {
     @Test
     public void changeSumTest() throws DAOException {
         BigDecimal expected = new BigDecimal("100.2").setScale(4, ROUND_DOWN);
-        bidDAO.changeSum(1, expected);
+        bidDAO.changeSum(testBid, expected);
         BigDecimal actual = bidDAO.findBidById(1).getSum();
         assertEquals(expected, actual);
     }
@@ -75,7 +75,7 @@ public class SQLBidDAOTest {
     @Test
     public void changeTimeTest() throws DAOException {
         LocalDateTime expected = LocalDateTime.now();
-        bidDAO.changeTime(1, expected);
+        bidDAO.changeTime(testBid, expected);
         LocalDateTime actual = bidDAO.findBidById(1).getTime();
         assertEquals(expected, actual);
     }
@@ -83,14 +83,14 @@ public class SQLBidDAOTest {
     @Test
     public void changeAuctionIdTest() throws DAOException {
         int expected = 2;
-        bidDAO.changeAuctionId(1, expected);
+        bidDAO.changeAuctionId(testBid, expected);
         int actual = bidDAO.findBidById(1).getAuctionId();
         assertEquals(expected, actual);
     }
 
     @Test
     public void deleteLotByIdTest() throws DAOException {
-        bidDAO.deleteBidById(5);
+        bidDAO.deleteBid(testBid);
     }
 
     @AfterClass

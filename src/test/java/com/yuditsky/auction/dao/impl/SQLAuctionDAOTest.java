@@ -43,7 +43,7 @@ public class SQLAuctionDAOTest {
     @Test
     public void changeAuctionTypeTest() throws DAOException {
         AuctionType expected = AuctionType.REVERS;
-        auctionDAO.changeAuctionType(3, expected);
+        auctionDAO.changeAuctionType(testAuction, expected);
         AuctionType actual = auctionDAO.findAuctionById(3).getType();
         assertEquals(expected, actual);
     }
@@ -51,7 +51,7 @@ public class SQLAuctionDAOTest {
     @Test
     public void changeLotIdTest() throws DAOException {
         int expected = 5;
-        auctionDAO.changeLotId(3, expected);
+        auctionDAO.changeLotId(testAuction, expected);
         int actual = auctionDAO.findAuctionById(3).getLotId();
         assertEquals(expected, actual);
     }
@@ -59,14 +59,14 @@ public class SQLAuctionDAOTest {
     @Test
     public void changeFinishTimeTest() throws DAOException {
         LocalDateTime expected = LocalDateTime.now();
-        auctionDAO.changeFinishTime(3, expected);
+        auctionDAO.changeFinishTime(testAuction, expected);
         LocalDateTime actual = auctionDAO.findAuctionById(3).getFinishTime();
         assertEquals(expected, actual);
     }
 
     @Test
-    public void deleteAuctionByIdTest() throws DAOException {
-        auctionDAO.deleteAuction(1);
+    public void deleteAuctionTest() throws DAOException {
+        auctionDAO.deleteAuction(testAuction);
     }
 
     @AfterClass

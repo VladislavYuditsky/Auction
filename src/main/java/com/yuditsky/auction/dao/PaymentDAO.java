@@ -13,13 +13,13 @@ public interface PaymentDAO {
 
     List<Integer> findPaymentIdsByPayerId(int payerId) throws DAOException;
 
-    void changePayerId(int paymentId, int newPayerId) throws DAOException;
+    void changePayerId(Payment payment, int newPayerId) throws DAOException;
 
-    void changeSum(int paymentId, BigDecimal newSum) throws DAOException;
+    void changeSum(Payment payment, BigDecimal newSum) throws DAOException;
 
-    void changeLotId(int paymentId, int newLotId) throws DAOException;
+    void changeLotId(Payment payment, int newLotId) throws DAOException;
 
-    void changeDate(int paymentId, LocalDateTime newDate) throws DAOException;
+    void changeDate(Payment payment, LocalDateTime newDate) throws DAOException;
 
-    void deletePaymentById(int paymentId) throws DAOException;
+    void deletePayment(Payment payment) throws DAOException;
 }

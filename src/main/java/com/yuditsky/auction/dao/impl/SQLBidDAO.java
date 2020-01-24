@@ -134,13 +134,13 @@ public class SQLBidDAO implements BidDAO {
     }
 
     @Override
-    public void changeBidderId(int bidId, int newBidderId) throws DAOException {
+    public void changeBidderId(Bid bid, int newBidderId) throws DAOException {
         try {
             Connection connection = connectionPool.takeConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(Const.UPDATE_BID_BIDDER_ID);
 
             preparedStatement.setString(1, String.valueOf(newBidderId));
-            preparedStatement.setString(2, String.valueOf(bidId));
+            preparedStatement.setString(2, String.valueOf(bid.getBidId()));
 
             preparedStatement.executeUpdate();
 
@@ -155,13 +155,13 @@ public class SQLBidDAO implements BidDAO {
     }
 
     @Override
-    public void changeSum(int bidId, BigDecimal newSum) throws DAOException {
+    public void changeSum(Bid bid, BigDecimal newSum) throws DAOException {
         try {
             Connection connection = connectionPool.takeConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(Const.UPDATE_BID_SUM);
 
             preparedStatement.setString(1, String.valueOf(newSum));
-            preparedStatement.setString(2, String.valueOf(bidId));
+            preparedStatement.setString(2, String.valueOf(bid.getBidId()));
 
             preparedStatement.executeUpdate();
 
@@ -176,13 +176,13 @@ public class SQLBidDAO implements BidDAO {
     }
 
     @Override
-    public void changeTime(int bidId, LocalDateTime newTime) throws DAOException {
+    public void changeTime(Bid bid, LocalDateTime newTime) throws DAOException {
         try {
             Connection connection = connectionPool.takeConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(Const.UPDATE_BID_TIME);
 
             preparedStatement.setString(1, String.valueOf(newTime));
-            preparedStatement.setString(2, String.valueOf(bidId));
+            preparedStatement.setString(2, String.valueOf(bid.getBidId()));
 
             preparedStatement.executeUpdate();
 
@@ -197,13 +197,13 @@ public class SQLBidDAO implements BidDAO {
     }
 
     @Override
-    public void changeAuctionId(int bidId, int newAuctionId) throws DAOException {
+    public void changeAuctionId(Bid bid, int newAuctionId) throws DAOException {
         try {
             Connection connection = connectionPool.takeConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(Const.UPDATE_BID_AUCTION_ID);
 
             preparedStatement.setString(1, String.valueOf(newAuctionId));
-            preparedStatement.setString(2, String.valueOf(bidId));
+            preparedStatement.setString(2, String.valueOf(bid.getBidId()));
 
             preparedStatement.executeUpdate();
 
@@ -218,12 +218,12 @@ public class SQLBidDAO implements BidDAO {
     }
 
     @Override
-    public void deleteBidById(int bidId) throws DAOException {
+    public void deleteBid(Bid bid) throws DAOException {
         try {
             Connection connection = connectionPool.takeConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(Const.DELETE_BID_BY_ID);
 
-            preparedStatement.setString(1, String.valueOf(bidId));
+            preparedStatement.setString(1, String.valueOf(bid.getBidId()));
 
             preparedStatement.executeUpdate();
 

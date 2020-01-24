@@ -106,13 +106,13 @@ public class SQLPaymentDAO implements PaymentDAO {
     }
 
     @Override
-    public void changePayerId(int paymentId, int newPayerId) throws DAOException {
+    public void changePayerId(Payment payment, int newPayerId) throws DAOException {
         try {
             Connection connection = connectionPool.takeConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(Const.UPDATE_PAYMENT_PAYER_ID);
 
             preparedStatement.setString(1, String.valueOf(newPayerId));
-            preparedStatement.setString(2, String.valueOf(paymentId));
+            preparedStatement.setString(2, String.valueOf(payment.getPaymentId()));
 
             preparedStatement.executeUpdate();
 
@@ -127,13 +127,13 @@ public class SQLPaymentDAO implements PaymentDAO {
     }
 
     @Override
-    public void changeSum(int paymentId, BigDecimal newSum) throws DAOException {
+    public void changeSum(Payment payment, BigDecimal newSum) throws DAOException {
         try {
             Connection connection = connectionPool.takeConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(Const.UPDATE_PAYMENT_SUM);
 
             preparedStatement.setString(1, String.valueOf(newSum));
-            preparedStatement.setString(2, String.valueOf(paymentId));
+            preparedStatement.setString(2, String.valueOf(payment.getPaymentId()));
 
             preparedStatement.executeUpdate();
 
@@ -148,13 +148,13 @@ public class SQLPaymentDAO implements PaymentDAO {
     }
 
     @Override
-    public void changeLotId(int paymentId, int newLotId) throws DAOException {
+    public void changeLotId(Payment payment, int newLotId) throws DAOException {
         try {
             Connection connection = connectionPool.takeConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(Const.UPDATE_PAYMENT_LOT_ID);
 
             preparedStatement.setString(1, String.valueOf(newLotId));
-            preparedStatement.setString(2, String.valueOf(paymentId));
+            preparedStatement.setString(2, String.valueOf(payment.getPaymentId()));
 
             preparedStatement.executeUpdate();
 
@@ -169,13 +169,13 @@ public class SQLPaymentDAO implements PaymentDAO {
     }
 
     @Override
-    public void changeDate(int paymentId, LocalDateTime newDate) throws DAOException {
+    public void changeDate(Payment payment, LocalDateTime newDate) throws DAOException {
         try {
             Connection connection = connectionPool.takeConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(Const.UPDATE_PAYMENT_DATE);
 
             preparedStatement.setString(1, String.valueOf(newDate));
-            preparedStatement.setString(2, String.valueOf(paymentId));
+            preparedStatement.setString(2, String.valueOf(payment.getPaymentId()));
 
             preparedStatement.executeUpdate();
 
@@ -190,12 +190,12 @@ public class SQLPaymentDAO implements PaymentDAO {
     }
 
     @Override
-    public void deletePaymentById(int paymentId) throws DAOException {
+    public void deletePayment(Payment payment) throws DAOException {
         try {
             Connection connection = connectionPool.takeConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(Const.DELETE_PAYMENT_BY_ID);
 
-            preparedStatement.setString(1, String.valueOf(paymentId));
+            preparedStatement.setString(1, String.valueOf(payment.getPaymentId()));
 
             preparedStatement.executeUpdate();
 

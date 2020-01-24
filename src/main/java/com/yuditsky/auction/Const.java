@@ -9,6 +9,7 @@ public class Const {
 
     public static final String ADD_NEW_USER = "INSERT INTO user (login, password, email) VALUES(?,?,?)";
     public static final String SELECT_USER_BY_LOGIN_AND_PASSWORD = "SELECT * FROM user WHERE login=? AND password=?";
+    public static final String SELECT_ALL_USERS = "SELECT * FROM user";
     public static final String UPDATE_USER_PASSWORD = "UPDATE user SET password=? WHERE login=?";
     public static final String SELECT_USER_BY_LOGIN = "SELECT * FROM user WHERE login=?";
     public static final String UPDATE_USER_EMAIL = "UPDATE user SET email=? WHERE login=?";

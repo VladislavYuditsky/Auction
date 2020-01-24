@@ -36,7 +36,7 @@ public class SQLLotDAOTest {
 
     @Test
     public void deleteLotByIdTest() throws DAOException {
-        lotDAO.deleteLotById(2);
+        lotDAO.deleteLot(testLot);
     }
 
     @Test
@@ -57,7 +57,7 @@ public class SQLLotDAOTest {
     @Test
     public void changeDescriptionTest() throws DAOException {
         String expected = "NEW DESC";
-        lotDAO.changeDescription(3, expected);
+        lotDAO.changeDescription(testLot, expected);
         String actual = lotDAO.findLotById(3).getDescription();
         assertEquals(expected, actual);
     }
@@ -65,7 +65,7 @@ public class SQLLotDAOTest {
     @Test
     public void changeLocationTest() throws DAOException {
         String expected = "NEW LOC";
-        lotDAO.changeLocation(3, expected);
+        lotDAO.changeLocation(testLot, expected);
         String actual = lotDAO.findLotById(3).getLocation();
         assertEquals(expected, actual);
     }
@@ -73,7 +73,7 @@ public class SQLLotDAOTest {
     @Test
     public void changeStartPriceTest() throws DAOException {
         BigDecimal expected = new BigDecimal("1.34556").setScale(4, ROUND_DOWN);
-        lotDAO.changeStartPrice(4, expected);
+        lotDAO.changeStartPrice(testLot, expected);
         BigDecimal actual = lotDAO.findLotById(4).getStartPrice();
         assertEquals(expected, actual);
     }
@@ -81,7 +81,7 @@ public class SQLLotDAOTest {
     @Test
     public void changeMinPriceTest() throws DAOException {
         BigDecimal expected = new BigDecimal("1888.345568").setScale(4, ROUND_DOWN);
-        lotDAO.changeMinPrice(4, expected);
+        lotDAO.changeMinPrice(testLot, expected);
         BigDecimal actual = lotDAO.findLotById(4).getMinPrice();
         assertEquals(expected, actual);
     }

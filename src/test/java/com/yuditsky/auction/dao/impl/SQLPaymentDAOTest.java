@@ -51,7 +51,7 @@ public class SQLPaymentDAOTest {
     @Test
     public void changePayerIdTest() throws DAOException {
         int expected = 2;
-        paymentDAO.changePayerId(1, expected);
+        paymentDAO.changePayerId(testPayment, expected);
         int actual = paymentDAO.findPaymentById(1).getPayerId();
         assertEquals(expected, actual);
     }
@@ -59,7 +59,7 @@ public class SQLPaymentDAOTest {
     @Test
     public void changeSumTest() throws DAOException {
         BigDecimal expected = new BigDecimal(23.23232).setScale(4, ROUND_DOWN);
-        paymentDAO.changeSum(1, expected);
+        paymentDAO.changeSum(testPayment, expected);
         BigDecimal actual = paymentDAO.findPaymentById(1).getSum();
         assertEquals(expected, actual);
     }
@@ -67,7 +67,7 @@ public class SQLPaymentDAOTest {
     @Test
     public void changeLotIdTest() throws DAOException {
         int expected = 2;
-        paymentDAO.changeLotId(1, expected);
+        paymentDAO.changeLotId(testPayment, expected);
         int actual = paymentDAO.findPaymentById(1).getLotId();
         assertEquals(expected, actual);
     }
@@ -75,14 +75,14 @@ public class SQLPaymentDAOTest {
     @Test
     public void changeDateTest() throws DAOException {
         LocalDateTime expected = LocalDateTime.now();
-        paymentDAO.changeDate(1, expected);
+        paymentDAO.changeDate(testPayment, expected);
         LocalDateTime actual = paymentDAO.findPaymentById(1).getDate();
         assertEquals(expected, actual);
     }
 
     @Test
     public void deletePaymentByIdTest() throws DAOException {
-        paymentDAO.deletePaymentById(1);
+        paymentDAO.deletePayment(testPayment);
     }
 
     @AfterClass
