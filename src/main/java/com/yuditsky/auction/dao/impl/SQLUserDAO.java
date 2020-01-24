@@ -1,10 +1,7 @@
 package com.yuditsky.auction.dao.impl;
 
 import com.yuditsky.auction.Const;
-import com.yuditsky.auction.dao.BidDAO;
-import com.yuditsky.auction.dao.DAOException;
-import com.yuditsky.auction.dao.LotDAO;
-import com.yuditsky.auction.dao.UserDAO;
+import com.yuditsky.auction.dao.*;
 import com.yuditsky.auction.dao.connection.ConnectionPool;
 import com.yuditsky.auction.dao.connection.ConnectionPoolException;
 import com.yuditsky.auction.entity.User;
@@ -223,6 +220,9 @@ public class SQLUserDAO implements UserDAO {
         LotDAO lotDAO = new SQLLotDAO();
         List<Integer> lotIds = lotDAO.findLotIdsBySellerId(id);
 
-        return new User(id, login, password, role, email, balance, blocked, bidIds, lotIds);
+        PaymentDAO paymentDAO = new SQLPaymentDAO();
+        List<Integer> paymentIds = paymentDAO.findPaymentIdsByPayerId(id);
+
+        return new User(id, login, password, role, email, balance, blocked, bidIds, lotIds, paymentIds);
     }
 }

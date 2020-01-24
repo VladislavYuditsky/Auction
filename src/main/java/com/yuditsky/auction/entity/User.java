@@ -14,11 +14,11 @@ public class User {
     private boolean blocked;
     private List<Integer> bidIds;
     private List<Integer> lotIds;
-    //private List<Payment> payments;
+    private List<Integer> paymentIds;
     //private List<Credit> credits;
 
     public User(int userId, String login, String password, UserRole role, String email, BigDecimal balance,
-                boolean blocked, List<Integer> bidIds, List<Integer> lotIds) {
+                boolean blocked, List<Integer> bidIds, List<Integer> lotIds, List<Integer> paymentIds) {
         this.userId = userId;
         this.login = login;
         this.password = password;
@@ -28,6 +28,7 @@ public class User {
         this.blocked = blocked;
         this.bidIds = bidIds;
         this.lotIds = lotIds;
+        this.paymentIds = paymentIds;
     }
 
     public User() {
@@ -105,6 +106,14 @@ public class User {
         this.lotIds = lotIds;
     }
 
+    public List<Integer> getPaymentIds() {
+        return paymentIds;
+    }
+
+    public void setPaymentIds(List<Integer> paymentIds) {
+        this.paymentIds = paymentIds;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -118,12 +127,13 @@ public class User {
                 email.equals(user.email) &&
                 balance.equals(user.balance) &&
                 bidIds.equals(user.bidIds) &&
-                lotIds.equals(user.lotIds);
+                lotIds.equals(user.lotIds) &&
+                paymentIds.equals(user.paymentIds);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(userId, login, password, role, email, balance, blocked, bidIds, lotIds);
+        return Objects.hash(userId, login, password, role, email, balance, blocked, bidIds, lotIds, paymentIds);
     }
 
     @Override
@@ -138,6 +148,7 @@ public class User {
                 ", blocked=" + blocked +
                 ", bidIds=" + bidIds +
                 ", lotIds=" + lotIds +
+                ", paymentIds=" + paymentIds +
                 '}';
     }
 }
