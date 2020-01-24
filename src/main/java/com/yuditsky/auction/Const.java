@@ -20,6 +20,7 @@ public class Const {
             " seller_id) VALUES(?,?,?,?,?,?)";
     public static final String DELETE_LOT_BY_ID = "DELETE FROM lot WHERE lot_id=?";
     public static final String SELECT_LOT_BY_ID = "SELECT * FROM lot WHERE lot_id=?";
+    public static final String SELECT_LOT_IDS_BY_SELLER_ID = "SELECT * FROM lot WHERE seller_id=?";
     public static final String UPDATE_LOT_DESCRIPTION = "UPDATE lot SET description=? WHERE lot_id=?";
     public static final String UPDATE_LOT_LOCATION = "UPDATE lot SET location=? WHERE lot_id=?";
     public static final String UPDATE_LOT_START_PRICE = "UPDATE lot SET start_price=? WHERE lot_id=?";
@@ -43,4 +44,13 @@ public class Const {
     public static final String UPDATE_BID_TIME = "UPDATE bid SET time=? WHERE bid_id=?";
     public static final String UPDATE_BID_AUCTION_ID = "UPDATE bid SET auction_id=? WHERE bid_id=?";
     public static final String DELETE_BID_BY_ID = "DELETE FROM bid WHERE bid_id=?";
+
+    public static final String ADD_NEW_PAYMENT = "INSERT INTO payment (payer_id, sum, lot_id, date) VALUES(?,?,?,?)";
+    public static final String SELECT_PAYMENT_BY_ID = "SELECT * FROM payment WHERE payment_id=?";
+    public static final String SELECT_PAYMENT_IDS_BY_PAYER_ID = "SELECT * FROM payment WHERE payer_id=?";
+    public static final String UPDATE_PAYMENT_PAYER_ID = "UPDATE payment SET payer_id=? WHERE payment_id=?";
+    public static final String UPDATE_PAYMENT_SUM = "UPDATE payment SET sum=? WHERE payment_id=?";
+    public static final String UPDATE_PAYMENT_LOT_ID = "UPDATE payment SET lot_id=? WHERE payment_id=?";
+    public static final String UPDATE_PAYMENT_DATE = "UPDATE payment SET date=? WHERE payment_id=?";
+    public static final String DELETE_PAYMENT_BY_ID = "DELETE FROM payment WHERE payment_id=?";
 }
