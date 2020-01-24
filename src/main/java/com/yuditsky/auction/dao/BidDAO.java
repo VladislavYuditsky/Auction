@@ -7,21 +7,21 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public interface BidDAO {
-    void addBid(Bid bid) throws DAOException;
+    void save(Bid bid) throws DAOException;
 
-    Bid findBidById(int bidId) throws DAOException;
+    Bid findById(int bidId) throws DAOException;
 
-    List<Integer> findBidIdsByAuctionId(int auctionId) throws DAOException;
+    List<Bid> findByAuctionId(int auctionId) throws DAOException;
 
-    List<Integer> findBidIdsByBidderId(int bidderId) throws DAOException;
+    List<Bid> findByBidderId(int bidderId) throws DAOException;
 
-    void changeBidderId(Bid bid, int newBidderId) throws DAOException;
+    void updateBidderId(Bid bid, int newBidderId) throws DAOException;
 
-    void changeSum(Bid bid, BigDecimal newSum) throws DAOException;
+    void updateSum(Bid bid, BigDecimal newSum) throws DAOException;
 
-    void changeTime(Bid bid, LocalDateTime newTime) throws DAOException;
+    void updateTime(Bid bid, LocalDateTime newTime) throws DAOException;
 
-    void changeAuctionId(Bid bid, int newAuctionId) throws DAOException;
+    void updateAuctionId(Bid bid, int newAuctionId) throws DAOException;
 
-    void deleteBid(Bid bid) throws DAOException;
+    void delete(Bid bid) throws DAOException;
 }

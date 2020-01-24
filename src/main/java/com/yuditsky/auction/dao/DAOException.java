@@ -1,6 +1,6 @@
 package com.yuditsky.auction.dao;
 
-public class DAOException extends Exception{
+public class DAOException extends Exception {
     public DAOException() {
         super();
     }

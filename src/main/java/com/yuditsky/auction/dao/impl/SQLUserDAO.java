@@ -4,8 +4,7 @@ import com.yuditsky.auction.Const;
 import com.yuditsky.auction.dao.*;
 import com.yuditsky.auction.dao.connection.ConnectionPool;
 import com.yuditsky.auction.dao.connection.ConnectionPoolException;
-import com.yuditsky.auction.entity.User;
-import com.yuditsky.auction.entity.UserRole;
+import com.yuditsky.auction.entity.*;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -21,7 +20,7 @@ public class SQLUserDAO implements UserDAO {
     private ConnectionPool connectionPool = ConnectionPool.getInstance();
 
     @Override
-    public User findUserByLoginAndPassword(String login, String password) throws DAOException {
+    public User findByLoginAndPassword(String login, String password) throws DAOException {
         try {
             Connection connection = connectionPool.takeConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(Const.SELECT_USER_BY_LOGIN_AND_PASSWORD);
@@ -98,7 +97,7 @@ public class SQLUserDAO implements UserDAO {
     }
 
     @Override
-    public User findUserByLogin(String login) throws DAOException {
+    public User findByLogin(String login) throws DAOException {
         try {
             Connection connection = connectionPool.takeConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(Const.SELECT_USER_BY_LOGIN);
@@ -126,7 +125,7 @@ public class SQLUserDAO implements UserDAO {
     }
 
     @Override
-    public void changePassword(User user, String newPassword) throws DAOException {
+    public void updatePassword(User user, String newPassword) throws DAOException {
         try {
             Connection connection = connectionPool.takeConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(Const.UPDATE_USER_PASSWORD);
@@ -147,7 +146,7 @@ public class SQLUserDAO implements UserDAO {
     }
 
     @Override
-    public void changeEmail(User user, String newEmail) throws DAOException {
+    public void updateEmail(User user, String newEmail) throws DAOException {
         try {
             Connection connection = connectionPool.takeConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(Const.UPDATE_USER_EMAIL);
@@ -168,7 +167,7 @@ public class SQLUserDAO implements UserDAO {
     }
 
     @Override
-    public void changeBalance(User user, BigDecimal newBalance) throws DAOException {
+    public void updateBalance(User user, BigDecimal newBalance) throws DAOException {
         try {
             Connection connection = connectionPool.takeConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(Const.UPDATE_USER_BALANCE);
@@ -189,7 +188,7 @@ public class SQLUserDAO implements UserDAO {
     }
 
     @Override
-    public void changeRole(User user, UserRole newUserRole) throws DAOException {
+    public void updateRole(User user, UserRole newUserRole) throws DAOException {
         try {
             Connection connection = connectionPool.takeConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(Const.UPDATE_USER_ROLE);
@@ -210,7 +209,7 @@ public class SQLUserDAO implements UserDAO {
     }
 
     @Override
-    public void deleteUser(User user) throws DAOException {
+    public void delete(User user) throws DAOException {
         try {
             Connection connection = connectionPool.takeConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(Const.DELETE_USER_BY_LOGIN);
@@ -240,14 +239,17 @@ public class SQLUserDAO implements UserDAO {
 
         DAOFactory factory = DAOFactory.getInstance();
         BidDAO bidDAO = factory.getBidDAO();
-        List<Integer> bidIds = bidDAO.findBidIdsByBidderId(id);
+        List<Bid> bids = bidDAO.findByBidderId(id);
 
         LotDAO lotDAO = factory.getLotDAO();
-        List<Integer> lotIds = lotDAO.findLotIdsBySellerId(id);
+        List<Lot> lots = lotDAO.findBySellerId(id);
 
         PaymentDAO paymentDAO = factory.getPaymentDAO();
-        List<Integer> paymentIds = paymentDAO.findPaymentIdsByPayerId(id);
+        List<Payment> payments = paymentDAO.findByPayerId(id);
 
-        return new User(id, login, password, role, email, balance, blocked, bidIds, lotIds, paymentIds);
+        CreditDAO creditDAO = factory.getCreditDAO();
+        List<Credit> credits = creditDAO.findByBorrowerId(id);
+
+        return new User(id, login, password, role, email, balance, blocked, bids, lots, payments, credits);
     }
 }

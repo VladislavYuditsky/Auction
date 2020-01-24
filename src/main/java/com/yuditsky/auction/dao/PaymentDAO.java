@@ -7,19 +7,19 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public interface PaymentDAO {
-    void addPayment(Payment payment) throws DAOException;
+    void save(Payment payment) throws DAOException;
 
-    Payment findPaymentById(int paymentId) throws DAOException;
+    Payment findById(int paymentId) throws DAOException;
 
-    List<Integer> findPaymentIdsByPayerId(int payerId) throws DAOException;
+    List<Payment> findByPayerId(int payerId) throws DAOException;
 
-    void changePayerId(Payment payment, int newPayerId) throws DAOException;
+    void updatePayerId(Payment payment, int newPayerId) throws DAOException;
 
-    void changeSum(Payment payment, BigDecimal newSum) throws DAOException;
+    void updateSum(Payment payment, BigDecimal newSum) throws DAOException;
 
-    void changeLotId(Payment payment, int newLotId) throws DAOException;
+    void updateLotId(Payment payment, int newLotId) throws DAOException;
 
-    void changeDate(Payment payment, LocalDateTime newDate) throws DAOException;
+    void updateDate(Payment payment, LocalDateTime newDate) throws DAOException;
 
-    void deletePayment(Payment payment) throws DAOException;
+    void delete(Payment payment) throws DAOException;
 }

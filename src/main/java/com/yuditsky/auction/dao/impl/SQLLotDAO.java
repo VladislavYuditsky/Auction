@@ -24,7 +24,7 @@ public class SQLLotDAO implements LotDAO {
     private ConnectionPool connectionPool = ConnectionPool.getInstance();
 
     @Override
-    public void addLot(Lot lot) throws DAOException {
+    public void save(Lot lot) throws DAOException {
         try {
             Connection connection = connectionPool.takeConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(Const.ADD_NEW_LOT);
@@ -49,7 +49,7 @@ public class SQLLotDAO implements LotDAO {
     }
 
     @Override
-    public void deleteLot(Lot lot) throws DAOException {
+    public void delete(Lot lot) throws DAOException {
         try {
             Connection connection = connectionPool.takeConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(Const.DELETE_LOT_BY_ID);
@@ -69,7 +69,7 @@ public class SQLLotDAO implements LotDAO {
     }
 
     @Override
-    public Lot findLotById(int lotId) throws DAOException {
+    public Lot findById(int lotId) throws DAOException {
         try {
             Connection connection = connectionPool.takeConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(Const.SELECT_LOT_BY_ID);
@@ -97,24 +97,24 @@ public class SQLLotDAO implements LotDAO {
     }
 
     @Override
-    public List<Integer> findLotIdsBySellerId(int sellerId) throws DAOException {
+    public List<Lot> findBySellerId(int sellerId) throws DAOException {
         try {
             Connection connection = connectionPool.takeConnection();
-            PreparedStatement preparedStatement = connection.prepareStatement(Const.SELECT_LOT_IDS_BY_SELLER_ID);
+            PreparedStatement preparedStatement = connection.prepareStatement(Const.SELECT_LOT_BY_SELLER_ID);
 
             preparedStatement.setString(1, String.valueOf(sellerId));
 
             ResultSet resultSet = preparedStatement.executeQuery();
 
-            List<Integer> lotIds = new ArrayList<>();
+            List<Lot> lots = new ArrayList<>();
             while (resultSet.next()) {
                 Lot lot = createLot(resultSet);
-                lotIds.add(lot.getLotId());
+                lots.add(lot);
             }
 
             connectionPool.closeConnection(connection, preparedStatement);
 
-            return lotIds;
+            return lots;
         } catch (SQLException e) {
             logger.log(Level.ERROR, "Error compiling sql request", e);///ne tolko
             throw new DAOException(e);
@@ -125,7 +125,7 @@ public class SQLLotDAO implements LotDAO {
     }
 
     @Override
-    public void changeDescription(Lot lot, String newDescription) throws DAOException {
+    public void updateDescription(Lot lot, String newDescription) throws DAOException {
         try {
             Connection connection = connectionPool.takeConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(Const.UPDATE_LOT_DESCRIPTION);
@@ -146,7 +146,7 @@ public class SQLLotDAO implements LotDAO {
     }
 
     @Override
-    public void changeLocation(Lot lot, String newLocation) throws DAOException {
+    public void updateLocation(Lot lot, String newLocation) throws DAOException {
         try {
             Connection connection = connectionPool.takeConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(Const.UPDATE_LOT_LOCATION);
@@ -167,7 +167,7 @@ public class SQLLotDAO implements LotDAO {
     }
 
     @Override
-    public void changeStartPrice(Lot lot, BigDecimal newStartPrice) throws DAOException {
+    public void updateStartPrice(Lot lot, BigDecimal newStartPrice) throws DAOException {
         try {
             Connection connection = connectionPool.takeConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(Const.UPDATE_LOT_START_PRICE);
@@ -188,7 +188,7 @@ public class SQLLotDAO implements LotDAO {
     }
 
     @Override
-    public void changeMinPrice(Lot lot, BigDecimal newMinPrice) throws DAOException {
+    public void updateMinPrice(Lot lot, BigDecimal newMinPrice) throws DAOException {
         try {
             Connection connection = connectionPool.takeConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(Const.UPDATE_LOT_MIN_PRICE);

@@ -27,7 +27,7 @@ public class SQLBidDAO implements BidDAO {
     private ConnectionPool connectionPool = ConnectionPool.getInstance();
 
     @Override
-    public void addBid(Bid bid) throws DAOException {
+    public void save(Bid bid) throws DAOException {
         try {
             Connection connection = connectionPool.takeConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(Const.ADD_NEW_BID);
@@ -50,7 +50,7 @@ public class SQLBidDAO implements BidDAO {
     }
 
     @Override
-    public Bid findBidById(int bidId) throws DAOException { //trabl millisec
+    public Bid findById(int bidId) throws DAOException { //trabl millisec
         try {
             Connection connection = connectionPool.takeConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(Const.SELECT_BID_BY_ID);
@@ -78,24 +78,24 @@ public class SQLBidDAO implements BidDAO {
     }
 
     @Override
-    public List<Integer> findBidIdsByAuctionId(int auctionId) throws DAOException {
+    public List<Bid> findByAuctionId(int auctionId) throws DAOException {
         try {
             Connection connection = connectionPool.takeConnection();
-            PreparedStatement preparedStatement = connection.prepareStatement(Const.SELECT_BID_IDS_BY_AUCTION_ID);
+            PreparedStatement preparedStatement = connection.prepareStatement(Const.SELECT_BID_BY_AUCTION_ID);
 
             preparedStatement.setString(1, String.valueOf(auctionId));
 
             ResultSet resultSet = preparedStatement.executeQuery();
 
-            List<Integer> bidIds = new ArrayList<>();
+            List<Bid> bids = new ArrayList<>();
             while (resultSet.next()) {
                 Bid bid = createBid(resultSet);
-                bidIds.add(bid.getBidId());
+                bids.add(bid);
             }
 
             connectionPool.closeConnection(connection, preparedStatement);
 
-            return bidIds;
+            return bids;
         } catch (SQLException e) {
             logger.log(Level.ERROR, "Error compiling sql request", e);///ne tolko
             throw new DAOException(e);
@@ -106,24 +106,24 @@ public class SQLBidDAO implements BidDAO {
     }
 
     @Override
-    public List<Integer> findBidIdsByBidderId(int bidderId) throws DAOException {
+    public List<Bid> findByBidderId(int bidderId) throws DAOException {
         try {
             Connection connection = connectionPool.takeConnection();
-            PreparedStatement preparedStatement = connection.prepareStatement(Const.SELECT_BID_IDS_BY_BIDDER_ID);
+            PreparedStatement preparedStatement = connection.prepareStatement(Const.SELECT_BID_BY_BIDDER_ID);
 
             preparedStatement.setString(1, String.valueOf(bidderId));
 
             ResultSet resultSet = preparedStatement.executeQuery();
 
-            List<Integer> bidIds = new ArrayList<>();
+            List<Bid> bids = new ArrayList<>();
             while (resultSet.next()) {
                 Bid bid = createBid(resultSet);
-                bidIds.add(bid.getBidId());
+                bids.add(bid);
             }
 
             connectionPool.closeConnection(connection, preparedStatement);
 
-            return bidIds;
+            return bids;
         } catch (SQLException e) {
             logger.log(Level.ERROR, "Error compiling sql request", e);///ne tolko
             throw new DAOException(e);
@@ -134,7 +134,7 @@ public class SQLBidDAO implements BidDAO {
     }
 
     @Override
-    public void changeBidderId(Bid bid, int newBidderId) throws DAOException {
+    public void updateBidderId(Bid bid, int newBidderId) throws DAOException {
         try {
             Connection connection = connectionPool.takeConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(Const.UPDATE_BID_BIDDER_ID);
@@ -155,7 +155,7 @@ public class SQLBidDAO implements BidDAO {
     }
 
     @Override
-    public void changeSum(Bid bid, BigDecimal newSum) throws DAOException {
+    public void updateSum(Bid bid, BigDecimal newSum) throws DAOException {
         try {
             Connection connection = connectionPool.takeConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(Const.UPDATE_BID_SUM);
@@ -176,7 +176,7 @@ public class SQLBidDAO implements BidDAO {
     }
 
     @Override
-    public void changeTime(Bid bid, LocalDateTime newTime) throws DAOException {
+    public void updateTime(Bid bid, LocalDateTime newTime) throws DAOException {
         try {
             Connection connection = connectionPool.takeConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(Const.UPDATE_BID_TIME);
@@ -197,7 +197,7 @@ public class SQLBidDAO implements BidDAO {
     }
 
     @Override
-    public void changeAuctionId(Bid bid, int newAuctionId) throws DAOException {
+    public void updateAuctionId(Bid bid, int newAuctionId) throws DAOException {
         try {
             Connection connection = connectionPool.takeConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(Const.UPDATE_BID_AUCTION_ID);
@@ -218,7 +218,7 @@ public class SQLBidDAO implements BidDAO {
     }
 
     @Override
-    public void deleteBid(Bid bid) throws DAOException {
+    public void delete(Bid bid) throws DAOException {
         try {
             Connection connection = connectionPool.takeConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(Const.DELETE_BID_BY_ID);

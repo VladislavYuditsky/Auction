@@ -8,14 +8,14 @@ public class Auction {
     private int auctionId;
     private AuctionType type;
     private int lotId;
-    private List<Integer> bidIds;
+    private List<Bid> bids;
     private LocalDateTime finishTime;
 
-    public Auction(int auctionId, AuctionType type, int lotId, List<Integer> bidIds, LocalDateTime finishTime) {
+    public Auction(int auctionId, AuctionType type, int lotId, List<Bid> bids, LocalDateTime finishTime) {
         this.auctionId = auctionId;
         this.type = type;
         this.lotId = lotId;
-        this.bidIds = bidIds;
+        this.bids = bids;
         this.finishTime = finishTime;
     }
 
@@ -52,12 +52,12 @@ public class Auction {
         this.lotId = lotId;
     }
 
-    public List<Integer> getBidIds() {
-        return bidIds;
+    public List<Bid> getBids() {
+        return bids;
     }
 
-    public void setBids(List<Integer> bidIds) {
-        this.bidIds = bidIds;
+    public void setBids(List<Bid> bids) {
+        this.bids = bids;
     }
 
     public LocalDateTime getFinishTime() {
@@ -76,13 +76,13 @@ public class Auction {
         return auctionId == auction.auctionId &&
                 type == auction.type &&
                 lotId == auction.lotId &&
-                bidIds.equals(auction.bidIds) &&
+                bids.equals(auction.bids) &&
                 finishTime.equals(auction.finishTime);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(auctionId, type, lotId, bidIds, finishTime);
+        return Objects.hash(auctionId, type, lotId, bids, finishTime);
     }
 
     @Override
@@ -91,7 +91,7 @@ public class Auction {
                 "auctionId=" + auctionId +
                 ", type=" + type +
                 ", lotId=" + lotId +
-                ", bidIds=" + bidIds +
+                ", bids=" + bids +
                 ", finishTime=" + finishTime +
                 '}';
     }

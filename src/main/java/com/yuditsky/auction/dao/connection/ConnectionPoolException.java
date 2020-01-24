@@ -1,6 +1,6 @@
 package com.yuditsky.auction.dao.connection;
 
-public class ConnectionPoolException extends Exception{
+public class ConnectionPoolException extends Exception {
     public ConnectionPoolException() {
         super();
     }

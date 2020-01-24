@@ -12,13 +12,13 @@ public class User {
     private String email;
     private BigDecimal balance;
     private boolean blocked;
-    private List<Integer> bidIds;
-    private List<Integer> lotIds;
-    private List<Integer> paymentIds;
-    //private List<Credit> credits;
+    private List<Bid> bids;
+    private List<Lot> lots;
+    private List<Payment> payments;
+    private List<Credit> credits;
 
     public User(int userId, String login, String password, UserRole role, String email, BigDecimal balance,
-                boolean blocked, List<Integer> bidIds, List<Integer> lotIds, List<Integer> paymentIds) {
+                boolean blocked, List<Bid> bids, List<Lot> lots, List<Payment> payments, List<Credit> credits) {
         this.userId = userId;
         this.login = login;
         this.password = password;
@@ -26,9 +26,10 @@ public class User {
         this.email = email;
         this.balance = balance;
         this.blocked = blocked;
-        this.bidIds = bidIds;
-        this.lotIds = lotIds;
-        this.paymentIds = paymentIds;
+        this.bids = bids;
+        this.lots = lots;
+        this.payments = payments;
+        this.credits = credits;
     }
 
     public User() {
@@ -90,28 +91,36 @@ public class User {
         this.blocked = blocked;
     }
 
-    public List<Integer> getBidIds() {
-        return bidIds;
+    public List<Bid> getBids() {
+        return bids;
     }
 
-    public void setBidIds(List<Integer> bidIds) {
-        this.bidIds = bidIds;
+    public void setBids(List<Bid> bids) {
+        this.bids = bids;
     }
 
-    public List<Integer> getLotIds() {
-        return lotIds;
+    public List<Lot> getLots() {
+        return lots;
     }
 
-    public void setLotIds(List<Integer> lotIds) {
-        this.lotIds = lotIds;
+    public void setLots(List<Lot> lots) {
+        this.lots = lots;
     }
 
-    public List<Integer> getPaymentIds() {
-        return paymentIds;
+    public List<Payment> getPayments() {
+        return payments;
     }
 
-    public void setPaymentIds(List<Integer> paymentIds) {
-        this.paymentIds = paymentIds;
+    public void setPayments(List<Payment> payments) {
+        this.payments = payments;
+    }
+
+    public List<Credit> getCredits() {
+        return credits;
+    }
+
+    public void setCredits(List<Credit> credits) {
+        this.credits = credits;
     }
 
     @Override
@@ -126,14 +135,15 @@ public class User {
                 role == user.role &&
                 email.equals(user.email) &&
                 balance.equals(user.balance) &&
-                bidIds.equals(user.bidIds) &&
-                lotIds.equals(user.lotIds) &&
-                paymentIds.equals(user.paymentIds);
+                bids.equals(user.bids) &&
+                lots.equals(user.lots) &&
+                payments.equals(user.payments) &&
+                credits.equals(user.credits);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(userId, login, password, role, email, balance, blocked, bidIds, lotIds, paymentIds);
+        return Objects.hash(userId, login, password, role, email, balance, blocked, bids, lots, payments, credits);
     }
 
     @Override
@@ -146,9 +156,10 @@ public class User {
                 ", email='" + email + '\'' +
                 ", balance=" + balance +
                 ", blocked=" + blocked +
-                ", bidIds=" + bidIds +
-                ", lotIds=" + lotIds +
-                ", paymentIds=" + paymentIds +
+                ", bids=" + bids +
+                ", lots=" + lots +
+                ", payments=" + payments +
+                ", credits=" + credits +
                 '}';
     }
 }

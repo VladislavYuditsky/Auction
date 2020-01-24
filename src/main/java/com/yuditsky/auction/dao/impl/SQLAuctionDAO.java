@@ -9,6 +9,7 @@ import com.yuditsky.auction.dao.connection.ConnectionPool;
 import com.yuditsky.auction.dao.connection.ConnectionPoolException;
 import com.yuditsky.auction.entity.Auction;
 import com.yuditsky.auction.entity.AuctionType;
+import com.yuditsky.auction.entity.Bid;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -28,7 +29,7 @@ public class SQLAuctionDAO implements AuctionDAO {
     private ConnectionPool connectionPool = ConnectionPool.getInstance();
 
     @Override
-    public void addAuction(Auction auction) throws DAOException {
+    public void save(Auction auction) throws DAOException {
         try {
             Connection connection = connectionPool.takeConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(Const.ADD_NEW_AUCTION);
@@ -49,7 +50,7 @@ public class SQLAuctionDAO implements AuctionDAO {
     }
 
     @Override
-    public Auction findAuctionById(int auctionId) throws DAOException {
+    public Auction findById(int auctionId) throws DAOException {
         try {
             Connection connection = connectionPool.takeConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(Const.SELECT_AUCTION_BY_ID);
@@ -77,7 +78,7 @@ public class SQLAuctionDAO implements AuctionDAO {
     }
 
     @Override
-    public void changeAuctionType(Auction auction, AuctionType newType) throws DAOException {
+    public void updateAuctionType(Auction auction, AuctionType newType) throws DAOException {
         try {
             Connection connection = connectionPool.takeConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(Const.UPDATE_AUCTION_TYPE);
@@ -98,7 +99,7 @@ public class SQLAuctionDAO implements AuctionDAO {
     }
 
     @Override
-    public void changeLotId(Auction auction, int newLotId) throws DAOException {
+    public void updateLotId(Auction auction, int newLotId) throws DAOException {
         try {
             Connection connection = connectionPool.takeConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(Const.UPDATE_AUCTION_LOT_ID);
@@ -119,7 +120,7 @@ public class SQLAuctionDAO implements AuctionDAO {
     }
 
     @Override
-    public void changeFinishTime(Auction auction, LocalDateTime newFinishTime) throws DAOException {
+    public void updateFinishTime(Auction auction, LocalDateTime newFinishTime) throws DAOException {
         try {
             Connection connection = connectionPool.takeConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(Const.UPDATE_AUCTION_FINISH_TIME);
@@ -140,7 +141,7 @@ public class SQLAuctionDAO implements AuctionDAO {
     }
 
     @Override
-    public void deleteAuction(Auction auction) throws DAOException {
+    public void delete(Auction auction) throws DAOException {
         try {
             Connection connection = connectionPool.takeConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(Const.DELETE_AUCTION_BY_ID);
@@ -168,8 +169,8 @@ public class SQLAuctionDAO implements AuctionDAO {
 
         DAOFactory factory = DAOFactory.getInstance();
         BidDAO bidDAO = factory.getBidDAO();
-        List<Integer> bidIds = bidDAO.findBidIdsByAuctionId(auctionId);
+        List<Bid> bids = bidDAO.findByAuctionId(auctionId);
 
-        return new Auction(auctionId, type, lotId, bidIds, finishTime);
+        return new Auction(auctionId, type, lotId, bids, finishTime);
     }
 }

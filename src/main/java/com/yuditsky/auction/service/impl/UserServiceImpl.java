@@ -23,7 +23,7 @@ public class UserServiceImpl implements UserService {
         DAOFactory factory = DAOFactory.getInstance();
         UserDAO userDAO = factory.getUserDAO();
         try {
-            User userFromDB = userDAO.findUserByLogin(user.getLogin());
+            User userFromDB = userDAO.findByLogin(user.getLogin());
             if (userFromDB != null) {
                 return false;
             }
@@ -50,7 +50,7 @@ public class UserServiceImpl implements UserService {
         Encoder encoder = new Encoder();
 
         try {
-            User user = userDAO.findUserByLoginAndPassword(login, encoder.encode(password));
+            User user = userDAO.findByLoginAndPassword(login, encoder.encode(password));
             logger.debug("User " + (user != null ? user.getLogin() + " loaded" : "not found"));
             return user;
         } catch (DAOException e) {
@@ -78,7 +78,7 @@ public class UserServiceImpl implements UserService {
         UserDAO userDAO = factory.getUserDAO();
 
         try {
-            return userDAO.findUserByLogin(login);
+            return userDAO.findByLogin(login);
         } catch (DAOException e) {
             logger.error("Can't find user by login", e);
             throw new ServiceException(e);
@@ -93,7 +93,7 @@ public class UserServiceImpl implements UserService {
         Encoder encoder = new Encoder();
 
         try {
-            userDAO.changePassword(user, encoder.encode(password));
+            userDAO.updatePassword(user, encoder.encode(password));
         } catch (DAOException e) {
             logger.error("Can't update password for user " + user.getLogin(), e);
             throw new ServiceException(e);
@@ -108,7 +108,7 @@ public class UserServiceImpl implements UserService {
         Encoder encoder = new Encoder();
 
         try {
-            userDAO.changeEmail(user, email);
+            userDAO.updateEmail(user, email);
         } catch (DAOException e) {
             logger.error("Can't update email for user " + user.getLogin(), e);
             throw new ServiceException(e);
@@ -121,7 +121,7 @@ public class UserServiceImpl implements UserService {
         UserDAO userDAO = factory.getUserDAO();
 
         try{
-            userDAO.changeBalance(user, sum);
+            userDAO.updateBalance(user, sum);
         } catch (DAOException e) {
         logger.error("Can't update balance for user " + user.getLogin(), e);
         throw new ServiceException(e);
@@ -146,7 +146,7 @@ public class UserServiceImpl implements UserService {
         UserDAO userDAO = factory.getUserDAO();
 
         try {
-            userDAO.deleteUser(user);
+            userDAO.delete(user);
             logger.debug("User " + user.getLogin() + "deleted");
         } catch (DAOException e) {
             logger.error("Can't delete user " + user.getLogin(), e);

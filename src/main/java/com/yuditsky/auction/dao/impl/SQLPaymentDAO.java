@@ -27,7 +27,7 @@ public class SQLPaymentDAO implements PaymentDAO {
     private ConnectionPool connectionPool = ConnectionPool.getInstance();
 
     @Override
-    public void addPayment(Payment payment) throws DAOException {
+    public void save(Payment payment) throws DAOException {
         try {
             Connection connection = connectionPool.takeConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(Const.ADD_NEW_PAYMENT);
@@ -50,7 +50,7 @@ public class SQLPaymentDAO implements PaymentDAO {
     }
 
     @Override
-    public Payment findPaymentById(int paymentId) throws DAOException {
+    public Payment findById(int paymentId) throws DAOException {
         try {
             Connection connection = connectionPool.takeConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(Const.SELECT_PAYMENT_BY_ID);
@@ -78,24 +78,24 @@ public class SQLPaymentDAO implements PaymentDAO {
     }
 
     @Override
-    public List<Integer> findPaymentIdsByPayerId(int payerId) throws DAOException {
+    public List<Payment> findByPayerId(int payerId) throws DAOException {
         try {
             Connection connection = connectionPool.takeConnection();
-            PreparedStatement preparedStatement = connection.prepareStatement(Const.SELECT_PAYMENT_IDS_BY_PAYER_ID);
+            PreparedStatement preparedStatement = connection.prepareStatement(Const.SELECT_PAYMENT_BY_PAYER_ID);
 
             preparedStatement.setString(1, String.valueOf(payerId));
 
             ResultSet resultSet = preparedStatement.executeQuery();
 
-            List<Integer> paymentIds = new ArrayList<>();
+            List<Payment> payments = new ArrayList<>();
             while (resultSet.next()) {
                 Payment payment = createPayment(resultSet);
-                paymentIds.add(payment.getPaymentId());
+                payments.add(payment);
             }
 
             connectionPool.closeConnection(connection, preparedStatement);
 
-            return paymentIds;
+            return payments;
         } catch (SQLException e) {
             logger.log(Level.ERROR, "Error compiling sql request", e);///ne tolko
             throw new DAOException(e);
@@ -106,7 +106,7 @@ public class SQLPaymentDAO implements PaymentDAO {
     }
 
     @Override
-    public void changePayerId(Payment payment, int newPayerId) throws DAOException {
+    public void updatePayerId(Payment payment, int newPayerId) throws DAOException {
         try {
             Connection connection = connectionPool.takeConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(Const.UPDATE_PAYMENT_PAYER_ID);
@@ -127,7 +127,7 @@ public class SQLPaymentDAO implements PaymentDAO {
     }
 
     @Override
-    public void changeSum(Payment payment, BigDecimal newSum) throws DAOException {
+    public void updateSum(Payment payment, BigDecimal newSum) throws DAOException {
         try {
             Connection connection = connectionPool.takeConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(Const.UPDATE_PAYMENT_SUM);
@@ -148,7 +148,7 @@ public class SQLPaymentDAO implements PaymentDAO {
     }
 
     @Override
-    public void changeLotId(Payment payment, int newLotId) throws DAOException {
+    public void updateLotId(Payment payment, int newLotId) throws DAOException {
         try {
             Connection connection = connectionPool.takeConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(Const.UPDATE_PAYMENT_LOT_ID);
@@ -169,7 +169,7 @@ public class SQLPaymentDAO implements PaymentDAO {
     }
 
     @Override
-    public void changeDate(Payment payment, LocalDateTime newDate) throws DAOException {
+    public void updateDate(Payment payment, LocalDateTime newDate) throws DAOException {
         try {
             Connection connection = connectionPool.takeConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(Const.UPDATE_PAYMENT_DATE);
@@ -190,7 +190,7 @@ public class SQLPaymentDAO implements PaymentDAO {
     }
 
     @Override
-    public void deletePayment(Payment payment) throws DAOException {
+    public void delete(Payment payment) throws DAOException {
         try {
             Connection connection = connectionPool.takeConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(Const.DELETE_PAYMENT_BY_ID);

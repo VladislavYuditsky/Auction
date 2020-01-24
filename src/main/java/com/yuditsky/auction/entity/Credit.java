@@ -6,17 +6,19 @@ import java.util.Objects;
 
 public class Credit {
     private int creditId;
-    private Payment payment;
     private double percent;
     private LocalDate endDate;
     private BigDecimal balance;
+    private BigDecimal sum;
+    private int borrowerId;
 
-    public Credit(int creditId, Payment payment, double percent, LocalDate endDate, BigDecimal balance) {
+    public Credit(int creditId, double percent, LocalDate endDate, BigDecimal balance, BigDecimal sum, int borrowerId) {
         this.creditId = creditId;
-        this.payment = payment;
         this.percent = percent;
         this.endDate = endDate;
         this.balance = balance;
+        this.sum = sum;
+        this.borrowerId = borrowerId;
     }
 
     public Credit() {
@@ -28,14 +30,6 @@ public class Credit {
 
     public void setCreditId(int creditId) {
         this.creditId = creditId;
-    }
-
-    public Payment getPayment() {
-        return payment;
-    }
-
-    public void setPayment(Payment payment) {
-        this.payment = payment;
     }
 
     public double getPercent() {
@@ -62,6 +56,22 @@ public class Credit {
         this.balance = balance;
     }
 
+    public BigDecimal getSum() {
+        return sum;
+    }
+
+    public void setSum(BigDecimal sum) {
+        this.sum = sum;
+    }
+
+    public int getBorrowerId() {
+        return borrowerId;
+    }
+
+    public void setBorrowerId(int borrowerId) {
+        this.borrowerId = borrowerId;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -69,24 +79,26 @@ public class Credit {
         Credit credit = (Credit) o;
         return creditId == credit.creditId &&
                 Double.compare(credit.percent, percent) == 0 &&
-                payment.equals(credit.payment) &&
+                borrowerId == credit.borrowerId &&
                 endDate.equals(credit.endDate) &&
-                balance.equals(credit.balance);
+                balance.equals(credit.balance) &&
+                sum.equals(credit.sum);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(creditId, payment, percent, endDate, balance);
+        return Objects.hash(creditId, percent, endDate, balance, sum, borrowerId);
     }
 
     @Override
     public String toString() {
         return "Credit{" +
                 "creditId=" + creditId +
-                ", payment=" + payment +
                 ", percent=" + percent +
                 ", endDate=" + endDate +
                 ", balance=" + balance +
+                ", sum=" + sum +
+                ", borrowerId=" + borrowerId +
                 '}';
     }
 }

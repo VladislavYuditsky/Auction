@@ -19,11 +19,11 @@ public class PooledConnection implements Connection {
 
     @Override
     public void close() throws SQLException {
-        if(connection.isClosed()){
+        if (connection.isClosed()) {
             throw new SQLException("Attempting to close closed connection");
         }
 
-        if(connection.isReadOnly()){ //
+        if (connection.isReadOnly()) { //
             connection.setReadOnly(false);
         }
 
