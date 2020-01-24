@@ -10,6 +10,7 @@ public class DAOFactory {
     private final BidDAO bidDAOImpl = new SQLBidDAO();
     private final LotDAO lotDAOImpl = new SQLLotDAO();
     private final PaymentDAO paymentDAOImpl = new SQLPaymentDAO();
+    private final CreditDAO creditDAOImpl = new SQLCreditDAO();
 
     private DAOFactory() {
     }
@@ -36,5 +37,9 @@ public class DAOFactory {
 
     public PaymentDAO getPaymentDAO() {
         return paymentDAOImpl;
+    }
+
+    public CreditDAO getCreditDAO() {
+        return creditDAOImpl;
     }
 }

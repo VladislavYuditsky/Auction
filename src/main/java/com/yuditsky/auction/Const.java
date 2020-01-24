@@ -54,4 +54,12 @@ public class Const {
     public static final String UPDATE_PAYMENT_LOT_ID = "UPDATE payment SET lot_id=? WHERE payment_id=?";
     public static final String UPDATE_PAYMENT_DATE = "UPDATE payment SET date=? WHERE payment_id=?";
     public static final String DELETE_PAYMENT_BY_ID = "DELETE FROM payment WHERE payment_id=?";
+
+    public static final String ADD_NEW_CREDIT = "INSERT INTO credit (percent, end_date, balance, sum, borrower_id)" +
+            " VALUES(?,?,?,?,?)";
+    public static final String SELECT_CREDIT_BY_ID = "SELECT * FROM credit WHERE credit_id=?";
+    public static final String SELECT_CREDIT_BY_BORROWER_ID = "SELECT * FROM credit WHERE borrower_id=?";
+    public static final String SELECT_ALL_CREDITS = "SELECT * FROM credit";
+    public static final String UPDATE_CREDIT_BALANCE = "UPDATE credit SET balance=? WHERE credit_id=?";
+    public static final String DELETE_CREDIT_BY_ID = "DELETE FROM credit WHERE credit_id=?";
 }

@@ -1,18 +1,18 @@
 package com.yuditsky.auction.entity;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 public class Credit {
     private int creditId;
     private double percent;
-    private LocalDate endDate;
+    private LocalDateTime endDate;
     private BigDecimal balance;
     private BigDecimal sum;
     private int borrowerId;
 
-    public Credit(int creditId, double percent, LocalDate endDate, BigDecimal balance, BigDecimal sum, int borrowerId) {
+    public Credit(int creditId, double percent, LocalDateTime endDate, BigDecimal balance, BigDecimal sum, int borrowerId) {
         this.creditId = creditId;
         this.percent = percent;
         this.endDate = endDate;
@@ -40,11 +40,11 @@ public class Credit {
         this.percent = percent;
     }
 
-    public LocalDate getEndDate() {
+    public LocalDateTime getEndDate() {
         return endDate;
     }
 
-    public void setEndDate(LocalDate endDate) {
+    public void setEndDate(LocalDateTime endDate) {
         this.endDate = endDate;
     }
 
