@@ -7,6 +7,7 @@ import org.apache.logging.log4j.Logger;
 import java.sql.*;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.locks.ReentrantLock;
 
 public class ConnectionPool {
     private final static Logger logger = LogManager.getLogger(ConnectionPool.class);
@@ -18,7 +19,8 @@ public class ConnectionPool {
     private int poolSize;
     private BlockingQueue<Connection> connectionQueue;
     private BlockingQueue<Connection> givenAwayConnectionQueue;
-    private final static ConnectionPool instance = new ConnectionPool();
+    private static ConnectionPool instance;
+    private static ReentrantLock lock = new ReentrantLock();
 
     private ConnectionPool() {
         DBResourceManager dbResourceManager = DBResourceManager.getInstance();
@@ -27,9 +29,21 @@ public class ConnectionPool {
         user = dbResourceManager.getValue(DBParameter.DB_USER);
         password = dbResourceManager.getValue(DBParameter.DB_PASSWORD);
         poolSize = Integer.parseInt(dbResourceManager.getValue(DBParameter.DB_POOL_SIZE));
+        try {
+            initPoolData();
+        } catch (ConnectionPoolException e) {
+            logger.error("Can't init pool data");
+        }
     }
 
     public static ConnectionPool getInstance() {
+        if (instance == null) {
+            lock.lock();
+            if (instance == null) {
+                instance = new ConnectionPool();
+            }
+            lock.unlock();
+        }
         return instance;
     }
 
