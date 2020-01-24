@@ -1,7 +1,9 @@
 package com.yuditsky.auction.dao.impl;
 
 import com.yuditsky.auction.Const;
+import com.yuditsky.auction.dao.BidDAO;
 import com.yuditsky.auction.dao.DAOException;
+import com.yuditsky.auction.dao.LotDAO;
 import com.yuditsky.auction.dao.UserDAO;
 import com.yuditsky.auction.dao.connection.ConnectionPool;
 import com.yuditsky.auction.dao.connection.ConnectionPoolException;
@@ -16,6 +18,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
 
 public class SQLUserDAO implements UserDAO {
     private final static Logger logger = LogManager.getLogger(SQLUserDAO.class);
@@ -205,7 +208,7 @@ public class SQLUserDAO implements UserDAO {
         }
     }
 
-    private User createUser(ResultSet resultSet) throws SQLException {
+    private User createUser(ResultSet resultSet) throws SQLException, DAOException {
         int id = resultSet.getInt("user_id");
         String login = resultSet.getString("login");
         String password = resultSet.getString("password");
@@ -213,6 +216,13 @@ public class SQLUserDAO implements UserDAO {
         UserRole role = UserRole.valueOf(resultSet.getString("role").toUpperCase());
         boolean blocked = resultSet.getBoolean("blocked");
         BigDecimal balance = resultSet.getBigDecimal("balance");
-        return new User(id, login, password, role, email, balance, blocked);
+
+        BidDAO bidDAO = new SQLBidDAO();
+        List<Integer> bidIds = bidDAO.findBidIdsByBidderId(id);
+
+        LotDAO lotDAO = new SQLLotDAO();
+        List<Integer> lotIds = lotDAO.findLotIdsBySellerId(id);
+
+        return new User(id, login, password, role, email, balance, blocked, bidIds, lotIds);
     }
 }

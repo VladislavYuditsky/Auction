@@ -6,9 +6,12 @@ import com.yuditsky.auction.dao.connection.ConnectionPool;
 import com.yuditsky.auction.dao.connection.ConnectionPoolException;
 import com.yuditsky.auction.entity.User;
 import com.yuditsky.auction.entity.UserRole;
-import org.junit.*;
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
+import org.junit.Test;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 
 import static java.math.BigDecimal.ROUND_DOWN;
 import static org.junit.Assert.assertEquals;
@@ -17,7 +20,7 @@ public class SQLUserDAOTest {
     private static final ConnectionPool connectionPool = ConnectionPool.getInstance();
     private static final UserDAO userDAO = new SQLUserDAO();
 
-    User testUser = new User(2, "qwertry", "12345", null, "qwe", null, true);
+    User testUser = new User(2, "qwertry1", "12345", null, "qwe", null, true, new ArrayList<>(), new ArrayList<>());
 
     @BeforeClass
     public static void init() throws ConnectionPoolException {
@@ -83,7 +86,7 @@ public class SQLUserDAOTest {
     }
 
     @AfterClass
-    public static void dispose(){
+    public static void dispose() {
         connectionPool.dispose();
     }
 }
