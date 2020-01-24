@@ -214,13 +214,14 @@ public class SQLUserDAO implements UserDAO {
         boolean blocked = resultSet.getBoolean("blocked");
         BigDecimal balance = resultSet.getBigDecimal("balance");
 
-        BidDAO bidDAO = new SQLBidDAO();
+        DAOFactory factory = DAOFactory.getInstance();
+        BidDAO bidDAO = factory.getBidDAO();
         List<Integer> bidIds = bidDAO.findBidIdsByBidderId(id);
 
-        LotDAO lotDAO = new SQLLotDAO();
+        LotDAO lotDAO = factory.getLotDAO();
         List<Integer> lotIds = lotDAO.findLotIdsBySellerId(id);
 
-        PaymentDAO paymentDAO = new SQLPaymentDAO();
+        PaymentDAO paymentDAO = factory.getPaymentDAO();
         List<Integer> paymentIds = paymentDAO.findPaymentIdsByPayerId(id);
 
         return new User(id, login, password, role, email, balance, blocked, bidIds, lotIds, paymentIds);

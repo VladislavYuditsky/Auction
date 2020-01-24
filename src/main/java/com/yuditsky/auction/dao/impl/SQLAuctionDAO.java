@@ -4,6 +4,7 @@ import com.yuditsky.auction.Const;
 import com.yuditsky.auction.dao.AuctionDAO;
 import com.yuditsky.auction.dao.BidDAO;
 import com.yuditsky.auction.dao.DAOException;
+import com.yuditsky.auction.dao.DAOFactory;
 import com.yuditsky.auction.dao.connection.ConnectionPool;
 import com.yuditsky.auction.dao.connection.ConnectionPoolException;
 import com.yuditsky.auction.entity.Auction;
@@ -165,7 +166,8 @@ public class SQLAuctionDAO implements AuctionDAO {
         LocalDateTime finishTime = LocalDateTime.parse(resultSet.getString("finish_time"),
                 DATA_TIME_FORMATTER);
 
-        BidDAO bidDAO = new SQLBidDAO();
+        DAOFactory factory = DAOFactory.getInstance();
+        BidDAO bidDAO = factory.getBidDAO();
         List<Integer> bidIds = bidDAO.findBidIdsByAuctionId(auctionId);
 
         return new Auction(auctionId, type, lotId, bidIds, finishTime);
