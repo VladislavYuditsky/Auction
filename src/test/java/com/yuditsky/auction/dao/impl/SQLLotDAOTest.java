@@ -2,17 +2,16 @@ package com.yuditsky.auction.dao.impl;
 
 import com.yuditsky.auction.dao.DAOException;
 import com.yuditsky.auction.dao.LotDAO;
-import com.yuditsky.auction.dao.UserDAO;
 import com.yuditsky.auction.dao.connection.ConnectionPool;
 import com.yuditsky.auction.dao.connection.ConnectionPoolException;
-import com.yuditsky.auction.entity.Bid;
 import com.yuditsky.auction.entity.Lot;
-import com.yuditsky.auction.entity.User;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 
 import static java.math.BigDecimal.ROUND_DOWN;
 import static org.junit.Assert.assertEquals;
@@ -44,6 +43,14 @@ public class SQLLotDAOTest {
     public void findLotByIdTest() throws DAOException {
         Lot expected = testLot;
         Lot actual = lotDAO.findLotById(testLot.getLotId());
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    public void findLotIdsBySellerIdTest() throws DAOException {
+        List<Integer> expected = new ArrayList<>();
+        expected.add(1);
+        List<Integer> actual = lotDAO.findLotIdsBySellerId(1);
         assertEquals(expected, actual);
     }
 

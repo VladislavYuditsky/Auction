@@ -15,6 +15,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class SQLLotDAO implements LotDAO {
     private final static Logger logger = LogManager.getLogger(SQLLotDAO.class);
@@ -85,6 +87,34 @@ public class SQLLotDAO implements LotDAO {
             connectionPool.closeConnection(connection, preparedStatement);
 
             return lot;
+        } catch (SQLException e) {
+            logger.log(Level.ERROR, "Error compiling sql request", e);///ne tolko
+            throw new DAOException(e);
+        } catch (ConnectionPoolException e) {
+            logger.log(Level.ERROR, "Can't take connection", e);
+            throw new DAOException(e);
+        }
+    }
+
+    @Override
+    public List<Integer> findLotIdsBySellerId(int sellerId) throws DAOException {
+        try {
+            Connection connection = connectionPool.takeConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement(Const.SELECT_LOT_IDS_BY_SELLER_ID);
+
+            preparedStatement.setString(1, String.valueOf(sellerId));
+
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            List<Integer> lotIds = new ArrayList<>();
+            while (resultSet.next()) {
+                Lot lot = createLot(resultSet);
+                lotIds.add(lot.getLotId());
+            }
+
+            connectionPool.closeConnection(connection, preparedStatement);
+
+            return lotIds;
         } catch (SQLException e) {
             logger.log(Level.ERROR, "Error compiling sql request", e);///ne tolko
             throw new DAOException(e);

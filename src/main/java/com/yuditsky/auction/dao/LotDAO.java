@@ -3,6 +3,7 @@ package com.yuditsky.auction.dao;
 import com.yuditsky.auction.entity.Lot;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 public interface LotDAO {
     void addLot(Lot lot) throws DAOException;
@@ -10,6 +11,8 @@ public interface LotDAO {
     void deleteLotById(int lotId) throws DAOException;
 
     Lot findLotById(int lotId) throws DAOException;
+
+    List<Integer> findLotIdsBySellerId(int sellerId) throws DAOException;
 
     void changeDescription(int lotId, String newDescription) throws DAOException;
 
