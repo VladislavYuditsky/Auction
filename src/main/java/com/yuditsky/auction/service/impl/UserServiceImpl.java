@@ -18,8 +18,7 @@ public class UserServiceImpl implements UserService {
     private final static Logger logger = LogManager.getLogger(UserServiceImpl.class);
 
     @Override
-    public boolean addUser(User user) throws ServiceException {
-        //validator
+    public boolean save(User user) throws ServiceException {
         DAOFactory factory = DAOFactory.getInstance();
         UserDAO userDAO = factory.getUserDAO();
         try {
@@ -43,8 +42,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User findUserByLoginAndPassword(String login, String password) throws ServiceException {
-        //validator
+    public User findByLoginAndPassword(String login, String password) throws ServiceException {
         DAOFactory factory = DAOFactory.getInstance();
         UserDAO userDAO = factory.getUserDAO();
         Encoder encoder = new Encoder();
@@ -87,7 +85,6 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void updatePassword(User user, String password) throws ServiceException {
-        //valid
         DAOFactory factory = DAOFactory.getInstance();
         UserDAO userDAO = factory.getUserDAO();
         Encoder encoder = new Encoder();
@@ -102,7 +99,6 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void updateEmail(User user, String email) throws ServiceException {
-        //valid
         DAOFactory factory = DAOFactory.getInstance();
         UserDAO userDAO = factory.getUserDAO();
         Encoder encoder = new Encoder();
@@ -141,7 +137,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void deleteUser(User user) throws ServiceException {
+    public void delete(User user) throws ServiceException {
         DAOFactory factory = DAOFactory.getInstance();
         UserDAO userDAO = factory.getUserDAO();
 

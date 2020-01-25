@@ -6,9 +6,9 @@ import java.math.BigDecimal;
 import java.util.List;
 
 public interface UserService {
-    boolean addUser(User user) throws ServiceException;
+    boolean save(User user) throws ServiceException;
 
-    User findUserByLoginAndPassword(String login, String password) throws ServiceException;
+    User findByLoginAndPassword(String login, String password) throws ServiceException;
 
     List<User> findAll() throws ServiceException;
 
@@ -24,5 +24,5 @@ public interface UserService {
 
     void subtractBalance(User user, BigDecimal sum) throws ServiceException;
 
-    void deleteUser(User user) throws ServiceException;
+    void delete(User user) throws ServiceException;
 }
