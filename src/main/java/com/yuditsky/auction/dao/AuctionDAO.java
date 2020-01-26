@@ -4,17 +4,15 @@ import com.yuditsky.auction.entity.Auction;
 import com.yuditsky.auction.entity.AuctionType;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
-public interface AuctionDAO {
-    void save(Auction auction) throws DAOException;
+public interface AuctionDAO extends GenericDAO<Auction> {
 
-    Auction findById(int auctionId) throws DAOException;
+    List<Auction> findByType(AuctionType type) throws DAOException;
 
-    void updateAuctionType(Auction auction, AuctionType newType) throws DAOException;
+    /*void updateAuctionType(Auction auction, AuctionType newType) throws DAOException;
 
     void updateLotId(Auction auction, int newLotId) throws DAOException;
 
-    void updateFinishTime(Auction auction, LocalDateTime newFinishTime) throws DAOException;
-
-    void delete(Auction auction) throws DAOException;
+    void updateFinishTime(Auction auction, LocalDateTime newFinishTime) throws DAOException;*/
 }

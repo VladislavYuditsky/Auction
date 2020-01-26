@@ -18,166 +18,135 @@ import java.util.List;
 
 import static com.yuditsky.auction.Const.DATA_TIME_FORMATTER;
 
-public class SQLCreditDAO implements CreditDAO {
+public class SQLCreditDAO extends SQLAbstractDAO<Credit> implements CreditDAO {
     private final static Logger logger = LogManager.getLogger(SQLCreditDAO.class);
 
     private ConnectionPool connectionPool = ConnectionPool.getInstance();
 
     @Override
-    public void save(Credit credit) throws DAOException {
+    protected List<Credit> parseResultSet(ResultSet resultSet) throws DAOException {
         try {
-            Connection connection = connectionPool.takeConnection();
-            PreparedStatement preparedStatement = connection.prepareStatement(Const.ADD_NEW_CREDIT);
+            List<Credit> credits = new ArrayList<>();
+            while (resultSet.next()) {
+                int creditId = resultSet.getInt("credit_id");
+                double percent = resultSet.getDouble("percent");
+                LocalDateTime endDate = LocalDateTime.parse(resultSet.getString("end_date"),
+                        DATA_TIME_FORMATTER);
+                BigDecimal balance = resultSet.getBigDecimal("balance");
+                BigDecimal sum = resultSet.getBigDecimal("sum");
+                int borrowerId = resultSet.getInt("borrower_id");
 
-            preparedStatement.setString(1, String.valueOf(credit.getCreditId()));
-            preparedStatement.setString(2, String.valueOf(credit.getPercent()));
-            preparedStatement.setString(3, String.valueOf(credit.getEndDate()));
-            preparedStatement.setString(4, String.valueOf(credit.getBalance()));
-            preparedStatement.setString(5, String.valueOf(credit.getBorrowerId()));
+                Credit credit = new Credit(creditId, percent, endDate, balance, sum, borrowerId);
+                credits.add(credit);
+            }
 
-            preparedStatement.executeUpdate();
-
-            connectionPool.closeConnection(connection, preparedStatement);
+            return credits;
         } catch (SQLException e) {
-            logger.log(Level.ERROR, "Error compiling sql request", e);
-            throw new DAOException(e);
-        } catch (ConnectionPoolException e) {
-            logger.log(Level.ERROR, "Can't take connection", e);
+            logger.error("Can't parse resultSet", e);
             throw new DAOException(e);
         }
     }
 
     @Override
-    public Credit findById(int creditId) throws DAOException {
+    protected String getSelectByIdQuery() {
+        return Const.SELECT_CREDIT_BY_ID;
+    }
+
+    @Override
+    protected String getSelectAllQuery() {
+        return Const.SELECT_ALL_CREDITS;
+    }
+
+    @Override
+    protected String getInsertQuery() {
+        return Const.INSERT_CREDIT;
+    }
+
+    @Override
+    protected String getUpdateQuery() {
+        return Const.UPDATE_CREDIT_BY_ID;
+    }
+
+    @Override
+    protected String getDeleteQuery() {
+        return Const.DELETE_CREDIT_BY_ID;
+    }
+
+    @Override
+    protected void prepareStatementForInsert(PreparedStatement statement, Credit credit) throws DAOException {
         try {
-            Connection connection = connectionPool.takeConnection();
-            PreparedStatement preparedStatement = connection.prepareStatement(Const.SELECT_CREDIT_BY_ID);
-
-            preparedStatement.setString(1, String.valueOf(creditId));
-
-            ResultSet resultSet = preparedStatement.executeQuery();
-
-            if (!resultSet.isBeforeFirst()) {
-                return null;
-            }
-            resultSet.first();
-            Credit credit = createCredit(resultSet);
-
-            connectionPool.closeConnection(connection, preparedStatement);
-
-            return credit;
+            statement.setDouble(1, credit.getPercent());
+            statement.setString(2, String.valueOf(credit.getEndDate()));
+            statement.setBigDecimal(3, credit.getBalance());
+            statement.setBigDecimal(4, credit.getSum());
+            statement.setInt(5, credit.getBorrowerId());
         } catch (SQLException e) {
-            logger.log(Level.ERROR, "Error compiling sql request", e);///ne tolko
+            logger.error("Can't prepare statement for insert", e);
             throw new DAOException(e);
-        } catch (ConnectionPoolException e) {
-            logger.log(Level.ERROR, "Can't take connection", e);
+        }
+    }
+
+    @Override
+    protected void prepareStatementForUpdate(PreparedStatement statement, Credit credit) throws DAOException {
+        try {
+            statement.setDouble(1, credit.getPercent());
+            statement.setString(2, String.valueOf(credit.getEndDate()));
+            statement.setBigDecimal(3, credit.getBalance());
+            statement.setBigDecimal(4, credit.getSum());
+            statement.setInt(5, credit.getBorrowerId());
+            statement.setInt(6, credit.getId());
+        } catch (SQLException e) {
+            logger.error("Can't prepare statement for update", e);
             throw new DAOException(e);
         }
     }
 
     @Override
     public List<Credit> findByBorrowerId(int borrowerId) throws DAOException {
+        Connection connection = null;
+        PreparedStatement statement = null;
+        ResultSet resultSet = null;
         try {
-            Connection connection = connectionPool.takeConnection();
-            PreparedStatement preparedStatement = connection.prepareStatement(Const.SELECT_CREDIT_BY_BORROWER_ID);
+            connection = connectionPool.takeConnection();
+            statement = connection.prepareStatement(Const.SELECT_CREDIT_BY_BORROWER_ID);
 
-            preparedStatement.setString(1, String.valueOf(borrowerId));
+            statement.setString(1, String.valueOf(borrowerId));
 
-            ResultSet resultSet = preparedStatement.executeQuery();
+            resultSet = statement.executeQuery();
 
-            List<Credit> credits = new ArrayList<>();
-            while (resultSet.next()) {
-                Credit credit = createCredit(resultSet);
-                credits.add(credit);
-            }
-
-            connectionPool.closeConnection(connection, preparedStatement);
-
-            return credits;
+            return parseResultSet(resultSet);
         } catch (SQLException e) {
-            logger.log(Level.ERROR, "Error compiling sql request", e);///ne tolko
+            logger.log(Level.ERROR, "SQL error", e);
             throw new DAOException(e);
         } catch (ConnectionPoolException e) {
             logger.log(Level.ERROR, "Can't take connection", e);
             throw new DAOException(e);
+        } finally {
+            connectionPool.closeConnection(connection, statement, resultSet);
         }
     }
 
     @Override
-    public List<Credit> findAll() throws DAOException {
+    public void updateBalance(Credit credit, BigDecimal newBalance) throws DAOException {
+        Connection connection = null;
+        PreparedStatement statement = null;
+        ResultSet resultSet = null;
         try {
-            Connection connection = connectionPool.takeConnection();
-            Statement statement = connection.createStatement();
+            connection = connectionPool.takeConnection();
+            statement = connection.prepareStatement(Const.UPDATE_CREDIT_BALANCE);
 
-            ResultSet resultSet = statement.executeQuery(Const.SELECT_ALL_CREDITS);
+            statement.setBigDecimal(1, newBalance);
+            statement.setInt(2, credit.getId());
 
-            List<Credit> credits = new ArrayList<>();
-            while (resultSet.next()) {
-                Credit credit = createCredit(resultSet);
-                credits.add(credit);
-            }
-
-            connectionPool.closeConnection(connection, statement);
-
-            return credits;
+            resultSet = statement.executeQuery();
         } catch (SQLException e) {
-            logger.log(Level.ERROR, "Error compiling sql request", e);///ne tolko
+            logger.log(Level.ERROR, "SQL error", e);
             throw new DAOException(e);
         } catch (ConnectionPoolException e) {
             logger.log(Level.ERROR, "Can't take connection", e);
             throw new DAOException(e);
+        } finally {
+            connectionPool.closeConnection(connection, statement, resultSet);
         }
-    }
-
-    @Override
-    public void updateBalance(Credit credit, int newBalance) throws DAOException {
-        try {
-            Connection connection = connectionPool.takeConnection();
-            PreparedStatement preparedStatement = connection.prepareStatement(Const.UPDATE_CREDIT_BALANCE);
-
-            preparedStatement.setString(1, String.valueOf(newBalance));
-            preparedStatement.setString(2, String.valueOf(credit.getCreditId()));
-
-            preparedStatement.executeUpdate();
-
-            connectionPool.closeConnection(connection, preparedStatement);
-        } catch (SQLException e) {
-            logger.log(Level.ERROR, "Error compiling sql request", e);
-            throw new DAOException(e);
-        } catch (ConnectionPoolException e) {
-            logger.log(Level.ERROR, "Can't take connection", e);
-            throw new DAOException(e);
-        }
-    }
-
-    @Override
-    public void delete(Credit credit) throws DAOException {
-        try {
-            Connection connection = connectionPool.takeConnection();
-            PreparedStatement preparedStatement = connection.prepareStatement(Const.DELETE_BID_BY_ID);
-
-            preparedStatement.setString(1, String.valueOf(credit.getCreditId()));
-
-            preparedStatement.executeUpdate();
-
-            connectionPool.closeConnection(connection, preparedStatement);
-        } catch (SQLException e) {
-            logger.log(Level.ERROR, "Error compiling sql request", e);
-            throw new DAOException(e);
-        } catch (ConnectionPoolException e) {
-            logger.log(Level.ERROR, "Can't take connection", e);
-            throw new DAOException(e);
-        }
-    }
-
-    private Credit createCredit(ResultSet resultSet) throws SQLException {
-        int creditId = resultSet.getInt("credit_id");
-        double percent = resultSet.getDouble("percent");
-        LocalDateTime endDate = LocalDateTime.parse(resultSet.getString("end_date"), DATA_TIME_FORMATTER);
-        BigDecimal balance = resultSet.getBigDecimal("balance");
-        BigDecimal sum = resultSet.getBigDecimal("sum");
-        int borrowerId = resultSet.getInt("borrower_id");
-
-        return new Credit(creditId, percent, endDate, balance, sum, borrowerId);
     }
 }
