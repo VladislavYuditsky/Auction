@@ -96,21 +96,27 @@ public class ConnectionPool {
     //poryadok&
     public void closeConnection(Connection connection, Statement statement, ResultSet resultSet) {
         try {
-            connection.close();
+            if (connection != null) {
+                connection.close();
+            }
         } catch (SQLException e) {
             //bez throw&
             logger.log(Level.ERROR, "Connection isn't return to the pool", e);
         }
 
         try {
-            resultSet.close();
+            if (resultSet != null) {
+                resultSet.close();
+            }
         } catch (SQLException e) {
             //
             logger.log(Level.ERROR, "ResultSet isn't closed", e);
         }
 
         try {
-            statement.close();
+            if (statement != null) {
+                statement.close();
+            }
         } catch (SQLException e) {
             logger.log(Level.ERROR, "Statement isn't closed", e);
             //
@@ -119,14 +125,18 @@ public class ConnectionPool {
 
     public void closeConnection(Connection connection, Statement statement) {
         try {
-            connection.close();
+            if (connection != null) {
+                connection.close();
+            }
         } catch (SQLException e) {
             logger.log(Level.ERROR, "Connection isn't return to the pool", e);
             //
         }
 
         try {
-            statement.close();
+            if (connection != null) {
+                statement.close();
+            }
         } catch (SQLException e) {
             logger.log(Level.ERROR, "ResultSet isn't closed", e);
             //
