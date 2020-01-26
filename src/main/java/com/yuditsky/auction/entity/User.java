@@ -4,8 +4,8 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.Objects;
 
-public class User {
-    private int userId;
+public class User implements Identified{
+    private int id;
     private String login;
     private String password;
     private UserRole role;
@@ -17,9 +17,9 @@ public class User {
     private List<Payment> payments;
     private List<Credit> credits;
 
-    public User(int userId, String login, String password, UserRole role, String email, BigDecimal balance,
+    public User(int id, String login, String password, UserRole role, String email, BigDecimal balance,
                 boolean blocked, List<Bid> bids, List<Lot> lots, List<Payment> payments, List<Credit> credits) {
-        this.userId = userId;
+        this.id = id;
         this.login = login;
         this.password = password;
         this.role = role;
@@ -35,12 +35,12 @@ public class User {
     public User() {
     }
 
-    public int getUserId() {
-        return userId;
+    public int getId() {
+        return id;
     }
 
-    public void setUserId(int userId) {
-        this.userId = userId;
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getLogin() {
@@ -128,7 +128,7 @@ public class User {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         User user = (User) o;
-        return userId == user.userId &&
+        return id == user.id &&
                 blocked == user.blocked &&
                 login.equals(user.login) &&
                 password.equals(user.password) &&
@@ -143,13 +143,13 @@ public class User {
 
     @Override
     public int hashCode() {
-        return Objects.hash(userId, login, password, role, email, balance, blocked, bids, lots, payments, credits);
+        return Objects.hash(id, login, password, role, email, balance, blocked, bids, lots, payments, credits);
     }
 
     @Override
     public String toString() {
         return "User{" +
-                "userId=" + userId +
+                "id=" + id +
                 ", login='" + login + '\'' +
                 ", password='" + password + '\'' +
                 ", role=" + role +

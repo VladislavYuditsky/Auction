@@ -4,16 +4,16 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
-public class Credit {
-    private int creditId;
+public class Credit implements Identified{
+    private int id;
     private double percent;
     private LocalDateTime endDate;
     private BigDecimal balance;
     private BigDecimal sum;
     private int borrowerId;
 
-    public Credit(int creditId, double percent, LocalDateTime endDate, BigDecimal balance, BigDecimal sum, int borrowerId) {
-        this.creditId = creditId;
+    public Credit(int id, double percent, LocalDateTime endDate, BigDecimal balance, BigDecimal sum, int borrowerId) {
+        this.id = id;
         this.percent = percent;
         this.endDate = endDate;
         this.balance = balance;
@@ -24,12 +24,12 @@ public class Credit {
     public Credit() {
     }
 
-    public int getCreditId() {
-        return creditId;
+    public int getId() {
+        return id;
     }
 
-    public void setCreditId(int creditId) {
-        this.creditId = creditId;
+    public void setId(int id) {
+        this.id = id;
     }
 
     public double getPercent() {
@@ -77,7 +77,7 @@ public class Credit {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Credit credit = (Credit) o;
-        return creditId == credit.creditId &&
+        return id == credit.id &&
                 Double.compare(credit.percent, percent) == 0 &&
                 borrowerId == credit.borrowerId &&
                 endDate.equals(credit.endDate) &&
@@ -87,13 +87,13 @@ public class Credit {
 
     @Override
     public int hashCode() {
-        return Objects.hash(creditId, percent, endDate, balance, sum, borrowerId);
+        return Objects.hash(id, percent, endDate, balance, sum, borrowerId);
     }
 
     @Override
     public String toString() {
         return "Credit{" +
-                "creditId=" + creditId +
+                "id=" + id +
                 ", percent=" + percent +
                 ", endDate=" + endDate +
                 ", balance=" + balance +

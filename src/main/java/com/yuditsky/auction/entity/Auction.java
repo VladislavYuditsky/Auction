@@ -4,15 +4,15 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 
-public class Auction {
-    private int auctionId;
+public class Auction implements Identified{
+    private int id;
     private AuctionType type;
     private int lotId;
     private List<Bid> bids;
     private LocalDateTime finishTime;
 
-    public Auction(int auctionId, AuctionType type, int lotId, List<Bid> bids, LocalDateTime finishTime) {
-        this.auctionId = auctionId;
+    public Auction(int id, AuctionType type, int lotId, List<Bid> bids, LocalDateTime finishTime) {
+        this.id = id;
         this.type = type;
         this.lotId = lotId;
         this.bids = bids;
@@ -28,12 +28,12 @@ public class Auction {
     public Auction() {
     }
 
-    public int getAuctionId() {
-        return auctionId;
+    public int getId() {
+        return id;
     }
 
-    public void setAuctionId(int auctionId) {
-        this.auctionId = auctionId;
+    public void setId(int id) {
+        this.id = id;
     }
 
     public AuctionType getType() {
@@ -73,7 +73,7 @@ public class Auction {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Auction auction = (Auction) o;
-        return auctionId == auction.auctionId &&
+        return id == auction.id &&
                 type == auction.type &&
                 lotId == auction.lotId &&
                 bids.equals(auction.bids) &&
@@ -82,13 +82,13 @@ public class Auction {
 
     @Override
     public int hashCode() {
-        return Objects.hash(auctionId, type, lotId, bids, finishTime);
+        return Objects.hash(id, type, lotId, bids, finishTime);
     }
 
     @Override
     public String toString() {
         return "Auction{" +
-                "auctionId=" + auctionId +
+                "id=" + id +
                 ", type=" + type +
                 ", lotId=" + lotId +
                 ", bids=" + bids +

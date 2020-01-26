@@ -4,15 +4,15 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
-public class Bid {
-    private int bidId;
+public class Bid implements Identified{
+    private int id;
     private int bidderId;
     private BigDecimal sum;
     private LocalDateTime time;
     private int auctionId;
 
-    public Bid(int bidId, int bidderId, BigDecimal sum, LocalDateTime time, int auctionId) {
-        this.bidId = bidId;
+    public Bid(int id, int bidderId, BigDecimal sum, LocalDateTime time, int auctionId) {
+        this.id = id;
         this.bidderId = bidderId;
         this.sum = sum;
         this.time = time;
@@ -22,12 +22,12 @@ public class Bid {
     public Bid() {
     }
 
-    public int getBidId() {
-        return bidId;
+    public int getId() {
+        return id;
     }
 
-    public void setBidId(int bidId) {
-        this.bidId = bidId;
+    public void setId(int id) {
+        this.id = id;
     }
 
     public int getBidderId() {
@@ -67,7 +67,7 @@ public class Bid {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Bid bid = (Bid) o;
-        return bidId == bid.bidId &&
+        return id == bid.id &&
                 bidderId == bid.bidderId &&
                 sum.equals(bid.sum) &&
                 time.equals(bid.time) &&
@@ -76,13 +76,13 @@ public class Bid {
 
     @Override
     public int hashCode() {
-        return Objects.hash(bidId, bidderId, sum, time, auctionId);
+        return Objects.hash(id, bidderId, sum, time, auctionId);
     }
 
     @Override
     public String toString() {
         return "Bid{" +
-                "bidId=" + bidId +
+                "id=" + id +
                 ", bidderId=" + bidderId +
                 ", sum=" + sum +
                 ", time=" + time +

@@ -3,22 +3,24 @@ package com.yuditsky.auction.entity;
 import java.math.BigDecimal;
 import java.util.Objects;
 
-public class Lot {
-    private int lotId;
+public class Lot implements Identified{
+    private int id;
     private String name;
     private String description;
     private String location;
-    private int sellerId;
+    private int ownerId;
+    private int buyerId;
     private BigDecimal startPrice;
     private BigDecimal minPrice;
 
-    public Lot(int lotId, String name, String description, String location, int sellerId, BigDecimal startPrice,
+    public Lot(int id, String name, String description, String location, int ownerId, int buyerId, BigDecimal startPrice,
                BigDecimal minPrice) {
-        this.lotId = lotId;
+        this.id = id;
         this.name = name;
         this.description = description;
         this.location = location;
-        this.sellerId = sellerId;
+        this.ownerId = ownerId;
+        this.buyerId = buyerId;
         this.startPrice = startPrice;
         this.minPrice = minPrice;
     }
@@ -26,12 +28,12 @@ public class Lot {
     public Lot() {
     }
 
-    public int getLotId() {
-        return lotId;
+    public int getId() {
+        return id;
     }
 
-    public void setLotId(int lotId) {
-        this.lotId = lotId;
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getName() {
@@ -58,12 +60,20 @@ public class Lot {
         this.location = location;
     }
 
-    public int getSellerId() {
-        return sellerId;
+    public int getOwnerId() {
+        return ownerId;
     }
 
-    public void setSellerId(int sellerId) {
-        this.sellerId = sellerId;
+    public void setOwnerId(int ownerId) {
+        this.ownerId = ownerId;
+    }
+
+    public int getBuyerId() {
+        return buyerId;
+    }
+
+    public void setBuyerId(int buyerId) {
+        this.buyerId = buyerId;
     }
 
     public BigDecimal getStartPrice() {
@@ -87,28 +97,30 @@ public class Lot {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Lot lot = (Lot) o;
-        return lotId == lot.lotId &&
+        return id == lot.id &&
+                ownerId == lot.ownerId &&
+                buyerId == lot.buyerId &&
                 name.equals(lot.name) &&
                 description.equals(lot.description) &&
                 location.equals(lot.location) &&
-                sellerId == lot.sellerId &&
                 startPrice.equals(lot.startPrice) &&
                 minPrice.equals(lot.minPrice);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(lotId, name, description, location, sellerId, startPrice, minPrice);
+        return Objects.hash(id, name, description, location, ownerId, buyerId, startPrice, minPrice);
     }
 
     @Override
     public String toString() {
         return "Lot{" +
-                "lotId=" + lotId +
+                "id=" + id +
                 ", name='" + name + '\'' +
                 ", description='" + description + '\'' +
                 ", location='" + location + '\'' +
-                ", sellerId=" + sellerId +
+                ", ownerId=" + ownerId +
+                ", buyerId=" + buyerId +
                 ", startPrice=" + startPrice +
                 ", minPrice=" + minPrice +
                 '}';

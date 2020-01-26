@@ -4,15 +4,15 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
-public class Payment {
-    private int paymentId;
+public class Payment implements Identified{
+    private int id;
     private int payerId;
     private BigDecimal sum;
     private int lotId;
     private LocalDateTime date;
 
-    public Payment(int paymentId, int payerId, BigDecimal sum, int lotId, LocalDateTime date) {
-        this.paymentId = paymentId;
+    public Payment(int id, int payerId, BigDecimal sum, int lotId, LocalDateTime date) {
+        this.id = id;
         this.payerId = payerId;
         this.sum = sum;
         this.lotId = lotId;
@@ -22,12 +22,12 @@ public class Payment {
     public Payment() {
     }
 
-    public int getPaymentId() {
-        return paymentId;
+    public int getId() {
+        return id;
     }
 
-    public void setPaymentId(int paymentId) {
-        this.paymentId = paymentId;
+    public void setId(int id) {
+        this.id = id;
     }
 
     public int getPayerId() {
@@ -67,7 +67,7 @@ public class Payment {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Payment payment = (Payment) o;
-        return paymentId == payment.paymentId &&
+        return id == payment.id &&
                 payerId == payment.payerId &&
                 lotId == payment.lotId &&
                 sum.equals(payment.sum) &&
@@ -76,13 +76,13 @@ public class Payment {
 
     @Override
     public int hashCode() {
-        return Objects.hash(paymentId, payerId, sum, lotId, date);
+        return Objects.hash(id, payerId, sum, lotId, date);
     }
 
     @Override
     public String toString() {
         return "Payment{" +
-                "paymentId=" + paymentId +
+                "id=" + id +
                 ", payerId=" + payerId +
                 ", sum=" + sum +
                 ", lotId=" + lotId +
