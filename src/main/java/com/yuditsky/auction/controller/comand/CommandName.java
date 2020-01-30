@@ -10,5 +10,6 @@ public enum CommandName {
     USER_LOTS,
     USER_BIDS,
     AWAITING_PAYMENT,
+    USER_PAYMENTS,
     WRONG_REQUEST
 }

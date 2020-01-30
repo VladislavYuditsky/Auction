@@ -38,12 +38,13 @@
                             ${sessionScope.login}
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <a class="dropdown-item" href="${pageContext.request.contextPath}/user_lots?id=${sessionScope.id}">
+                        <a class="dropdown-item"
+                           href="${pageContext.request.contextPath}/user_lots?id=${sessionScope.id}">
                             My lots</a>
                         <a class="dropdown-item" href="${pageContext.request.contextPath}/user_bids">My bids</a>
                         <a class="dropdown-item" href="${pageContext.request.contextPath}/awaiting_payment">
                             Awaiting payment</a>
-                        <a class="dropdown-item" href="#">My payments</a>
+                        <a class="dropdown-item" href="${pageContext.request.contextPath}/user_payments">My payments</a>
                         <a class="dropdown-item" href="#">My Credits</a>
                         <a class="dropdown-item" href="#">Settings</a>
                         <a class="dropdown-item" href="#">Replenish balance</a>
@@ -54,7 +55,7 @@
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownAdm" role="button"
                            data-toggle="dropdown"
                            aria-haspopup="true" aria-expanded="false">
-                                Admin panel
+                            Admin panel
                         </a>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                             <a class="dropdown-item" href="">Proposed auctions</a>
