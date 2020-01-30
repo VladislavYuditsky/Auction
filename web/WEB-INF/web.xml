@@ -22,5 +22,6 @@
         <url-pattern>/awaiting_payment</url-pattern>
         <url-pattern>/new_payment</url-pattern>
         <url-pattern>/user_payments</url-pattern>
+        <url-pattern>/user_credits</url-pattern>
     </servlet-mapping>
 </web-app>

@@ -45,7 +45,7 @@
                         <a class="dropdown-item" href="${pageContext.request.contextPath}/awaiting_payment">
                             Awaiting payment</a>
                         <a class="dropdown-item" href="${pageContext.request.contextPath}/user_payments">My payments</a>
-                        <a class="dropdown-item" href="#">My Credits</a>
+                        <a class="dropdown-item" href="${pageContext.request.contextPath}/user_credits">My Credits</a>
                         <a class="dropdown-item" href="#">Settings</a>
                         <a class="dropdown-item" href="#">Replenish balance</a>
                     </div>

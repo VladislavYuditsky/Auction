@@ -19,6 +19,7 @@ public class CommandProvider {
         repository.put(CommandName.USER_BIDS, new UserBids());
         repository.put(CommandName.AWAITING_PAYMENT, new AwaitingPayment());
         repository.put(CommandName.USER_PAYMENTS, new UserPayments());
+        repository.put(CommandName.USER_CREDITS, new UserCredits());
         //repository.put(CommandName.WRONG_REQUEST, new WrongRequest());
     }
 
