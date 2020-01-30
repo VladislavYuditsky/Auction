@@ -1,8 +1,8 @@
 <%--
   Created by IntelliJ IDEA.
   User: JFresh
-  Date: 29.01.2020
-  Time: 4:09
+  Date: 30.01.2020
+  Time: 13:40
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
@@ -11,14 +11,15 @@
 <html>
 <head>
     <jsp:include page="bootstrapHeader.jsp"/>
-    <title>Title</title>
+    <title>Auction</title>
 </head>
 <body>
 <jsp:include page="navbar.jsp"/>
-<jsp:include page="auctionsList.jsp"/>
+<jsp:include page="lotsList.jsp"/>
 <c:if test="${lots.size()==0}">
-    Auctions are not currently running
+    No lots
 </c:if>
+<jsp:include page="bootstrapFooter.jsp"/>
 <jsp:include page="bootstrapFooter.jsp"/>
 </body>
 </html>

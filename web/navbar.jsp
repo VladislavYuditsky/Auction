@@ -38,9 +38,11 @@
                             ${sessionScope.login}
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <a class="dropdown-item" href="">My lots</a>
-                        <a class="dropdown-item" href="#">My bids</a>
-                        <a class="dropdown-item" href="#">Awaiting payment</a>
+                        <a class="dropdown-item" href="${pageContext.request.contextPath}/user_lots?id=${sessionScope.id}">
+                            My lots</a>
+                        <a class="dropdown-item" href="${pageContext.request.contextPath}/user_bids">My bids</a>
+                        <a class="dropdown-item" href="${pageContext.request.contextPath}/awaiting_payment">
+                            Awaiting payment</a>
                         <a class="dropdown-item" href="#">My payments</a>
                         <a class="dropdown-item" href="#">My Credits</a>
                         <a class="dropdown-item" href="#">Settings</a>

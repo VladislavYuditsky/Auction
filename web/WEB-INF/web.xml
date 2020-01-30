@@ -17,5 +17,8 @@
         <url-pattern>/greeting</url-pattern>
         <url-pattern>/sign_out</url-pattern>
         <url-pattern>/add_new_lot</url-pattern>
+        <url-pattern>/user_lots</url-pattern>
+        <url-pattern>/user_bids</url-pattern>
+        <url-pattern>/awaiting_payment</url-pattern>
     </servlet-mapping>
 </web-app>

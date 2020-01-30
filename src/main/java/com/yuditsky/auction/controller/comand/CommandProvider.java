@@ -15,6 +15,8 @@ public class CommandProvider {
         repository.put(CommandName.GREETING, new Greeting());
         repository.put(CommandName.SIGN_OUT, new SignOut());
         repository.put(CommandName.ADD_NEW_LOT, new AddNewLot());
+        repository.put(CommandName.USER_LOTS, new UserLots());
+        repository.put(CommandName.USER_BIDS, new UserBids());
         //repository.put(CommandName.WRONG_REQUEST, new WrongRequest());
     }
 

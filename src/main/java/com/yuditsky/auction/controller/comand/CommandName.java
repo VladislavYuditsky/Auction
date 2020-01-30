@@ -7,5 +7,8 @@ public enum CommandName {
     GREETING,
     SIGN_OUT,
     ADD_NEW_LOT,
+    USER_LOTS,
+    USER_BIDS,
+    AWAITING_PAYMENT,
     WRONG_REQUEST
 }
