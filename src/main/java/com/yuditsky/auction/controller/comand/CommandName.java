@@ -14,5 +14,7 @@ public enum CommandName {
     USER_CREDITS,
     SETTINGS,
     REPLENISH_BALANCE,
+    PROPOSED_AUCTIONS,
+    USERS,
     WRONG_REQUEST
 }

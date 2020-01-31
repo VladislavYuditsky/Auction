@@ -59,8 +59,8 @@
                             Admin panel
                         </a>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <a class="dropdown-item" href="">Proposed auctions</a>
-                            <a class="dropdown-item" href="#">Users</a>
+                            <a class="dropdown-item" href="${pageContext.request.contextPath}/proposed_auctions">Proposed auctions</a>
+                            <a class="dropdown-item" href="${pageContext.request.contextPath}/users">Users</a>
                         </div>
                     </li>
                 </c:if>

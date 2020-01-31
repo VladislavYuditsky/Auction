@@ -22,6 +22,8 @@ public class CommandProvider {
         repository.put(CommandName.USER_CREDITS, new UserCredits());
         repository.put(CommandName.SETTINGS, new Settings());
         repository.put(CommandName.REPLENISH_BALANCE, new ReplenishBalance());
+        repository.put(CommandName.PROPOSED_AUCTIONS, new ProposedAuctions());
+        repository.put(CommandName.USERS, new Users());
         //repository.put(CommandName.WRONG_REQUEST, new WrongRequest());
     }
 
