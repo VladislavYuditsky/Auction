@@ -12,5 +12,6 @@ public enum CommandName {
     AWAITING_PAYMENT,
     USER_PAYMENTS,
     USER_CREDITS,
+    SETTINGS,
     WRONG_REQUEST
 }

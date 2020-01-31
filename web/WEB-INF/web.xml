@@ -23,5 +23,6 @@
         <url-pattern>/new_payment</url-pattern>
         <url-pattern>/user_payments</url-pattern>
         <url-pattern>/user_credits</url-pattern>
+        <url-pattern>/settings</url-pattern>
     </servlet-mapping>
 </web-app>
