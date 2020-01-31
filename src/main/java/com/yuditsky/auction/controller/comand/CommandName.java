@@ -15,6 +15,7 @@ public enum CommandName {
     SETTINGS,
     REPLENISH_BALANCE,
     PROPOSED_AUCTIONS,
+    AUCTION,
     USERS,
     WRONG_REQUEST
 }
