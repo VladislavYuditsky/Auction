@@ -47,7 +47,8 @@
                         <a class="dropdown-item" href="${pageContext.request.contextPath}/user_payments">My payments</a>
                         <a class="dropdown-item" href="${pageContext.request.contextPath}/user_credits">My Credits</a>
                         <a class="dropdown-item" href="${pageContext.request.contextPath}/settings">Settings</a>
-                        <a class="dropdown-item" href="#">Replenish balance</a>
+                        <a class="dropdown-item" href="${pageContext.request.contextPath}/replenish_balance">Replenish
+                            balance</a>
                     </div>
                 </li>
                 <c:if test="${sessionScope.role=='ADMIN'}">

@@ -13,5 +13,6 @@ public enum CommandName {
     USER_PAYMENTS,
     USER_CREDITS,
     SETTINGS,
+    REPLENISH_BALANCE,
     WRONG_REQUEST
 }

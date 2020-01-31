@@ -24,5 +24,6 @@
         <url-pattern>/user_payments</url-pattern>
         <url-pattern>/user_credits</url-pattern>
         <url-pattern>/settings</url-pattern>
+        <url-pattern>/replenish_balance</url-pattern>
     </servlet-mapping>
 </web-app>

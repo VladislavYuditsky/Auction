@@ -14,23 +14,23 @@
 </head>
 <body>
 <jsp:include page="navbar.jsp"/>
+
 <div class="container mt-2">
     <form method="post">
         <div class="form-group row">
-            <label class="col-sm-2 col-form-label">Password :</label>
-            <div class="col-sm-6">
-                <input type="password" name="password" class="form-control" placeholder="Password"/>
-            </div>
+            <label class="col-sm-2 col-form-label">Balance: ${balance}</label>
         </div>
         <div class="form-group row">
-            <label class="col-sm-2 col-form-label">Email :</label>
+            <label class="col-sm-2 col-form-label">Replenish sum: </label>
             <div class="col-sm-6">
-                <input type="email" name="email" class="form-control" placeholder="Email" value="${email}"/>
+                <input type="text" name="replenishSum"/>
             </div>
         </div>
-        <button type="submit" class="btn btn-dark">Save</button>
+        <button type="submit" class="btn btn-dark">Replenish</button>
     </form>
 </div>
+
+<jsp:include page="bootstrapFooter.jsp"/>
 <jsp:include page="bootstrapFooter.jsp"/>
 </body>
 </html>
