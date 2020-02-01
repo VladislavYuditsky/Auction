@@ -2,6 +2,7 @@ package com.yuditsky.auction.controller.comand.impl;
 
 import com.yuditsky.auction.controller.comand.Command;
 import com.yuditsky.auction.entity.Auction;
+import com.yuditsky.auction.entity.AuctionType;
 import com.yuditsky.auction.entity.Bid;
 import com.yuditsky.auction.entity.Lot;
 import com.yuditsky.auction.service.*;
@@ -24,6 +25,7 @@ public class AuctionCommand implements Command {
             LotService lotService = factory.getLotService();
             BidService bidService = factory.getBidService();
             AuctionService auctionService = factory.getAuctionService();
+            UserService userService = factory.getUserService();
 
             if (lotIdStr != null) {
                 int lotId = Integer.parseInt(lotIdStr);
@@ -33,27 +35,49 @@ public class AuctionCommand implements Command {
 
                     Auction auction = auctionService.findByLotId(lot.getId());
 
-                    if (bidSumStr != null) {
-                        BigDecimal bidSum = new BigDecimal(bidSumStr);
-                        int userId = (Integer) session.getAttribute("id");
+                    int userId = (Integer) session.getAttribute("id");
 
-                        Bid bid = new Bid(userId, bidSum, LocalDateTime.now(), auction.getId());
-                        try {
-                            if(bidService.isMaxBid(bid, auction.getId())){
-                                bidService.save(bid);
+                    if (auction.getType() == AuctionType.DIRECT) {
+
+                        if (bidSumStr != null) {
+                            BigDecimal bidSum = new BigDecimal(bidSumStr);
+
+                            Bid bid = new Bid(userId, bidSum, LocalDateTime.now(), auction.getId());
+
+                            if (bidService.findByAuctionId(auction.getId()).size() > 0) {
+                                if (bidService.isMaxBid(bid) && !bidService.isRebid(bid)) {
+                                    bidService.save(bid);
+                                }
+                            } else {
+                                if (bidSum.compareTo(lot.getStartPrice()) > 0) {
+                                    bidService.save(bid);
+                                }
                             }
-                        } catch (ServiceException e) {
-                            ///
                         }
+
+                        Bid bid = bidService.findWithMaxSumByAuctionId(auction.getId());
+
+                        if (bid != null) {
+                            request.setAttribute("maxBid", bid);
+                        } else {
+                            request.setAttribute("maxBid", new Bid());
+                        }
+
+                        request.setAttribute("auction", auction);
+                        request.setAttribute("lot", lot);
+
+                        return "directAuction";
+                    } else {
+                        Bid bid = bidService.findMinByBidderIdAndAuctionId(userId, auction.getId());
+
+                        if (bid != null) {
+                            request.setAttribute("bid", bid);
+                        } else {
+                            request.setAttribute("bid", new Bid());
+                        }
+                        request.setAttribute("lot", lot);
+                        return "reversAuction";
                     }
-
-
-                    Bid bid = bidService.findWithMaxSumByAuctionId(auction.getId());
-
-                    request.setAttribute("lot", lot);
-                    request.setAttribute("maxBid", bid);
-
-                    return "auction";
                 } catch (ServiceException e) {
                     ////
                 }

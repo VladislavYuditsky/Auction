@@ -17,5 +17,6 @@ public enum CommandName {
     PROPOSED_AUCTIONS,
     AUCTION,
     USERS,
+    ADD_NEW_BID,
     WRONG_REQUEST
 }

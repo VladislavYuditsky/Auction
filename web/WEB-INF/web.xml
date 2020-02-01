@@ -28,5 +28,7 @@
         <url-pattern>/proposed_auctions</url-pattern>
         <url-pattern>/users</url-pattern>
         <url-pattern>/auction</url-pattern>
+        <url-pattern>/buy</url-pattern>
+        <url-pattern>/add_new_bid</url-pattern>
     </servlet-mapping>
 </web-app>

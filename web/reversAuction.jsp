@@ -1,5 +1,5 @@
 <jsp:useBean id="lot" scope="request" type="com.yuditsky.auction.entity.Lot"/>
-<jsp:useBean id="maxBid" scope="request" type="com.yuditsky.auction.entity.Bid"/>
+<jsp:useBean id="bid" scope="request" type="com.yuditsky.auction.entity.Bid"/>
 <%--
   Created by IntelliJ IDEA.
   User: JFresh
@@ -18,7 +18,7 @@
 <jsp:include page="navbar.jsp"/>
 
 <div class="container mt-2">
-    <form method="post" action="${pageContext.request.contextPath}/auction">
+    <form method="post" action="${pageContext.request.contextPath}/add_new_bid">
         <div>
             <label>${lot.name}</label>
         </div>
@@ -29,16 +29,32 @@
             <label>Location: ${lot.location}</label>
         </div>
         <div class="form-group row">
-            <label class="col-sm-2 col-form-label">Current price: ${maxBid.sum}</label>
+            <label class="col-sm-2 col-form-label">
+                Current price:
+                <c:if test="${bid.sum!=null}">
+                    ${bid.sum}
+                </c:if>
+                <c:if test="${bid.sum == null}">
+                    ?
+                </c:if>
+            </label>
+            <label>
+                Price: ${lot.startPrice}
+            </label>
             <div class="col-sm-6">
-                <input type="text" name="bidSum" class="form-control"/>
                 <input type="hidden" name="lotId" value="${lot.id}"/>
-            </div>
-            <div class="col-sm-6">
                 <button type="submit" class="btn btn-dark">Bid</button>
             </div>
         </div>
     </form>
+    <form method="post" action="${pageContext.request.contextPath}/buy">
+        <div class="col-sm-6">
+            <input type="hidden" name="lotId" value="${lot.id}"/>
+            <button type="submit" class="btn btn-dark">Buy</button>
+        </div>
+    </form>
+</div>
+</form>
 </div>
 
 <jsp:include page="bootstrapFooter.jsp"/>
