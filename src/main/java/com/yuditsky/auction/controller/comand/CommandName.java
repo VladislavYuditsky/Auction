@@ -18,5 +18,8 @@ public enum CommandName {
     AUCTION,
     USERS,
     ADD_NEW_BID,
+    CHANGE_AUCTION_STATUS,
+    CREATE_AUCTION,
+    NEW_PAYMENT,
     WRONG_REQUEST
 }
