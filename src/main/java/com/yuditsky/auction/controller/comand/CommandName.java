@@ -23,5 +23,7 @@ public enum CommandName {
     NEW_PAYMENT,
     EDIT_LOT,
     DELETE_LOT,
+    DENY,
+    BLOCK,
     WRONG_REQUEST
 }

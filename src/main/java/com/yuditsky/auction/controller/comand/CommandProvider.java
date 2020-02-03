@@ -31,6 +31,8 @@ public class CommandProvider {
         repository.put(CommandName.NEW_PAYMENT, new NewPayment());
         repository.put(CommandName.EDIT_LOT, new EditLot());
         repository.put(CommandName.DELETE_LOT, new DeleteLot());
+        repository.put(CommandName.DENY, new Deny());
+        repository.put(CommandName.BLOCK, new Block());
         //repository.put(CommandName.WRONG_REQUEST, new WrongRequest());
     }
 
