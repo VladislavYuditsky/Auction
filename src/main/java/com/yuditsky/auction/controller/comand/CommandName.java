@@ -21,5 +21,7 @@ public enum CommandName {
     CHANGE_AUCTION_STATUS,
     CREATE_AUCTION,
     NEW_PAYMENT,
+    EDIT_LOT,
+    DELETE_LOT,
     WRONG_REQUEST
 }

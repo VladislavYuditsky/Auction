@@ -29,6 +29,8 @@ public class CommandProvider {
         repository.put(CommandName.CHANGE_AUCTION_STATUS, new ChangeAuctionStatus());
         repository.put(CommandName.CREATE_AUCTION, new CreateAuction());
         repository.put(CommandName.NEW_PAYMENT, new NewPayment());
+        repository.put(CommandName.EDIT_LOT, new EditLot());
+        repository.put(CommandName.DELETE_LOT, new DeleteLot());
         //repository.put(CommandName.WRONG_REQUEST, new WrongRequest());
     }
 
