@@ -9,30 +9,35 @@ public class CommandProvider {
     private final Map<CommandName, Command> repository = new HashMap<>();
 
     public CommandProvider() {
-        repository.put(CommandName.SIGN_IN, new SignIn());
-        repository.put(CommandName.SIGN_UP, new SignUp());
-        repository.put(CommandName.MAIN, new Main());
-        repository.put(CommandName.GREETING, new Greeting());
-        repository.put(CommandName.SIGN_OUT, new SignOut());
-        repository.put(CommandName.ADD_NEW_LOT, new AddNewLot());
-        repository.put(CommandName.USER_LOTS, new UserLots());
-        repository.put(CommandName.USER_BIDS, new UserBids());
-        repository.put(CommandName.AWAITING_PAYMENT, new AwaitingPayment());
-        repository.put(CommandName.USER_PAYMENTS, new UserPayments());
-        repository.put(CommandName.USER_CREDITS, new UserCredits());
-        repository.put(CommandName.SETTINGS, new Settings());
-        repository.put(CommandName.REPLENISH_BALANCE, new ReplenishBalance());
-        repository.put(CommandName.PROPOSED_AUCTIONS, new ProposedAuctions());
-        repository.put(CommandName.USERS, new Users());
+        repository.put(CommandName.SIGN_IN, new SignInCommand());
+        repository.put(CommandName.SIGN_UP, new SignUpCommand());
+        repository.put(CommandName.AUCTIONS, new AuctionsCommand());
+        repository.put(CommandName.GREETING, new GreetingCommand());
+        repository.put(CommandName.SIGN_OUT, new SignOutCommand());
+        repository.put(CommandName.CREATE_LOT, new CreateLotCommand());
+        repository.put(CommandName.USER_LOTS, new UserLotsCommand());
+        repository.put(CommandName.USER_BIDS, new UserBidsCommand());
+        repository.put(CommandName.AWAITING_PAYMENT_LOTS, new AwaitingPaymentLotsCommand());
+        repository.put(CommandName.USER_PAYMENTS, new UserPaymentsCommand());
+        repository.put(CommandName.USER_CREDITS, new UserCreditsCommand());
+        repository.put(CommandName.SETTINGS, new SettingsCommand());
+        repository.put(CommandName.REPLENISH_BALANCE, new ReplenishBalanceCommand());
+        repository.put(CommandName.PROPOSED_AUCTIONS, new ProposedAuctionsCommand());
+        repository.put(CommandName.USERS, new UsersCommand());
         repository.put(CommandName.AUCTION, new AuctionCommand());
-        repository.put(CommandName.ADD_NEW_BID, new AddNewBid());
-        repository.put(CommandName.CHANGE_AUCTION_STATUS, new ChangeAuctionStatus());
-        repository.put(CommandName.CREATE_AUCTION, new CreateAuction());
-        repository.put(CommandName.NEW_PAYMENT, new NewPayment());
-        repository.put(CommandName.EDIT_LOT, new EditLot());
-        repository.put(CommandName.DELETE_LOT, new DeleteLot());
-        repository.put(CommandName.DENY, new Deny());
-        repository.put(CommandName.BLOCK, new Block());
+        repository.put(CommandName.SHOW_PRICE, new ShowPriceCommand());
+        repository.put(CommandName.CHANGE_AUCTION_STATUS, new ChangeAuctionStatusCommand());
+        repository.put(CommandName.CREATE_AUCTION, new CreateAuctionCommand());
+        repository.put(CommandName.CREATE_PAYMENT, new CreatePaymentCommand());
+        repository.put(CommandName.EDIT_LOT, new EditLotCommand());
+        repository.put(CommandName.DELETE_LOT, new DeleteLotCommand());
+        repository.put(CommandName.DENY, new DenyCommand());
+        repository.put(CommandName.BLOCK, new BlockCommand());
+        repository.put(CommandName.CREATE_CREDIT, new CreateCreditCommand());
+        repository.put(CommandName.BUY, new BuyCommand());
+        repository.put(CommandName.CREATE_BID, new CreateBidCommand());
+        repository.put(CommandName.USER_BALANCE, new UserBalanceCommand());
+        repository.put(CommandName.UPDATE_SETTINGS, new UpdateSettingsCommand());
         //repository.put(CommandName.WRONG_REQUEST, new WrongRequest());
     }
 
@@ -46,6 +51,7 @@ public class CommandProvider {
         } catch (IllegalArgumentException | NullPointerException e) {
             command = repository.get(CommandName.WRONG_REQUEST);
         }
+
         return command;
     }
 }

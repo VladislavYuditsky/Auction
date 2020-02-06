@@ -1,5 +1,6 @@
 package com.yuditsky.auction.controller.comand.impl;
 
+import com.yuditsky.auction.controller.comand.AbstractCommand;
 import com.yuditsky.auction.controller.comand.Command;
 import com.yuditsky.auction.entity.Auction;
 import com.yuditsky.auction.entity.AuctionStatus;
@@ -9,14 +10,18 @@ import com.yuditsky.auction.service.ServiceException;
 import com.yuditsky.auction.service.ServiceFactory;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.io.IOException;
 
-public class ChangeAuctionStatus implements Command {
+import static com.yuditsky.auction.controller.comand.ConstProv.*;
+
+public class ChangeAuctionStatusCommand extends AbstractCommand {
     @Override
-    public String execute(HttpServletRequest request) {
+    public void execute(HttpServletRequest request, HttpServletResponse response) throws IOException {
         HttpSession session = request.getSession();
 
-        String page = "signIn";
+        String page = GREETING_PAGE;
 
         if (session.getAttribute("id") != null) {
             UserRole role = (UserRole) session.getAttribute("role");
@@ -39,13 +44,13 @@ public class ChangeAuctionStatus implements Command {
                             auction.setStatus(AuctionStatus.ACTIVE);
                             auctionService.update(auction);
 
-                            page = "proposedAuctions";
+                            page = PROPOSED_AUCTIONS;
                         }
 
                         if(status == AuctionStatus.ACTIVE){
                             auctionService.finishAuction(auction);
 
-                            page = "main";
+                            page = AUCTIONS;
                         }
                     } catch (ServiceException e) {
                         ///
@@ -54,6 +59,7 @@ public class ChangeAuctionStatus implements Command {
             }
         }
 
-        return  page;
+        //return  page;
+        redirect(request, response, page);
     }
 }

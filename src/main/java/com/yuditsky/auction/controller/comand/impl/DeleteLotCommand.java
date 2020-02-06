@@ -1,17 +1,24 @@
 package com.yuditsky.auction.controller.comand.impl;
 
+import com.yuditsky.auction.controller.comand.AbstractCommand;
 import com.yuditsky.auction.controller.comand.Command;
+import com.yuditsky.auction.entity.Auction;
 import com.yuditsky.auction.entity.Lot;
+import com.yuditsky.auction.service.AuctionService;
 import com.yuditsky.auction.service.LotService;
 import com.yuditsky.auction.service.ServiceException;
 import com.yuditsky.auction.service.ServiceFactory;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.io.IOException;
 
-public class DeleteLot implements Command {
+import static com.yuditsky.auction.controller.comand.ConstProv.USER_LOTS;
+
+public class DeleteLotCommand extends AbstractCommand {
     @Override
-    public String execute(HttpServletRequest request) {
+    public void execute(HttpServletRequest request, HttpServletResponse response) throws IOException {
         HttpSession session = request.getSession();
 
         if (session.getAttribute("id") != null) {
@@ -22,6 +29,7 @@ public class DeleteLot implements Command {
 
                 ServiceFactory factory = ServiceFactory.getInstance();
                 LotService lotService = factory.getLotService();
+                AuctionService auctionService = factory.getAuctionService();
 
                 try {
                     Lot lot = lotService.findById(lotId);
@@ -30,11 +38,15 @@ public class DeleteLot implements Command {
                     int currentUserId = (Integer) session.getAttribute("id");
 
                     if(ownerId == currentUserId){
-                        lotService.delete(lot);
 
-                        request.setAttribute("id", currentUserId);
+                        if(auctionService.findByLotId(lotId) == null) {
+                            lotService.delete(lot);
+                        }
 
-                        return "userLots"; //redirect
+                        request.setAttribute("id", currentUserId); //a nado li
+
+                        //return "userLots"; //redirect
+                        redirect(request, response, USER_LOTS);
                     } // else 403
                 } catch (ServiceException e) {
                     ///
@@ -42,6 +54,6 @@ public class DeleteLot implements Command {
             }
         }
 
-        return "greeting";
+        //return "greeting";
     }
 }

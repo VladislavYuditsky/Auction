@@ -1,7 +1,9 @@
 package com.yuditsky.auction.controller.comand.impl;
 
+import com.yuditsky.auction.controller.comand.AbstractCommand;
 import com.yuditsky.auction.controller.comand.Command;
 import com.yuditsky.auction.entity.Auction;
+import com.yuditsky.auction.entity.AuctionStatus;
 import com.yuditsky.auction.entity.AuctionType;
 import com.yuditsky.auction.entity.Lot;
 import com.yuditsky.auction.service.AuctionService;
@@ -9,14 +11,18 @@ import com.yuditsky.auction.service.LotService;
 import com.yuditsky.auction.service.ServiceException;
 import com.yuditsky.auction.service.ServiceFactory;
 
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
-public class Main implements Command {
+import static com.yuditsky.auction.controller.comand.ConstProv.AUCTIONS_PAGE;
+
+public class AuctionsCommand extends AbstractCommand {
     @Override
-    public String execute(HttpServletRequest request) {
+    public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String strType = request.getParameter("auctionType");
         AuctionType type;
 
@@ -25,34 +31,25 @@ public class Main implements Command {
         } else {
             try {
                 type = AuctionType.valueOf(strType.toUpperCase());
-            } catch (IllegalArgumentException e){
+            } catch (IllegalArgumentException e) {
                 //logger
                 type = AuctionType.DIRECT;
             }
         }
 
         ServiceFactory factory = ServiceFactory.getInstance();
-        AuctionService auctionService = factory.getAuctionService();
+        //AuctionService auctionService = factory.getAuctionService();
         LotService lotService = factory.getLotService();
 
         try {
-            List<Auction> auctions = auctionService.findByType(type);
-            Iterator<Auction> iterator = auctions.iterator();
+            List<Lot> lots = lotService.findActiveLotsByAuctionType(type);
 
-            List<Lot> lotsForSale = new ArrayList<>();
-
-            while(iterator.hasNext()){
-                Auction auction = iterator.next();
-                Lot lot = lotService.findById(auction.getLotId());
-                if(lot != null) {
-                    lotsForSale.add(lot);
-                }
-            }
-            request.setAttribute("lots", lotsForSale);
+            request.setAttribute("lots", lots);
         } catch (ServiceException e) {
             //
         }
 
-        return "main";
+        //return "main";
+        forward(request, response, AUCTIONS_PAGE);
     }
 }

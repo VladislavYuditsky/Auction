@@ -1,5 +1,6 @@
 package com.yuditsky.auction.controller.comand.impl;
 
+import com.yuditsky.auction.controller.comand.AbstractCommand;
 import com.yuditsky.auction.controller.comand.Command;
 import com.yuditsky.auction.entity.Auction;
 import com.yuditsky.auction.entity.Bid;
@@ -7,11 +8,15 @@ import com.yuditsky.auction.entity.Credit;
 import com.yuditsky.auction.service.*;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.io.IOException;
 
-public class NewCredit implements Command {
+import static com.yuditsky.auction.controller.comand.ConstProv.CREATE_PAYMENT;
+
+public class CreateCreditCommand extends AbstractCommand {
     @Override
-    public String execute(HttpServletRequest request) {
+    public void execute(HttpServletRequest request, HttpServletResponse response) throws IOException {
         HttpSession session = request.getSession();
 
         if (session.getAttribute("id") != null) {
@@ -40,8 +45,11 @@ public class NewCredit implements Command {
                             Credit credit = creditService.createCredit(currentUserId, bid.getSum());
                             creditService.save(credit);
 
-                            NewPayment newPayment = new NewPayment();///////////////////
-                            newPayment.execute(request);////////////////////////////
+                            request.setAttribute("lotId", lotId);
+
+                            redirect(request, response, CREATE_PAYMENT);
+                            // newPayment = new NewPayment();///////////////////
+                            //newPayment.execute(request);////////////////////////////
                         }//else 403
                     }
                 } catch (ServiceException e) {
@@ -51,6 +59,6 @@ public class NewCredit implements Command {
 
         }
 
-        return "greeting";
+        //return "greeting";
     }
 }

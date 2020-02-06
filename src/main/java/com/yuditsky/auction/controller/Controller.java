@@ -14,23 +14,23 @@ public class Controller extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        doPost(req, resp);
+        processRequest(req, resp);
     }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String commandName = req.getServletPath();
+        processRequest(req, resp);
+    }
+
+    private void processRequest(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+        //String commandName = request.getParameter("command");
+
+        String commandName = request.getServletPath();
         commandName = commandName.substring(1);
+
         Command executionCommand = commandProvider.getCommand(commandName);
 
-        String page = executionCommand.execute(req);
-
-        page ="/" +  page + ".jsp";
-
-        //page = "/" + page;
-
-        req.getServletContext().getRequestDispatcher(page).forward(req, resp);
-        //resp.sendRedirect(page);
+        executionCommand.execute(request, response);
     }
 }
 

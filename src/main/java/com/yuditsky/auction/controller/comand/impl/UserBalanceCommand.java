@@ -1,23 +1,26 @@
 package com.yuditsky.auction.controller.comand.impl;
 
-import com.yuditsky.auction.controller.comand.Command;
+import com.yuditsky.auction.controller.comand.AbstractCommand;
 import com.yuditsky.auction.entity.User;
 import com.yuditsky.auction.service.ServiceException;
 import com.yuditsky.auction.service.ServiceFactory;
 import com.yuditsky.auction.service.UserService;
 
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.io.IOException;
 import java.math.BigDecimal;
 
-public class ReplenishBalance implements Command {
+import static com.yuditsky.auction.controller.comand.ConstProv.USER_BALANCE_PAGE;
+
+public class UserBalanceCommand extends AbstractCommand {
     @Override
-    public String execute(HttpServletRequest request) {
+    public void execute(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         HttpSession session = request.getSession();
 
         if (session.getAttribute("id") != null) {
-            String replenishSumStr = request.getParameter("replenishSum");
-
             ServiceFactory factory = ServiceFactory.getInstance();
             UserService userService = factory.getUserService();
 
@@ -26,22 +29,17 @@ public class ReplenishBalance implements Command {
             try {
                 User user = userService.findById(userId);
 
-                if (replenishSumStr != null) {
-                    BigDecimal replenishSum = new BigDecimal(replenishSumStr);
-
-                    userService.addBalance(user, replenishSum);
-                }
-
                 BigDecimal balance = user.getBalance(); //validation// negative balance
 
                 request.setAttribute("balance", balance);
 
-                return "replenishBalance";
+                //return "replenishBalance";
+                forward(request, response, USER_BALANCE_PAGE);
             } catch (ServiceException e) {
                 /////
             }
         }
 
-        return "signIn";
+        //return "signIn";
     }
 }
