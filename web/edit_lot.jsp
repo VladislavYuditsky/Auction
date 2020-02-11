@@ -1,43 +1,42 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: JFresh
-  Date: 30.01.2020
-  Time: 1:16
-  To change this template use File | Settings | File Templates.
---%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <jsp:useBean id="lot" scope="request" type="com.yuditsky.auction.entity.Lot"/>
 <html>
 <head>
-    <jsp:include page="bootstrapHeader.jsp"/>
-    <title>Title</title>
+    <fmt:setLocale value="${sessionScope.locale}" scope="session"/>
+    <fmt:setBundle basename="pageContent" var="pc"/>
+
+    <jsp:include page="bootstrap_header.jsp"/>
+    <title>Auction</title>
 </head>
 <body>
 <jsp:include page="navbar.jsp"/>
 <form method="post" action="${pageContext.request.contextPath}/edit_lot?lotId=${lot.id}">
     <label>
-        Name:
+        <fmt:message key="lot.name" bundle="${pc}"/>
         <input type="text" name="name" value="${lot.name}"/>
     </label>
     <br>
     <label>
-        Description:
+        <fmt:message key="lot.description" bundle="${pc}"/>
         <input type="text" name="description" value="${lot.description}"/>
     </label>
     <br>
     <label>
-        Location:
+        <fmt:message key="lot.location" bundle="${pc}"/>
         <input type="text" name="location" value="${lot.location}"/>
     </label>
     <br>
     <label>
-        Start price:
+        <fmt:message key="lot.start_price" bundle="${pc}"/>
         <input type="text" name="startPrice" value="${lot.startPrice}"/>
     </label>
     <br>
     <br>
-    <button type="submit">Save</button>
+    <button type="submit">
+        <fmt:message key="button.save" bundle="${pc}"/>
+    </button>
 </form>
-<jsp:include page="bootstrapFooter.jsp"/>
+<jsp:include page="bootstrap_footer.jsp"/>
 </body>
 </html>

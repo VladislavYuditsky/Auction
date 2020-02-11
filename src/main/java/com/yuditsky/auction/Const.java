@@ -1,5 +1,6 @@
 package com.yuditsky.auction;
 
+import java.math.BigDecimal;
 import java.time.format.DateTimeFormatter;
 
 public class Const {
@@ -13,7 +14,7 @@ public class Const {
     public static final String SELECT_USER_BY_LOGIN = "SELECT * FROM user WHERE login=?";
     public static final String SELECT_USER_BY_ID = "SELECT * FROM user WHERE user_id=?";
     public static final String UPDATE_USER_BY_ID = "UPDATE user SET password=?, email=?, role=?, blocked=?, balance=?" +
-            " WHERE id=?";
+            " WHERE user_id=?";
     public static final String UPDATE_USER_PASSWORD = "UPDATE user SET password=? WHERE login=?";
     public static final String UPDATE_USER_EMAIL = "UPDATE user SET email=? WHERE login=?";
     public static final String UPDATE_USER_BALANCE = "UPDATE user SET balance=? WHERE login=?";
@@ -21,30 +22,30 @@ public class Const {
     public static final String DELETE_USER_BY_LOGIN = "DELETE FROM user WHERE login=?";
     public static final String DELETE_USER_BY_ID = "DELETE FROM user WHERE user_id=?";
 
-    public static final String INSERT_LOT = "INSERT INTO lot (name, description, location, start_price, min_price," +
-            " seller_id) VALUES(?,?,?,?,?,?)";
+    public static final String INSERT_LOT = "INSERT INTO lot (name, description, location, start_price, owner_id)" +
+            " VALUES(?,?,?,?,?)";
     public static final String DELETE_LOT_BY_ID = "DELETE FROM lot WHERE lot_id=?";
     public static final String SELECT_ALL_LOTS = "SELECT * FROM lot";
     public static final String SELECT_LOT_BY_ID = "SELECT * FROM lot WHERE lot_id=?";
     public static final String SELECT_LOT_BY_OWNER_ID = "SELECT * FROM lot WHERE owner_id=?";
-    public static final String SELECT_LOT_BY_BUYER_ID = "SELECT * FROM lot WHERE buyer_id=?";
     public static final String UPDATE_LOT_BY_ID = "UPDATE lot SET name=?, description=?, location=?, start_price=?," +
-            " min_price=?, owner_id=?, buyer_id=? WHERE lot_id=?";
+            " owner_id=? WHERE lot_id=?";
     public static final String UPDATE_LOT_DESCRIPTION = "UPDATE lot SET description=? WHERE lot_id=?";
     public static final String UPDATE_LOT_LOCATION = "UPDATE lot SET location=? WHERE lot_id=?";
     public static final String UPDATE_LOT_START_PRICE = "UPDATE lot SET start_price=? WHERE lot_id=?";
-    public static final String UPDATE_LOT_MIN_PRICE = "UPDATE lot SET min_price=? WHERE lot_id=?";
 
-    public static final String INSERT_AUCTION = "INSERT INTO auction (auction_type, lot_id, finish_time)" +
-            " VALUES(?,?,?)";
+    public static final String INSERT_AUCTION = "INSERT INTO auction (auction_type, lot_id, status, winner_id)" +
+            " VALUES(?,?,?,?)";
     public static final String SELECT_ALL_AUCTIONS = "SELECT * FROM auction";
     public static final String SELECT_AUCTION_BY_ID = "SELECT * FROM auction WHERE auction_id=?";
     public static final String SELECT_AUCTION_BY_TYPE = "SELECT * FROM auction WHERE auction_type=?";
-    public static final String UPDATE_AUCTION_BY_ID = "UPDATE auction SET auction_type=?, lot_id=?, finish_time=?" +
+    public static final String SELECT_AUCTION_BY_STATUS = "SELECT * FROM auction WHERE status=?";
+    public static final String SELECT_AUCTION_BY_WINNER_ID = "SELECT * FROM auction WHERE winner_id=?";
+    public static final String SELECT_AUCTION_BY_LOT_ID = "SELECT * FROM auction WHERE lot_id=?";
+    public static final String UPDATE_AUCTION_BY_ID = "UPDATE auction SET auction_type=?, lot_id=?, status=?, winner_id=?" +
             " WHERE auction_id=?";
     public static final String UPDATE_AUCTION_TYPE = "UPDATE auction SET auction_type=? WHERE auction_id=?";
     public static final String UPDATE_AUCTION_LOT_ID = "UPDATE auction SET lot_id=? WHERE auction_id=?";
-    public static final String UPDATE_AUCTION_FINISH_TIME = "UPDATE auction SET finish_time=? WHERE auction_id=?";
     public static final String DELETE_AUCTION_BY_ID = "DELETE FROM auction WHERE auction_id=?";
 
     public static final String INSERT_BID = "INSERT INTO bid (bidder_id, sum, time, auction_id)" +
@@ -53,6 +54,7 @@ public class Const {
     public static final String SELECT_BID_BY_ID = "SELECT * FROM bid WHERE bid_id=?";
     public static final String SELECT_BID_BY_AUCTION_ID = "SELECT * FROM bid WHERE auction_id=?";
     public static final String SELECT_BID_BY_BIDDER_ID = "SELECT * FROM bid WHERE bidder_id=?";
+    public static final String SELECT_MIN_BID_BY_BIDDER_ID_AND_AUCTION_ID = "SELECT * FROM bid WHERE bidder_id=?, auction_id=?, sum=MIN(sum)";
     public static final String UPDATE_BID_BY_ID = "UPDATE bid SET bidder_id=?, sum=?, time=?, auction_id=?" +
             " WHERE bid_id=?";
     public static final String UPDATE_BID_BIDDER_ID = "UPDATE bid SET bidder_id=? WHERE bid_id=?";
@@ -82,4 +84,10 @@ public class Const {
             " borrower_id=? WHERE credit_id=?";
     public static final String UPDATE_CREDIT_BALANCE = "UPDATE credit SET balance=? WHERE credit_id=?";
     public static final String DELETE_CREDIT_BY_ID = "DELETE FROM credit WHERE credit_id=?";
+
+    public static final BigDecimal NULL = new BigDecimal("0");
+
+    public static final BigDecimal REVERS_AUCTION_COEFFICIENT = new BigDecimal("0.005");
+
+    public static final BigDecimal CREDIT_PERCENT = new BigDecimal("1.1");
 }

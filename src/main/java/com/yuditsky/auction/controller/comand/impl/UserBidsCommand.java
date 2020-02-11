@@ -1,7 +1,6 @@
 package com.yuditsky.auction.controller.comand.impl;
 
 import com.yuditsky.auction.controller.comand.AbstractCommand;
-import com.yuditsky.auction.controller.comand.Command;
 import com.yuditsky.auction.entity.Lot;
 import com.yuditsky.auction.service.LotService;
 import com.yuditsky.auction.service.ServiceException;
@@ -17,27 +16,26 @@ import java.util.List;
 import static com.yuditsky.auction.controller.comand.ConstProv.USER_BIDS_PAGE;
 
 public class UserBidsCommand extends AbstractCommand {
+    private final LotService lotService;
+
+    public UserBidsCommand() {
+        ServiceFactory factory = ServiceFactory.getInstance();
+        lotService = factory.getLotService();
+    }
+
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession();
+        int userId = (Integer) session.getAttribute("id");
 
-        if (session.getAttribute("id") != null) {
-            int userId = (Integer) session.getAttribute("id");
+        try {
+            List<Lot> lots = lotService.takeLotsWithUserBids(userId);
 
-            ServiceFactory factory = ServiceFactory.getInstance();
-            LotService lotService = factory.getLotService();
+            request.setAttribute("lots", lots);
 
-            try {
-                List<Lot> lots = lotService.takeLotsWithUserBids(userId);
-
-                request.setAttribute("lots", lots);
-
-                //return "userBids";
-                forward(request, response, USER_BIDS_PAGE);
-            } catch (ServiceException e) {
-                //
-            }
+            forward(request, response, USER_BIDS_PAGE);
+        } catch (ServiceException e) {
+            //
         }
-        //return "signIn";
     }
 }

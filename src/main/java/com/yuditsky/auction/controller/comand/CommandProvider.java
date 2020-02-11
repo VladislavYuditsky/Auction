@@ -38,7 +38,10 @@ public class CommandProvider {
         repository.put(CommandName.CREATE_BID, new CreateBidCommand());
         repository.put(CommandName.USER_BALANCE, new UserBalanceCommand());
         repository.put(CommandName.UPDATE_SETTINGS, new UpdateSettingsCommand());
-        //repository.put(CommandName.WRONG_REQUEST, new WrongRequest());
+        repository.put(CommandName.REPAY_CREDIT, new RepayCreditCommand());
+        repository.put(CommandName.CHANGE_LOCALE, new ChangeLocaleCommand());
+        repository.put(CommandName.BAN, new BanCommand());
+        repository.put(CommandName.WRONG_REQUEST, new WrongRequestCommand());
     }
 
     public Command getCommand(String name) {

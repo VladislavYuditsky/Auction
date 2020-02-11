@@ -16,30 +16,28 @@ import java.math.BigDecimal;
 import static com.yuditsky.auction.controller.comand.ConstProv.USER_BALANCE_PAGE;
 
 public class UserBalanceCommand extends AbstractCommand {
+    private final UserService userService;
+
+    public UserBalanceCommand() {
+        ServiceFactory factory = ServiceFactory.getInstance();
+        userService = factory.getUserService();
+    }
+
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         HttpSession session = request.getSession();
+        int userId = (int) session.getAttribute("id");
 
-        if (session.getAttribute("id") != null) {
-            ServiceFactory factory = ServiceFactory.getInstance();
-            UserService userService = factory.getUserService();
+        try {
+            User user = userService.findById(userId);
 
-            int userId = (Integer) session.getAttribute("id");
+            BigDecimal balance = user.getBalance(); //validation// negative balance
 
-            try {
-                User user = userService.findById(userId);
+            request.setAttribute("balance", balance);
 
-                BigDecimal balance = user.getBalance(); //validation// negative balance
-
-                request.setAttribute("balance", balance);
-
-                //return "replenishBalance";
-                forward(request, response, USER_BALANCE_PAGE);
-            } catch (ServiceException e) {
-                /////
-            }
+            forward(request, response, USER_BALANCE_PAGE);
+        } catch (ServiceException e) {
+            /////
         }
-
-        //return "signIn";
     }
 }

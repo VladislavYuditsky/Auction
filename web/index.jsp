@@ -8,10 +8,9 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
   <head>
-    <title>$Title$</title>
+    <title>Auction</title>
   </head>
   <body>
-  Здарова, чёрт
-  $END$
+  <jsp:forward page="greeting.jsp"/>
   </body>
 </html>

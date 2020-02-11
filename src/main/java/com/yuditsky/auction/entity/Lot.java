@@ -9,20 +9,23 @@ public class Lot implements Identified{
     private String description;
     private String location;
     private int ownerId;
-    private int buyerId;
     private BigDecimal startPrice;
-    private BigDecimal minPrice;
 
-    public Lot(int id, String name, String description, String location, int ownerId, int buyerId, BigDecimal startPrice,
-               BigDecimal minPrice) {
+    public Lot(int id, String name, String description, String location, int ownerId, BigDecimal startPrice) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.location = location;
         this.ownerId = ownerId;
-        this.buyerId = buyerId;
         this.startPrice = startPrice;
-        this.minPrice = minPrice;
+    }
+
+    public Lot(String name, String description, String location, int ownerId, BigDecimal startPrice) {
+        this.name = name;
+        this.description = description;
+        this.location = location;
+        this.ownerId = ownerId;
+        this.startPrice = startPrice;
     }
 
     public Lot() {
@@ -32,7 +35,7 @@ public class Lot implements Identified{
         return id;
     }
 
-    public void setId(int id) {
+    protected void setId(int id) {
         this.id = id;
     }
 
@@ -68,28 +71,12 @@ public class Lot implements Identified{
         this.ownerId = ownerId;
     }
 
-    public int getBuyerId() {
-        return buyerId;
-    }
-
-    public void setBuyerId(int buyerId) {
-        this.buyerId = buyerId;
-    }
-
     public BigDecimal getStartPrice() {
         return startPrice;
     }
 
     public void setStartPrice(BigDecimal startPrice) {
         this.startPrice = startPrice;
-    }
-
-    public BigDecimal getMinPrice() {
-        return minPrice;
-    }
-
-    public void setMinPrice(BigDecimal minPrice) {
-        this.minPrice = minPrice;
     }
 
     @Override
@@ -99,17 +86,15 @@ public class Lot implements Identified{
         Lot lot = (Lot) o;
         return id == lot.id &&
                 ownerId == lot.ownerId &&
-                buyerId == lot.buyerId &&
                 name.equals(lot.name) &&
                 description.equals(lot.description) &&
                 location.equals(lot.location) &&
-                startPrice.equals(lot.startPrice) &&
-                minPrice.equals(lot.minPrice);
+                startPrice.equals(lot.startPrice);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, description, location, ownerId, buyerId, startPrice, minPrice);
+        return Objects.hash(id, name, description, location, ownerId, startPrice);
     }
 
     @Override
@@ -120,9 +105,7 @@ public class Lot implements Identified{
                 ", description='" + description + '\'' +
                 ", location='" + location + '\'' +
                 ", ownerId=" + ownerId +
-                ", buyerId=" + buyerId +
                 ", startPrice=" + startPrice +
-                ", minPrice=" + minPrice +
                 '}';
     }
 }

@@ -29,7 +29,7 @@ public class SQLCreditDAO extends SQLAbstractDAO<Credit> implements CreditDAO {
             List<Credit> credits = new ArrayList<>();
             while (resultSet.next()) {
                 int creditId = resultSet.getInt("credit_id");
-                double percent = resultSet.getDouble("percent");
+                BigDecimal percent = resultSet.getBigDecimal("percent");
                 LocalDateTime endDate = LocalDateTime.parse(resultSet.getString("end_date"),
                         DATA_TIME_FORMATTER);
                 BigDecimal balance = resultSet.getBigDecimal("balance");
@@ -75,7 +75,7 @@ public class SQLCreditDAO extends SQLAbstractDAO<Credit> implements CreditDAO {
     @Override
     protected void prepareStatementForInsert(PreparedStatement statement, Credit credit) throws DAOException {
         try {
-            statement.setDouble(1, credit.getPercent());
+            statement.setBigDecimal(1, credit.getPercent());
             statement.setString(2, String.valueOf(credit.getEndDate()));
             statement.setBigDecimal(3, credit.getBalance());
             statement.setBigDecimal(4, credit.getSum());
@@ -89,7 +89,7 @@ public class SQLCreditDAO extends SQLAbstractDAO<Credit> implements CreditDAO {
     @Override
     protected void prepareStatementForUpdate(PreparedStatement statement, Credit credit) throws DAOException {
         try {
-            statement.setDouble(1, credit.getPercent());
+            statement.setBigDecimal(1, credit.getPercent());
             statement.setString(2, String.valueOf(credit.getEndDate()));
             statement.setBigDecimal(3, credit.getBalance());
             statement.setBigDecimal(4, credit.getSum());
@@ -130,7 +130,6 @@ public class SQLCreditDAO extends SQLAbstractDAO<Credit> implements CreditDAO {
     public void updateBalance(Credit credit, BigDecimal newBalance) throws DAOException {
         Connection connection = null;
         PreparedStatement statement = null;
-        ResultSet resultSet = null;
         try {
             connection = connectionPool.takeConnection();
             statement = connection.prepareStatement(Const.UPDATE_CREDIT_BALANCE);
@@ -138,7 +137,7 @@ public class SQLCreditDAO extends SQLAbstractDAO<Credit> implements CreditDAO {
             statement.setBigDecimal(1, newBalance);
             statement.setInt(2, credit.getId());
 
-            resultSet = statement.executeQuery();
+            statement.executeUpdate();
         } catch (SQLException e) {
             logger.log(Level.ERROR, "SQL error", e);
             throw new DAOException(e);
@@ -146,7 +145,7 @@ public class SQLCreditDAO extends SQLAbstractDAO<Credit> implements CreditDAO {
             logger.log(Level.ERROR, "Can't take connection", e);
             throw new DAOException(e);
         } finally {
-            connectionPool.closeConnection(connection, statement, resultSet);
+            connectionPool.closeConnection(connection, statement);
         }
     }
 }

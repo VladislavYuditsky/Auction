@@ -1,88 +1,60 @@
 package com.yuditsky.auction.controller.comand.impl;
 
 import com.yuditsky.auction.controller.comand.AbstractCommand;
-import com.yuditsky.auction.controller.comand.Command;
-import com.yuditsky.auction.entity.*;
-import com.yuditsky.auction.service.*;
+import com.yuditsky.auction.entity.Lot;
+import com.yuditsky.auction.entity.User;
+import com.yuditsky.auction.service.LotService;
+import com.yuditsky.auction.service.ServiceException;
+import com.yuditsky.auction.service.ServiceFactory;
+import com.yuditsky.auction.service.UserService;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
-import java.math.BigDecimal;
-import java.time.LocalDateTime;
 
-import static com.yuditsky.auction.controller.comand.ConstProv.REVERS_AUCTION_PAGE;
-import static com.yuditsky.auction.controller.comand.ConstProv.USER_LOTS_PAGE;
+import static com.yuditsky.auction.controller.comand.ConstProv.*;
 
 public class BuyCommand extends AbstractCommand {
+    private final static Logger logger = LogManager.getLogger(BuyCommand.class);
+
+    private final UserService userService;
+    private final LotService lotService;
+
+    public BuyCommand() {
+        ServiceFactory factory = ServiceFactory.getInstance();
+        userService = factory.getUserService();
+        lotService = factory.getLotService();
+    }
+
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        HttpSession session = request.getSession();
 
-        if (session.getAttribute("id") != null) {
-            String lotIdStr = request.getParameter("lotId");
+        String lotIdStr = request.getParameter("lotId");
 
-            if (lotIdStr != null) {
-                int lotId = Integer.parseInt(lotIdStr);
+        if (lotIdStr != null) {
+            int lotId = Integer.parseInt(lotIdStr);
 
-                int userId = (Integer) session.getAttribute("id");
+            HttpSession session = request.getSession();
+            int userId = (Integer) session.getAttribute("id");
 
-                ServiceFactory factory = ServiceFactory.getInstance();
-                BidService bidService = factory.getBidService();
-                AuctionService auctionService = factory.getAuctionService();
-                UserService userService = factory.getUserService();
-                LotService lotService = factory.getLotService();
-                PaymentService paymentService = factory.getPaymentService();
+            try {
+                User user = userService.findById(userId);
 
-                try {
-                    Auction auction = auctionService.findByLotId(lotId);
+                Lot lot = lotService.findById(lotId);
 
-                    Bid bid = bidService.findMinByBidderIdAndAuctionId(userId, auction.getId());
-
-                    User user = userService.findById(userId);
-
-                    BigDecimal userBalance = user.getBalance();
-                    BigDecimal price;
-
-                    Lot lot = lotService.findById(lotId);
-
-                    if(bid != null) {
-                        price = bid.getSum();
-                    } else {
-                        price = lot.getStartPrice();
-                    }
-
-                    if (auction.getStatus() == AuctionStatus.ACTIVE && userBalance.compareTo(price) > 0) {
-                        auction.setStatus(AuctionStatus.COMPLETED);
-                        auctionService.update(auction);
-
-                        userService.subtractBalance(user, price);
-
-                        User owner = userService.findById(lot.getOwnerId());
-                        userService.addBalance(owner, lot.getStartPrice());
-
-                        lot.setOwnerId(userId);
-                        lotService.update(lot);
-
-                        Payment payment = new Payment(userId, price, lotId, LocalDateTime.now());
-                        paymentService.save(payment);
-
-                        auctionService.delete(auction);
-
-                        //return "userLots";
-                        forward(request, response, USER_LOTS_PAGE);
-                    } else {
-                        //return "reversAuction";
-                        forward(request, response, REVERS_AUCTION_PAGE);
-                    }
-                } catch (ServiceException e) {
-                    ///
+                if (lotService.buy(lot, user)) {
+                    redirect(request, response, USER_LOTS);
+                } else {
+                    redirect(request, response, AUCTION);
                 }
+            } catch (ServiceException e) {
+                logger.error("BuyCommand failed", e);
+                forward(request, response, ERROR_PAGE);
             }
         }
-
-        //return "greeting";
     }
 }

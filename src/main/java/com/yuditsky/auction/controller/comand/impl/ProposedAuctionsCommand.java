@@ -19,33 +19,23 @@ import java.util.List;
 import static com.yuditsky.auction.controller.comand.ConstProv.PROPOSED_AUCTIONS_PAGE;
 
 public class ProposedAuctionsCommand extends AbstractCommand {
+    private final AuctionService auctionService;
+
+    public ProposedAuctionsCommand() {
+        ServiceFactory factory = ServiceFactory.getInstance();
+        auctionService = factory.getAuctionService();
+    }
+
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        HttpSession session = request.getSession();
+        try {
+            List<Auction> auctions = auctionService.findByStatus(AuctionStatus.WAITING);
 
-        if (session.getAttribute("id") != null) {
-            UserRole role = (UserRole) session.getAttribute("role");
+            request.setAttribute("auctions", auctions);
 
-            if (role == UserRole.ADMIN) {
-                ServiceFactory factory = ServiceFactory.getInstance();
-                AuctionService auctionService = factory.getAuctionService();
-
-                try {
-                    List<Auction> auctions = auctionService.findByStatus(AuctionStatus.WAITING);
-
-                    request.setAttribute("auctions", auctions);
-
-                    //return "proposedAuctions";
-                    forward(request, response, PROPOSED_AUCTIONS_PAGE);
-                } catch (ServiceException e) {
-                    ////
-                }
-
-            } else {
-                ///403
-            }
+            forward(request, response, PROPOSED_AUCTIONS_PAGE);
+        } catch (ServiceException e) {
+            ////
         }
-
-        //return "signIn";
     }
 }

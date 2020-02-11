@@ -1,10 +1,10 @@
 package com.yuditsky.auction.controller.comand.impl;
 
 import com.yuditsky.auction.controller.comand.AbstractCommand;
-import com.yuditsky.auction.controller.comand.Command;
 import com.yuditsky.auction.entity.Auction;
+import com.yuditsky.auction.entity.AuctionType;
 import com.yuditsky.auction.entity.Bid;
-import com.yuditsky.auction.entity.Credit;
+import com.yuditsky.auction.entity.User;
 import com.yuditsky.auction.service.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -15,50 +15,56 @@ import java.io.IOException;
 import static com.yuditsky.auction.controller.comand.ConstProv.CREATE_PAYMENT;
 
 public class CreateCreditCommand extends AbstractCommand {
+    private final AuctionService auctionService;
+    private final BidService bidService;
+    private final CreditService creditService;
+    private final UserService userService;
+
+    public CreateCreditCommand() {
+        ServiceFactory factory = ServiceFactory.getInstance();
+        auctionService = factory.getAuctionService();
+        bidService = factory.getBidService();
+        creditService = factory.getCreditService();
+        userService = factory.getUserService();
+    }
+
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws IOException {
         HttpSession session = request.getSession();
 
-        if (session.getAttribute("id") != null) {
-            String lotIdStr = request.getParameter("lotId");
+        String lotIdStr = request.getParameter("lotId");
 
-            ServiceFactory factory = ServiceFactory.getInstance();
-            //LotService lotService = factory.getLotService();
-            AuctionService auctionService = factory.getAuctionService();
-            BidService bidService = factory.getBidService();
-            CreditService creditService = factory.getCreditService();
+        if (lotIdStr != null) {
+            int lotId = Integer.parseInt(lotIdStr);
 
-            if (lotIdStr != null) {
-                int lotId = Integer.parseInt(lotIdStr);
+            try {
+                Auction auction = auctionService.findByLotId(lotId);
 
-                try {
-                    Auction auction = auctionService.findByLotId(lotId);
+                if (auction != null) {
+                    int winnerId = auction.getWinnerId();
 
-                    if (auction != null) {
-                        int winnerId = auction.getWinnerId();
+                    int currentUserId = (Integer) session.getAttribute("id");
 
-                        int currentUserId = (Integer) session.getAttribute("id");
+                    if (winnerId == currentUserId) {
 
-                        if (winnerId == currentUserId) {
-                            Bid bid = bidService.findWithMaxSumByAuctionId(auction.getId());
+                        Bid bid;
+                        if (auction.getType() == AuctionType.DIRECT) {
+                            bid = bidService.findWithMaxSumByAuctionId(auction.getId());
+                        } else {
+                            bid = bidService.findWithMinSumByAuctionId(auction.getId());
+                        }
 
-                            Credit credit = creditService.createCredit(currentUserId, bid.getSum());
-                            creditService.save(credit);
+                        creditService.createCredit(currentUserId, bid.getSum());
 
-                            request.setAttribute("lotId", lotId);
+                        User user = userService.findById(winnerId);
+                        userService.addBalance(user, bid.getSum());
 
-                            redirect(request, response, CREATE_PAYMENT);
-                            // newPayment = new NewPayment();///////////////////
-                            //newPayment.execute(request);////////////////////////////
-                        }//else 403
-                    }
-                } catch (ServiceException e) {
-                    ///
+                        redirect(request, response, CREATE_PAYMENT + "?lotId=" + lotId);
+                    }//else 403
                 }
+            } catch (ServiceException e) {
+                ///
             }
-
         }
-
-        //return "greeting";
     }
 }

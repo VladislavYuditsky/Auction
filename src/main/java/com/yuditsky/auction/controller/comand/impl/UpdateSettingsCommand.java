@@ -16,11 +16,16 @@ import java.io.IOException;
 import static com.yuditsky.auction.controller.comand.ConstProv.SETTINGS;
 
 public class UpdateSettingsCommand extends AbstractCommand {
+    private final Encoder encoder;
+
+    public UpdateSettingsCommand() {
+        encoder = new Encoder();
+    }
+
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         HttpSession session = request.getSession();
 
-        if (session.getAttribute("id") != null) {
             ServiceFactory factory = ServiceFactory.getInstance();
             UserService userService = factory.getUserService();
 
@@ -50,7 +55,7 @@ public class UpdateSettingsCommand extends AbstractCommand {
             } catch (ServiceException e) {
                 /////
             }
-        }
+        //}
 
         //return "signIn";
     }

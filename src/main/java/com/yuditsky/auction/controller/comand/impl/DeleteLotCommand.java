@@ -1,8 +1,6 @@
 package com.yuditsky.auction.controller.comand.impl;
 
 import com.yuditsky.auction.controller.comand.AbstractCommand;
-import com.yuditsky.auction.controller.comand.Command;
-import com.yuditsky.auction.entity.Auction;
 import com.yuditsky.auction.entity.Lot;
 import com.yuditsky.auction.service.AuctionService;
 import com.yuditsky.auction.service.LotService;
@@ -17,43 +15,41 @@ import java.io.IOException;
 import static com.yuditsky.auction.controller.comand.ConstProv.USER_LOTS;
 
 public class DeleteLotCommand extends AbstractCommand {
+    private final LotService lotService;
+    private final AuctionService auctionService;
+
+    public DeleteLotCommand() {
+        ServiceFactory factory = ServiceFactory.getInstance();
+        lotService = factory.getLotService();
+        auctionService = factory.getAuctionService();
+    }
+
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        HttpSession session = request.getSession();
+        String lotIdStr = request.getParameter("lotId");
 
-        if (session.getAttribute("id") != null) {
-            String lotIdStr = request.getParameter("lotId");
+        if (lotIdStr != null) {
+            int lotId = Integer.parseInt(lotIdStr);
 
-            if(lotIdStr != null){
-                int lotId = Integer.parseInt(lotIdStr);
+            try {
+                Lot lot = lotService.findById(lotId);
 
-                ServiceFactory factory = ServiceFactory.getInstance();
-                LotService lotService = factory.getLotService();
-                AuctionService auctionService = factory.getAuctionService();
+                int ownerId = lot.getOwnerId();
 
-                try {
-                    Lot lot = lotService.findById(lotId);
+                HttpSession session = request.getSession();
+                int currentUserId = (Integer) session.getAttribute("id");
 
-                    int ownerId = lot.getOwnerId();
-                    int currentUserId = (Integer) session.getAttribute("id");
+                if (ownerId == currentUserId) {
 
-                    if(ownerId == currentUserId){
+                    if (auctionService.findByLotId(lotId) == null) {
+                        lotService.delete(lot);
+                    }
 
-                        if(auctionService.findByLotId(lotId) == null) {
-                            lotService.delete(lot);
-                        }
-
-                        request.setAttribute("id", currentUserId); //a nado li
-
-                        //return "userLots"; //redirect
-                        redirect(request, response, USER_LOTS);
-                    } // else 403
-                } catch (ServiceException e) {
-                    ///
-                }
+                    redirect(request, response, USER_LOTS);
+                } // else 403
+            } catch (ServiceException e) {
+                ///
             }
         }
-
-        //return "greeting";
     }
 }

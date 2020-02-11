@@ -1,7 +1,6 @@
 package com.yuditsky.auction.controller.comand.impl;
 
 import com.yuditsky.auction.controller.comand.AbstractCommand;
-import com.yuditsky.auction.controller.comand.Command;
 import com.yuditsky.auction.entity.User;
 import com.yuditsky.auction.service.ServiceException;
 import com.yuditsky.auction.service.ServiceFactory;
@@ -13,42 +12,35 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.math.BigDecimal;
 
-import static com.yuditsky.auction.controller.comand.ConstProv.REPLENISH_BALANCE;
 import static com.yuditsky.auction.controller.comand.ConstProv.USER_BALANCE;
 
 public class ReplenishBalanceCommand extends AbstractCommand {
+    private final UserService userService;
+
+    public ReplenishBalanceCommand() {
+        ServiceFactory factory = ServiceFactory.getInstance();
+        userService = factory.getUserService();
+    }
+
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        String replenishSumStr = request.getParameter("replenishSum");
+
         HttpSession session = request.getSession();
+        int userId = (Integer) session.getAttribute("id");
 
-        if (session.getAttribute("id") != null) {
-            String replenishSumStr = request.getParameter("replenishSum");
+        try {
+            User user = userService.findById(userId);
 
-            ServiceFactory factory = ServiceFactory.getInstance();
-            UserService userService = factory.getUserService();
+            if (replenishSumStr != null && !replenishSumStr.equals("")) {
+                BigDecimal replenishSum = new BigDecimal(replenishSumStr);
 
-            int userId = (Integer) session.getAttribute("id");
-
-            try {
-                User user = userService.findById(userId);
-
-                if (replenishSumStr != null) {
-                    BigDecimal replenishSum = new BigDecimal(replenishSumStr);
-
-                    userService.addBalance(user, replenishSum);
-                }
-
-                //BigDecimal balance = user.getBalance(); //validation// negative balance
-
-                //request.setAttribute("balance", balance);
-
-                //return "replenishBalance";
-                redirect(request, response, USER_BALANCE);
-            } catch (ServiceException e) {
-                /////
+                userService.addBalance(user, replenishSum);
             }
-        }
 
-        //return "signIn";
+            redirect(request, response, USER_BALANCE);
+        } catch (ServiceException e) {
+            /////
+        }
     }
 }

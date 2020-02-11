@@ -30,5 +30,8 @@ public enum CommandName {
     CREATE_BID,
     USER_BALANCE,
     UPDATE_SETTINGS,
+    REPAY_CREDIT,
+    CHANGE_LOCALE,
+    BAN,
     WRONG_REQUEST
 }

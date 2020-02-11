@@ -9,8 +9,6 @@ public interface LotDAO extends GenericDAO<Lot>{
 
     List<Lot> findByOwnerId(int id) throws DAOException;
 
-    List<Lot> findByBuyerId(int id) throws DAOException;
-
     /*void updateDescription(Lot lot, String description) throws DAOException;
 
     void updateLocation(Lot lot, String location) throws DAOException;

@@ -6,6 +6,8 @@ import com.yuditsky.auction.entity.AuctionType;
 import com.yuditsky.auction.entity.Bid;
 import com.yuditsky.auction.entity.Lot;
 import com.yuditsky.auction.service.*;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -13,77 +15,50 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
-import static com.yuditsky.auction.controller.comand.ConstProv.DIRECT_AUCTION_PAGE;
+import static com.yuditsky.auction.controller.comand.ConstProv.*;
 
 public class AuctionCommand extends AbstractCommand {
+    private final static Logger logger = LogManager.getLogger(AuctionCommand.class);
+
+    private final LotService lotService;
+    private final BidService bidService;
+    private final AuctionService auctionService;
+
+    public AuctionCommand() {
+        ServiceFactory factory = ServiceFactory.getInstance();
+        lotService = factory.getLotService();
+        bidService = factory.getBidService();
+        auctionService = factory.getAuctionService();
+    }
+
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        HttpSession session = request.getSession();
+        String lotIdStr = request.getParameter("lotId");
 
-        if (session.getAttribute("id") != null) {
-            //String bidSumStr = request.getParameter("bidSum");
-            String lotIdStr = request.getParameter("lotId");
-
-            ServiceFactory factory = ServiceFactory.getInstance();
-            LotService lotService = factory.getLotService();
-            BidService bidService = factory.getBidService();
-            AuctionService auctionService = factory.getAuctionService();
-            //UserService userService = factory.getUserService();
-
+        try {
             if (lotIdStr != null) {
                 int lotId = Integer.parseInt(lotIdStr);
 
-                try {
-                    Lot lot = lotService.findById(lotId);
+                Lot lot = lotService.findById(lotId);
 
-                    Auction auction = auctionService.findByLotId(lot.getId());
+                Auction auction = auctionService.findByLotId(lot.getId());
 
-                    int userId = (Integer) session.getAttribute("id");
-
+                if (auction != null) {
                     Bid bid;
 
+                    String page;
+
                     if (auction.getType() == AuctionType.DIRECT) {
-
-//                        if (bidSumStr != null) {
-//                            BigDecimal bidSum = new BigDecimal(bidSumStr);
-//
-//                            Bid bid = new Bid(userId, bidSum, LocalDateTime.now(), auction.getId());
-//
-//                            if (bidService.findByAuctionId(auction.getId()).size() > 0) {
-//                                if (bidService.isMaxBid(bid) && !bidService.isRebid(bid)) {
-//                                    bidService.save(bid);
-//                                }
-//                            } else {
-//                                if (bidSum.compareTo(lot.getStartPrice()) > 0) {
-//                                    bidService.save(bid);
-//                                }
-//                            }
-//                        }
-
                         bid = bidService.findWithMaxSumByAuctionId(auction.getId());
 
-//                        if (bid != null) {
-//                            request.setAttribute("bid", bid);
-//                        } else {
-//                            request.setAttribute("bid", new Bid());
-//                        }
-//
-//                        request.setAttribute("auction", auction);
-//                        request.setAttribute("lot", lot);
-//
-//                        forward(request, response, "directAuction");
-                        //return "directAuction";
+                        page = DIRECT_AUCTION_PAGE;
                     } else {
+                        HttpSession session = request.getSession();
+                        int userId = (Integer) session.getAttribute("id");
+
                         bid = bidService.findMinByBidderIdAndAuctionId(userId, auction.getId());
 
-//                        if (bid != null) {
-//                            request.setAttribute("bid", bid);
-//                        } else {
-//                            request.setAttribute("bid", new Bid());
-//                        }
-//                        request.setAttribute("lot", lot);
-//                        request.setAttribute("auction", auction);
-                        //return "reversAuction";
+                        page = REVERS_AUCTION_PAGE;
                     }
 
                     if (bid != null) {
@@ -95,13 +70,12 @@ public class AuctionCommand extends AbstractCommand {
                     request.setAttribute("auction", auction);
                     request.setAttribute("lot", lot);
 
-                    forward(request, response, DIRECT_AUCTION_PAGE);
-                } catch (ServiceException e) {
-                    ////
+                    forward(request, response, page);
                 }
             }
+        } catch (ServiceException e) {
+            logger.error("AuctionCommand failed", e);
+            forward(request, response, ERROR_PAGE);
         }
-
-        //return "signIn";
     }
 }

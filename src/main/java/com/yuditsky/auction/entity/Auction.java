@@ -1,28 +1,29 @@
 package com.yuditsky.auction.entity;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 
-public class Auction implements Identified{
+public class Auction implements Identified {
     private int id;
     private AuctionType type;
     private int lotId;
+    private AuctionStatus status;
+    private int winnerId;
     private List<Bid> bids;
-    private LocalDateTime finishTime;
 
-    public Auction(int id, AuctionType type, int lotId, List<Bid> bids, LocalDateTime finishTime) {
+    public Auction(int id, AuctionType type, int lotId, List<Bid> bids, AuctionStatus status, int winnerId) {
         this.id = id;
         this.type = type;
         this.lotId = lotId;
         this.bids = bids;
-        this.finishTime = finishTime;
+        this.status = status;
+        this.winnerId = winnerId;
     }
 
-    public Auction(AuctionType type, int lotId, LocalDateTime finishTime) {
+    public Auction(AuctionType type, int lotId, AuctionStatus status) {
         this.type = type;
         this.lotId = lotId;
-        this.finishTime = finishTime;
+        this.status = status;
     }
 
     public Auction() {
@@ -32,7 +33,7 @@ public class Auction implements Identified{
         return id;
     }
 
-    public void setId(int id) {
+    protected void setId(int id) {
         this.id = id;
     }
 
@@ -60,12 +61,20 @@ public class Auction implements Identified{
         this.bids = bids;
     }
 
-    public LocalDateTime getFinishTime() {
-        return finishTime;
+    public AuctionStatus getStatus() {
+        return status;
     }
 
-    public void setFinishTime(LocalDateTime finishTime) {
-        this.finishTime = finishTime;
+    public void setStatus(AuctionStatus status) {
+        this.status = status;
+    }
+
+    public int getWinnerId() {
+        return winnerId;
+    }
+
+    public void setWinnerId(int winnerId) {
+        this.winnerId = winnerId;
     }
 
     @Override
@@ -74,15 +83,16 @@ public class Auction implements Identified{
         if (o == null || getClass() != o.getClass()) return false;
         Auction auction = (Auction) o;
         return id == auction.id &&
-                type == auction.type &&
                 lotId == auction.lotId &&
-                bids.equals(auction.bids) &&
-                finishTime.equals(auction.finishTime);
+                winnerId == auction.winnerId &&
+                type == auction.type &&
+                status == auction.status &&
+                bids.equals(auction.bids);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, type, lotId, bids, finishTime);
+        return Objects.hash(id, type, lotId, status, winnerId, bids);
     }
 
     @Override
@@ -91,8 +101,9 @@ public class Auction implements Identified{
                 "id=" + id +
                 ", type=" + type +
                 ", lotId=" + lotId +
+                ", status=" + status +
+                ", winnerId=" + winnerId +
                 ", bids=" + bids +
-                ", finishTime=" + finishTime +
                 '}';
     }
 }

@@ -12,17 +12,23 @@ public interface UserService {
 
     List<User> findAll() throws ServiceException;
 
-    User findUserByLogin(String login) throws ServiceException;
+    User findByLogin(String login) throws ServiceException;
 
-    void updatePassword(User user, String password) throws ServiceException;
+    User findById(int id) throws ServiceException;
+
+    /*void updatePassword(User user, String password) throws ServiceException;
 
     void updateEmail(User user, String email) throws ServiceException;
 
-    void updateBalance(User user, BigDecimal sum) throws ServiceException;
+    void updateBalance(User user, BigDecimal sum) throws ServiceException;*/
+
+    void update(User user) throws ServiceException;
 
     void addBalance(User user, BigDecimal sum) throws ServiceException;
 
     void subtractBalance(User user, BigDecimal sum) throws ServiceException;
+
+    void block(User user) throws ServiceException;
 
     void delete(User user) throws ServiceException;
 }

@@ -10,6 +10,8 @@ import com.yuditsky.auction.service.AuctionService;
 import com.yuditsky.auction.service.LotService;
 import com.yuditsky.auction.service.ServiceException;
 import com.yuditsky.auction.service.ServiceFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -21,57 +23,55 @@ import static com.yuditsky.auction.controller.comand.ConstProv.CREATE_AUCTION_PA
 import static com.yuditsky.auction.controller.comand.ConstProv.USER_LOTS;
 
 public class CreateAuctionCommand extends AbstractCommand {
+    private final static Logger logger = LogManager.getLogger(CreateAuctionCommand.class);
+
+    private final AuctionService auctionService;
+    private final LotService lotService;
+
+    public CreateAuctionCommand() {
+        ServiceFactory factory = ServiceFactory.getInstance();
+        auctionService = factory.getAuctionService();
+        lotService = factory.getLotService();
+    }
+
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         HttpSession session = request.getSession();
 
-        if (session.getAttribute("id") != null) {
-            String auctionTypeStr = request.getParameter("auctionType");
-            String lotIdStr = request.getParameter("lotId");
+        String auctionTypeStr = request.getParameter("auctionType");
+        String lotIdStr = request.getParameter("lotId");
 
-            ServiceFactory factory = ServiceFactory.getInstance();
-            AuctionService auctionService = factory.getAuctionService();
-            LotService lotService = factory.getLotService();
+        if (lotIdStr != null) {
+            int lotId = Integer.parseInt(lotIdStr);
 
-            if (lotIdStr != null) {
-                int lotId = Integer.parseInt(lotIdStr);
+            try {
+                Lot lot = lotService.findById(lotId); ///mb null
 
-                try {
-                    Lot lot = lotService.findById(lotId);
+                Auction auction = auctionService.findByLotId(lot.getId());
 
+                if(auction == null) {
                     int ownerId = lot.getOwnerId();
                     int currentUserId = (Integer) session.getAttribute("id");
 
-                    if(ownerId == currentUserId) {
+                    if (ownerId == currentUserId) {
+                        if (auctionTypeStr != null) {
+                            AuctionType type = AuctionType.valueOf(auctionTypeStr.toUpperCase());
 
-                        if(auctionService.findByLotId(lotId) == null) {
-                            if (auctionTypeStr != null) {
-                                AuctionType auctionType = AuctionType.valueOf(auctionTypeStr.toUpperCase());
-
-                                Auction auction = new Auction(auctionType, lotId, AuctionStatus.WAITING);
-
-                                auctionService.save(auction);
-
-                                //return "userLots";
+                            if (auctionService.createAuction(lotId, type)) {
                                 redirect(request, response, USER_LOTS);
-
-                            } else {
-                                request.setAttribute("lot", lot);
-
-                                forward(request, response, CREATE_AUCTION_PAGE);
-                                //return "createAuction";
                             }
                         } else {
-                            //return "userLots";
-                            redirect(request, response, USER_LOTS);
+                            request.setAttribute("lot", lot);
+
+                            forward(request, response, CREATE_AUCTION_PAGE);
                         }
                     } //else 403
-                } catch (ServiceException e) {
-                    ////
+                } else {
+                    redirect(request, response, USER_LOTS);
                 }
+            } catch (ServiceException e) {
+                ////
             }
         }
-
-        //return "greeting";
     }
 }

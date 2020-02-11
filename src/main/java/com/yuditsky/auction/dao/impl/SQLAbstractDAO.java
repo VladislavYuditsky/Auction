@@ -40,14 +40,13 @@ public abstract class SQLAbstractDAO<T extends Identified> implements GenericDAO
     public void save(T object) throws DAOException {
         Connection connection = null;
         PreparedStatement statement = null;
-        ResultSet resultSet = null;
         try {
             connection = connectionPool.takeConnection();
             statement = connection.prepareStatement(getInsertQuery());
 
             prepareStatementForInsert(statement, object);
 
-            resultSet = statement.executeQuery();
+            statement.executeUpdate();
         } catch (SQLException e) {
             logger.log(Level.ERROR, "SQL error", e);
             throw new DAOException(e);
@@ -55,7 +54,7 @@ public abstract class SQLAbstractDAO<T extends Identified> implements GenericDAO
             logger.log(Level.ERROR, "Can't take connection", e);
             throw new DAOException(e);
         } finally {
-            connectionPool.closeConnection(connection, statement, resultSet);
+            connectionPool.closeConnection(connection, statement);
         }
     }
 
@@ -124,14 +123,13 @@ public abstract class SQLAbstractDAO<T extends Identified> implements GenericDAO
     public void update(T object) throws DAOException {
         Connection connection = null;
         PreparedStatement statement = null;
-        ResultSet resultSet = null;
         try {
             connection = connectionPool.takeConnection();
             statement = connection.prepareStatement(getUpdateQuery());
 
             prepareStatementForUpdate(statement, object);
 
-            resultSet = statement.executeQuery();
+            statement.executeUpdate();
         } catch (SQLException e) {
             logger.log(Level.ERROR, "SQL error", e);
             throw new DAOException(e);
@@ -139,7 +137,7 @@ public abstract class SQLAbstractDAO<T extends Identified> implements GenericDAO
             logger.log(Level.ERROR, "Can't take connection", e);
             throw new DAOException(e);
         } finally {
-            connectionPool.closeConnection(connection, statement, resultSet);
+            connectionPool.closeConnection(connection, statement);
         }
     }
 
@@ -147,14 +145,13 @@ public abstract class SQLAbstractDAO<T extends Identified> implements GenericDAO
     public void delete(T object) throws DAOException {
         Connection connection = null;
         PreparedStatement statement = null;
-        ResultSet resultSet = null;
         try {
             connection = connectionPool.takeConnection();
             statement = connection.prepareStatement(getDeleteQuery());
 
             statement.setString(1, String.valueOf(object.getId()));
 
-            resultSet = statement.executeQuery();
+            statement.executeUpdate();
         } catch (SQLException e) {
             logger.log(Level.ERROR, "SQL error", e);
             throw new DAOException(e);
@@ -162,7 +159,7 @@ public abstract class SQLAbstractDAO<T extends Identified> implements GenericDAO
             logger.log(Level.ERROR, "Can't take connection", e);
             throw new DAOException(e);
         } finally {
-            connectionPool.closeConnection(connection, statement, resultSet);
+            connectionPool.closeConnection(connection, statement);
         }
     }
 }

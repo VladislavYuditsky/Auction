@@ -32,6 +32,12 @@ public class User implements Identified{
         this.credits = credits;
     }
 
+    public User(String login, String password, String email) {
+        this.login = login;
+        this.password = password;
+        this.email = email;
+    }
+
     public User() {
     }
 
@@ -39,7 +45,7 @@ public class User implements Identified{
         return id;
     }
 
-    public void setId(int id) {
+    protected void setId(int id) {
         this.id = id;
     }
 

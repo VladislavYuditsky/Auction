@@ -19,6 +19,13 @@ public class Payment implements Identified{
         this.date = date;
     }
 
+    public Payment(int payerId, BigDecimal sum, int lotId, LocalDateTime date) {
+        this.payerId = payerId;
+        this.sum = sum;
+        this.lotId = lotId;
+        this.date = date;
+    }
+
     public Payment() {
     }
 
@@ -26,7 +33,7 @@ public class Payment implements Identified{
         return id;
     }
 
-    public void setId(int id) {
+    protected void setId(int id) {
         this.id = id;
     }
 

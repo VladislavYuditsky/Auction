@@ -33,11 +33,9 @@ public class SQLLotDAO extends SQLAbstractDAO<Lot> implements LotDAO {
                 String description = resultSet.getString("description");
                 String location = resultSet.getString("location");
                 BigDecimal startPrice = resultSet.getBigDecimal("start_price");
-                BigDecimal minPrice = resultSet.getBigDecimal("min_price");
                 int ownerId = resultSet.getInt("owner_id");
-                int buyerId = resultSet.getInt("buyer_id");
 
-                Lot lot = new Lot(id, name, description, location, ownerId, buyerId, startPrice, minPrice);
+                Lot lot = new Lot(id, name, description, location, ownerId, startPrice);
                 lots.add(lot);
             }
 
@@ -80,8 +78,7 @@ public class SQLLotDAO extends SQLAbstractDAO<Lot> implements LotDAO {
             statement.setString(2, lot.getDescription());
             statement.setString(3, lot.getLocation());
             statement.setBigDecimal(4, lot.getStartPrice());
-            statement.setBigDecimal(5, lot.getMinPrice());
-            statement.setInt(6, lot.getOwnerId());
+            statement.setInt(5, lot.getOwnerId());
         } catch (SQLException e) {
             logger.error("Can't prepare statement for insert", e);
             throw new DAOException(e);
@@ -95,9 +92,8 @@ public class SQLLotDAO extends SQLAbstractDAO<Lot> implements LotDAO {
             statement.setString(2, lot.getDescription());
             statement.setString(3, lot.getLocation());
             statement.setBigDecimal(4, lot.getStartPrice());
-            statement.setBigDecimal(5, lot.getMinPrice());
-            statement.setInt(6, lot.getOwnerId());
-            statement.setInt(7, lot.getId());
+            statement.setInt(5, lot.getOwnerId());
+            statement.setInt(6, lot.getId());
         } catch (SQLException e) {
             logger.error("Can't prepare statement for insert", e);
             throw new DAOException(e);
@@ -112,31 +108,6 @@ public class SQLLotDAO extends SQLAbstractDAO<Lot> implements LotDAO {
         try {
             connection = connectionPool.takeConnection();
             statement = connection.prepareStatement(Const.SELECT_LOT_BY_OWNER_ID);
-
-            statement.setString(1, String.valueOf(id));
-
-            resultSet = statement.executeQuery();
-
-            return parseResultSet(resultSet);
-        } catch (SQLException e) {
-            logger.log(Level.ERROR, "SQL error", e);
-            throw new DAOException(e);
-        } catch (ConnectionPoolException e) {
-            logger.log(Level.ERROR, "Can't take connection", e);
-            throw new DAOException(e);
-        } finally {
-            connectionPool.closeConnection(connection, statement, resultSet);
-        }
-    }
-
-    @Override
-    public List<Lot> findByBuyerId(int id) throws DAOException {
-        Connection connection = null;
-        PreparedStatement statement = null;
-        ResultSet resultSet = null;
-        try {
-            connection = connectionPool.takeConnection();
-            statement = connection.prepareStatement(Const.SELECT_LOT_BY_BUYER_ID);
 
             statement.setString(1, String.valueOf(id));
 

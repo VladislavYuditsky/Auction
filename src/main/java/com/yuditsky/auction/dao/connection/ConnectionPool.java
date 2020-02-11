@@ -17,6 +17,7 @@ public class ConnectionPool {
     private String user;
     private String password;
     private int poolSize;
+
     private BlockingQueue<Connection> connectionQueue;
     private BlockingQueue<Connection> givenAwayConnectionQueue;
     private static ConnectionPool instance;
@@ -59,10 +60,10 @@ public class ConnectionPool {
                 connectionQueue.add(pooledConnection);
             }
         } catch (SQLException e) {
-            logger.log(Level.ERROR, "Can't init connection pool data", e);
+            //logger.log(Level.ERROR, "Can't init connection pool data", e);
             throw new ConnectionPoolException(e);
         } catch (ClassNotFoundException e) {
-            logger.log(Level.ERROR, "Can't find database driver class", e);
+            //logger.log(Level.ERROR, "Can't find database driver class", e);
             throw new ConnectionPoolException(e);
         }
     }
@@ -77,7 +78,7 @@ public class ConnectionPool {
             closeConnectionsQueue(connectionQueue);
         } catch (SQLException e) {
             //bez throw&
-            logger.log(Level.ERROR, "Error closing the connection", e);
+            //logger.log(Level.ERROR, "Error closing the connection", e);
         }
     }
 

@@ -1,7 +1,6 @@
 package com.yuditsky.auction.controller.comand.impl;
 
 import com.yuditsky.auction.controller.comand.AbstractCommand;
-import com.yuditsky.auction.controller.comand.Command;
 import com.yuditsky.auction.entity.Auction;
 import com.yuditsky.auction.entity.UserRole;
 import com.yuditsky.auction.service.AuctionService;
@@ -15,37 +14,30 @@ import java.io.IOException;
 
 import static com.yuditsky.auction.controller.comand.ConstProv.PROPOSED_AUCTIONS;
 
-public class DenyCommand extends AbstractCommand {
+public class DenyCommand extends AbstractCommand { //DeleteAuction ////////////////////////////////////
+    private final AuctionService auctionService;
+
+    public DenyCommand() {
+        ServiceFactory factory = ServiceFactory.getInstance();
+        auctionService = factory.getAuctionService();
+    }
+
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        HttpSession session = request.getSession();
+        String auctionIdStr = request.getParameter("auctionId");
 
-        if (session.getAttribute("id") != null) {
-            UserRole userRole = (UserRole) session.getAttribute("role");
+        if (auctionIdStr != null) { //Optional
+            int auctionId = Integer.parseInt(auctionIdStr);
 
-            if (userRole == UserRole.ADMIN) {
-                String auctionIdStr = request.getParameter("auctionId");
+            try {
+                Auction auction = auctionService.findById(auctionId);
 
-                if(auctionIdStr != null){
-                    int auctionId = Integer.parseInt(auctionIdStr);
+                auctionService.delete(auction);
 
-                    ServiceFactory factory = ServiceFactory.getInstance();
-                    AuctionService auctionService = factory.getAuctionService();
-
-                    try {
-                        Auction auction = auctionService.findById(auctionId);
-
-                        auctionService.delete(auction);
-
-                        //return "proposedAuctions";
-                        redirect(request, response, PROPOSED_AUCTIONS);
-                    } catch (ServiceException e) {
-                        /////
-                    }
-                }
-            } //else 403
-        }
-
-        //return "greeting";
+                redirect(request, response, PROPOSED_AUCTIONS);
+            } catch (ServiceException e) {
+                /////
+            }
+        } //else 403
     }
 }

@@ -19,6 +19,13 @@ public class Bid implements Identified{
         this.auctionId = auctionId;
     }
 
+    public Bid(int bidderId, BigDecimal sum, LocalDateTime time, int auctionId) {
+        this.bidderId = bidderId;
+        this.sum = sum;
+        this.time = time;
+        this.auctionId = auctionId;
+    }
+
     public Bid() {
     }
 
@@ -26,7 +33,7 @@ public class Bid implements Identified{
         return id;
     }
 
-    public void setId(int id) {
+    protected void setId(int id) {
         this.id = id;
     }
 

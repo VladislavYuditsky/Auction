@@ -1,10 +1,8 @@
 package com.yuditsky.auction.controller.comand.impl;
 
 import com.yuditsky.auction.controller.comand.AbstractCommand;
-import com.yuditsky.auction.entity.Auction;
-import com.yuditsky.auction.entity.AuctionType;
-import com.yuditsky.auction.entity.Bid;
 import com.yuditsky.auction.entity.Lot;
+import com.yuditsky.auction.entity.User;
 import com.yuditsky.auction.service.*;
 
 import javax.servlet.ServletException;
@@ -13,59 +11,51 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 
-import static com.yuditsky.auction.controller.comand.ConstProv.DIRECT_AUCTION;
+import static com.yuditsky.auction.controller.comand.ConstProv.AUCTION;
 
 public class CreateBidCommand extends AbstractCommand {
+    private final LotService lotService;
+    private final BidService bidService;
+    private final UserService userService;
+
+    public CreateBidCommand() {
+        ServiceFactory factory = ServiceFactory.getInstance();
+        lotService = factory.getLotService();
+        bidService = factory.getBidService();
+        userService = factory.getUserService();
+    }
+
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         HttpSession session = request.getSession();
 
-        if (session.getAttribute("id") != null) {
-            String bidSumStr = request.getParameter("bidSum");
-            String lotIdStr = request.getParameter("lotId");
+        String bidSumStr = request.getParameter("bidSum");
+        String lotIdStr = request.getParameter("lotId");
 
-            ServiceFactory factory = ServiceFactory.getInstance();
-            LotService lotService = factory.getLotService();
-            BidService bidService = factory.getBidService();
-            AuctionService auctionService = factory.getAuctionService();
-            UserService userService = factory.getUserService();
+        if (lotIdStr != null) {
+            int lotId = Integer.parseInt(lotIdStr);
 
-            if (lotIdStr != null) {
-                int lotId = Integer.parseInt(lotIdStr);
+            try {
+                Lot lot = lotService.findById(lotId);
 
-                try {
-                    Lot lot = lotService.findById(lotId);
+                int userId = (Integer) session.getAttribute("id");
 
-                    Auction auction = auctionService.findByLotId(lot.getId());
+                User user = userService.findById(userId);
 
-                    int userId = (Integer) session.getAttribute("id");
+                if (bidSumStr != null && !bidSumStr.equals("")) {
+                    BigDecimal bidSum = new BigDecimal(bidSumStr);
 
-                    if (auction.getType() == AuctionType.DIRECT) {
-
-                        if (bidSumStr != null) {
-                            BigDecimal bidSum = new BigDecimal(bidSumStr);
-
-                            Bid bid = new Bid(userId, bidSum, LocalDateTime.now(), auction.getId());
-
-                            if (bidService.findByAuctionId(auction.getId()).size() > 0) {
-                                if (bidService.isMaxBid(bid) && !bidService.isRebid(bid)) {
-                                    bidService.save(bid);
-                                }
-                            } else {
-                                if (bidSum.compareTo(lot.getStartPrice()) > 0) {
-                                    bidService.save(bid);
-                                }
-                            }
-                        }
+                    if (!bidService.createBid(lot, user, bidSum)) {
+                        //сообщение пользователю
                     }
-                } catch (ServiceException e) {
-                    ///
                 }
+
+                //request.setAttribute("lotId", lotId);
+                redirect(request, response, AUCTION + "?lotId=" + lotId);
+            } catch (ServiceException e) {
+                ///
             }
         }
-
-        redirect(request, response, DIRECT_AUCTION);
     }
 }

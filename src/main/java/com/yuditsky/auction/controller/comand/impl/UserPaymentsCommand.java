@@ -1,7 +1,6 @@
 package com.yuditsky.auction.controller.comand.impl;
 
 import com.yuditsky.auction.controller.comand.AbstractCommand;
-import com.yuditsky.auction.controller.comand.Command;
 import com.yuditsky.auction.entity.Payment;
 import com.yuditsky.auction.service.PaymentService;
 import com.yuditsky.auction.service.ServiceException;
@@ -17,28 +16,26 @@ import java.util.List;
 import static com.yuditsky.auction.controller.comand.ConstProv.USER_PAYMENTS_PAGE;
 
 public class UserPaymentsCommand extends AbstractCommand {
+    private final PaymentService paymentService;
+
+    public UserPaymentsCommand() {
+        ServiceFactory factory = ServiceFactory.getInstance();
+        paymentService = factory.getPaymentService();
+    }
+
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession();
+        int userId = (Integer) session.getAttribute("id");
 
-        if (session.getAttribute("id") != null) {
-            ServiceFactory factory = ServiceFactory.getInstance();
-            PaymentService paymentService = factory.getPaymentService();
+        try {
+            List<Payment> payments = paymentService.findByPayerId(userId);
 
-            int userId = (Integer) session.getAttribute("id");
+            request.setAttribute("payments", payments);
 
-            try {
-                List<Payment> payments = paymentService.findByPayerId(userId);
-
-                request.setAttribute("payments", payments);
-
-                forward(request, response, USER_PAYMENTS_PAGE);
-                //return "userPayments";
-            } catch (ServiceException e) {
-                ////
-            }
-
+            forward(request, response, USER_PAYMENTS_PAGE);
+        } catch (ServiceException e) {
+            ////
         }
-        //return "signIn";
     }
 }

@@ -23,8 +23,6 @@ public class Controller extends HttpServlet {
     }
 
     private void processRequest(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-        //String commandName = request.getParameter("command");
-
         String commandName = request.getServletPath();
         commandName = commandName.substring(1);
 

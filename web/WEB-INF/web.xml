@@ -13,14 +13,13 @@
         <servlet-name>Controller</servlet-name>
         <url-pattern>/sign_in</url-pattern>
         <url-pattern>/sign_up</url-pattern>
-        <url-pattern>/main</url-pattern>
         <url-pattern>/greeting</url-pattern>
         <url-pattern>/sign_out</url-pattern>
-        <url-pattern>/add_new_lot</url-pattern>
+        <url-pattern>/create_lot</url-pattern>
         <url-pattern>/user_lots</url-pattern>
         <url-pattern>/user_bids</url-pattern>
-        <url-pattern>/awaiting_payment</url-pattern>
-        <url-pattern>/new_payment</url-pattern>
+        <url-pattern>/awaiting_payment_lots</url-pattern>
+        <url-pattern>/create_payment</url-pattern>
         <url-pattern>/user_payments</url-pattern>
         <url-pattern>/user_credits</url-pattern>
         <url-pattern>/settings</url-pattern>
@@ -29,6 +28,66 @@
         <url-pattern>/users</url-pattern>
         <url-pattern>/auction</url-pattern>
         <url-pattern>/buy</url-pattern>
-        <url-pattern>/add_new_bid</url-pattern>
+        <url-pattern>/show_price</url-pattern>
+        <url-pattern>/change_auction_status</url-pattern>
+        <url-pattern>/edit_lot</url-pattern>
+        <url-pattern>/create_auction</url-pattern>
+        <url-pattern>/delete_lot</url-pattern>
+        <url-pattern>/deny</url-pattern>
+        <url-pattern>/block</url-pattern>
+        <url-pattern>/create_credit</url-pattern>
+        <url-pattern>/auctions</url-pattern>
+        <url-pattern>/user_balance</url-pattern>
+        <url-pattern>/create_bid</url-pattern>
+        <url-pattern>/update_settings</url-pattern>
+        <url-pattern>/revers_auction</url-pattern>
+        <url-pattern>/repay_credit</url-pattern>
+        <url-pattern>/change_locale</url-pattern>
+        <url-pattern>/ban</url-pattern>
     </servlet-mapping>
+
+    <filter>
+        <filter-name>AuthorizationFilter</filter-name>
+        <filter-class>com.yuditsky.auction.controller.filter.AuthorizationFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>AuthorizationFilter</filter-name>
+        <servlet-name>Controller</servlet-name>
+    </filter-mapping>
+
+    <filter>
+        <filter-name>RoleFilter</filter-name>
+        <filter-class>com.yuditsky.auction.controller.filter.RoleFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>RoleFilter</filter-name>
+        <servlet-name>Controller</servlet-name>
+    </filter-mapping>
+
+    <filter>
+        <filter-name>EncodingFilter</filter-name>
+        <filter-class>com.yuditsky.auction.controller.filter.EncodingFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>EncodingFilter</filter-name>
+        <servlet-name>Controller</servlet-name>
+    </filter-mapping>
+
+    <filter>
+        <filter-name>LocaleFilter</filter-name>
+        <filter-class>com.yuditsky.auction.controller.filter.LocaleFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>LocaleFilter</filter-name>
+        <servlet-name>Controller</servlet-name>
+    </filter-mapping>
+
+    <filter>
+        <filter-name>BlockedFilter</filter-name>
+        <filter-class>com.yuditsky.auction.controller.filter.BlockedFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>BlockedFilter</filter-name>
+        <servlet-name>Controller</servlet-name>
+    </filter-mapping>
 </web-app>

@@ -6,14 +6,22 @@ import java.util.Objects;
 
 public class Credit implements Identified{
     private int id;
-    private double percent;
+    private BigDecimal percent;
     private LocalDateTime endDate;
     private BigDecimal balance;
     private BigDecimal sum;
     private int borrowerId;
 
-    public Credit(int id, double percent, LocalDateTime endDate, BigDecimal balance, BigDecimal sum, int borrowerId) {
+    public Credit(int id, BigDecimal percent, LocalDateTime endDate, BigDecimal balance, BigDecimal sum, int borrowerId) {
         this.id = id;
+        this.percent = percent;
+        this.endDate = endDate;
+        this.balance = balance;
+        this.sum = sum;
+        this.borrowerId = borrowerId;
+    }
+
+    public Credit(BigDecimal percent, LocalDateTime endDate, BigDecimal balance, BigDecimal sum, int borrowerId) {
         this.percent = percent;
         this.endDate = endDate;
         this.balance = balance;
@@ -28,15 +36,15 @@ public class Credit implements Identified{
         return id;
     }
 
-    public void setId(int id) {
+    protected void setId(int id) {
         this.id = id;
     }
 
-    public double getPercent() {
+    public BigDecimal getPercent() {
         return percent;
     }
 
-    public void setPercent(double percent) {
+    public void setPercent(BigDecimal percent) {
         this.percent = percent;
     }
 
@@ -78,7 +86,7 @@ public class Credit implements Identified{
         if (o == null || getClass() != o.getClass()) return false;
         Credit credit = (Credit) o;
         return id == credit.id &&
-                Double.compare(credit.percent, percent) == 0 &&
+                percent.equals(credit.percent) &&
                 borrowerId == credit.borrowerId &&
                 endDate.equals(credit.endDate) &&
                 balance.equals(credit.balance) &&

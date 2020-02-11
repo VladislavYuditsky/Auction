@@ -18,32 +18,23 @@ import java.util.List;
 import static com.yuditsky.auction.controller.comand.ConstProv.USERS_PAGE;
 
 public class UsersCommand extends AbstractCommand {
+    private final UserService userService;
+
+    public UsersCommand() {
+        ServiceFactory factory = ServiceFactory.getInstance();
+        userService = factory.getUserService();
+    }
+
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        HttpSession session = request.getSession();
+        try {
+            List<User> users = userService.findAll();
 
-        if (session.getAttribute("id") != null) {
-            UserRole role = (UserRole) session.getAttribute("role");
+            request.setAttribute("users", users);
 
-            if (role == UserRole.ADMIN) {
-                ServiceFactory factory = ServiceFactory.getInstance();
-                UserService userService = factory.getUserService();
-
-                try {
-                    List<User> users = userService.findAll();
-
-                    request.setAttribute("users", users);
-
-                    forward(request, response, USERS_PAGE);
-                    //return "users";
-                } catch (ServiceException e) {
-                    ///
-                }
-            } else{
-                //403
-            }
+            forward(request, response, USERS_PAGE);
+        } catch (ServiceException e) {
+            ///
         }
-
-        //return "signIn";
     }
 }

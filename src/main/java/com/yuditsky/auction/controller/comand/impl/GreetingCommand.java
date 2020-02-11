@@ -13,7 +13,6 @@ import static com.yuditsky.auction.controller.comand.ConstProv.GREETING_PAGE;
 public class GreetingCommand extends AbstractCommand {
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        //return "greeting";
         forward(request, response, GREETING_PAGE);
     }
 }

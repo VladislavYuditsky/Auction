@@ -1,65 +1,55 @@
 package com.yuditsky.auction.controller.comand.impl;
 
 import com.yuditsky.auction.controller.comand.AbstractCommand;
-import com.yuditsky.auction.controller.comand.Command;
 import com.yuditsky.auction.entity.Auction;
 import com.yuditsky.auction.entity.AuctionStatus;
-import com.yuditsky.auction.entity.UserRole;
 import com.yuditsky.auction.service.AuctionService;
 import com.yuditsky.auction.service.ServiceException;
 import com.yuditsky.auction.service.ServiceFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
 import static com.yuditsky.auction.controller.comand.ConstProv.*;
 
 public class ChangeAuctionStatusCommand extends AbstractCommand {
+    private final static Logger logger = LogManager.getLogger(ChangeAuctionStatusCommand.class);
+
+    private final AuctionService auctionService;
+
+    public ChangeAuctionStatusCommand() {
+        ServiceFactory factory = ServiceFactory.getInstance();
+        auctionService = factory.getAuctionService();
+    }
+
     @Override
-    public void execute(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        HttpSession session = request.getSession();
+    public void execute(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
 
-        String page = GREETING_PAGE;
+        String auctionIdStr = request.getParameter("auctionId");
 
-        if (session.getAttribute("id") != null) {
-            UserRole role = (UserRole) session.getAttribute("role");
+        if (auctionIdStr != null) {
+            int auctionId = Integer.parseInt(auctionIdStr);
 
-            if (role == UserRole.ADMIN) {
-                String auctionIdStr = request.getParameter("auctionId");
+            try {
+                Auction auction = auctionService.findById(auctionId);
 
-                if(auctionIdStr != null){
-                    int auctionId = Integer.parseInt(auctionIdStr);
+                auctionService.changeStatus(auction);
 
-                    ServiceFactory factory = ServiceFactory.getInstance();
-                    AuctionService auctionService = factory.getAuctionService();
+                auction = auctionService.findById(auction.getId());
 
-                    try {
-                        Auction auction = auctionService.findById(auctionId);
-
-                        AuctionStatus status = auction.getStatus();
-
-                        if(status == AuctionStatus.WAITING){
-                            auction.setStatus(AuctionStatus.ACTIVE);
-                            auctionService.update(auction);
-
-                            page = PROPOSED_AUCTIONS;
-                        }
-
-                        if(status == AuctionStatus.ACTIVE){
-                            auctionService.finishAuction(auction);
-
-                            page = AUCTIONS;
-                        }
-                    } catch (ServiceException e) {
-                        ///
-                    }
+                if (auction != null && auction.getStatus() == AuctionStatus.ACTIVE) {
+                    redirect(request, response, PROPOSED_AUCTIONS);
+                } else {
+                    redirect(request, response, AUCTIONS);
                 }
+            } catch (ServiceException e) {
+                logger.error("ChangeAuctionStatusCommand failed", e);
+                forward(request, response, ERROR_PAGE);
             }
         }
-
-        //return  page;
-        redirect(request, response, page);
     }
 }

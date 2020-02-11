@@ -1,10 +1,19 @@
 package com.yuditsky.auction.service.util;
 
-import org.apache.commons.codec.digest.DigestUtils;
+import org.mindrot.jbcrypt.BCrypt;
 
 public class Encoder {
-    public String encode(String string){
-        String md5Hex = DigestUtils.md5Hex(string);
-        return md5Hex;
+    private final String gensalt;
+
+    public Encoder() {
+        gensalt = BCrypt.gensalt();
+    }
+
+    public String encode(String password) {
+        return BCrypt.hashpw(password, gensalt);
+    }
+
+    public boolean checkPassword(String password, String hashPassword) throws IllegalArgumentException {
+        return BCrypt.checkpw(password, hashPassword);
     }
 }

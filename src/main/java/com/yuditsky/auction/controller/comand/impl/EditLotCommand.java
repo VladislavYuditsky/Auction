@@ -2,6 +2,7 @@ package com.yuditsky.auction.controller.comand.impl;
 
 import com.yuditsky.auction.controller.comand.AbstractCommand;
 import com.yuditsky.auction.controller.comand.Command;
+import com.yuditsky.auction.entity.Auction;
 import com.yuditsky.auction.entity.Lot;
 import com.yuditsky.auction.service.AuctionService;
 import com.yuditsky.auction.service.LotService;
@@ -19,66 +20,63 @@ import static com.yuditsky.auction.controller.comand.ConstProv.EDIT_LOT_PAGE;
 import static com.yuditsky.auction.controller.comand.ConstProv.USER_LOTS;
 
 public class EditLotCommand extends AbstractCommand {
+    private final LotService lotService;
+    private final AuctionService auctionService;
+
+    public EditLotCommand() {
+        ServiceFactory factory = ServiceFactory.getInstance();
+        lotService = factory.getLotService();
+        auctionService = factory.getAuctionService();
+    }
+
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-        HttpSession session = request.getSession();
+        String lotIdStr = request.getParameter("lotId");
 
-        if (session.getAttribute("id") != null) {
-            String lotIdStr = request.getParameter("lotId");
+        if (lotIdStr != null) { //Optional
 
-            if (lotIdStr != null) {
+            int lotId = Integer.parseInt(lotIdStr);
 
-                int lotId = Integer.parseInt(lotIdStr);
+            try {
+                Lot lot = lotService.findById(lotId);
 
-                ServiceFactory factory = ServiceFactory.getInstance();
-                LotService lotService = factory.getLotService();
-                AuctionService auctionService = factory.getAuctionService();
+                HttpSession session = request.getSession();
+                int currentUserId = (Integer) session.getAttribute("id");
 
-                try {
-                    Lot lot = lotService.findById(lotId);
+                if (lot.getOwnerId() == currentUserId) {
 
-                    int currentUserId = (Integer) session.getAttribute("id");
+                    if (auctionService.findByLotId(lotId) == null) {
+                        String name = request.getParameter("name");
+                        String description = request.getParameter("description");
+                        String location = request.getParameter("location");
+                        String startPriceStr = request.getParameter("startPrice");
 
-                    if (lot.getOwnerId() == currentUserId) {
+                        if (name != null && description != null && location != null && startPriceStr != null && !startPriceStr.equals("")) {
+                            //validation в том числе на пустую строку
 
-                        if (auctionService.findByLotId(lotId) == null) {
-                            String name = request.getParameter("name");
-                            String description = request.getParameter("description");
-                            String location = request.getParameter("location");
-                            String startPriceStr = request.getParameter("startPrice");
+                            BigDecimal startPrice = new BigDecimal(startPriceStr);
 
-                            if (name != null && description != null && location != null && startPriceStr != null) {
-                                //validation в том числе на пустую строку
+                            lot.setName(name);
+                            lot.setDescription(description);
+                            lot.setLocation(location);
+                            lot.setStartPrice(startPrice);
 
-                                BigDecimal startPrice = new BigDecimal(startPriceStr);
+                            lotService.update(lot);
 
-                                lot.setName(name);
-                                lot.setDescription(description);
-                                lot.setLocation(location);
-                                lot.setStartPrice(startPrice);
-
-                                lotService.update(lot);
-
-                                //return "userLots"; //redirect(user_lots?id=${session.getAttr("id)
-                                redirect(request, response, USER_LOTS);
-                                return;
-                            }
-
-                            request.setAttribute("lot", lot);
-
-                            //return "editLot";
-                            forward(request, response, EDIT_LOT_PAGE);
-                        } else {
-                            //return "userLots"; //redirect(user_lots?id=${session.getAttr("id)
                             redirect(request, response, USER_LOTS);
+                            return;
                         }
-                    }//else 403
-                } catch (ServiceException e) {
-                    ///
-                }
+
+                        request.setAttribute("lot", lot);
+
+                        forward(request, response, EDIT_LOT_PAGE);
+                    } else {
+                        redirect(request, response, USER_LOTS);
+                    }
+                }//else 403
+            } catch (ServiceException e) {
+                ///
             }
         }
-
-        //return "greeting";
     }
 }
