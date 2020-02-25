@@ -33,5 +33,10 @@ public enum CommandName {
     REPAY_CREDIT,
     CHANGE_LOCALE,
     BAN,
+    DIRECT_AUCTION,
+    REVERS_AUCTION,
+    SELL,
+    UPDATE_LOT,
+    CREATE_USER,
     WRONG_REQUEST
 }

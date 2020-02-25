@@ -8,17 +8,18 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
-import static com.yuditsky.auction.controller.comand.ConstProv.SIGN_IN_PAGE;
+import static com.yuditsky.auction.controller.provider.JspPageProvider.SIGN_IN_PAGE;
+import static com.yuditsky.auction.controller.provider.SessionAttributesNameProvider.*;
 
 public class SignOutCommand extends AbstractCommand {
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession();
 
-        session.removeAttribute("id");
-        session.removeAttribute("login");
-        session.removeAttribute("role");
-        session.removeAttribute("blocked");
+        session.removeAttribute(ID);
+        session.removeAttribute(LOGIN);
+        session.removeAttribute(ROLE);
+        session.removeAttribute(BLOCKED);
 
         forward(request, response, SIGN_IN_PAGE);
     }

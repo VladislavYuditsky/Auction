@@ -6,7 +6,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
-import static com.yuditsky.auction.controller.comand.ConstProv.*;
+import static com.yuditsky.auction.controller.provider.ServletPathProvider.BAN;
+import static com.yuditsky.auction.controller.provider.SessionAttributesNameProvider.BLOCKED;
 
 public class BlockedFilter implements Filter {
     @Override
@@ -17,9 +18,9 @@ public class BlockedFilter implements Filter {
         HttpSession session = request.getSession();
         String path = request.getServletPath();
 
-        if(session.getAttribute("blocked") != null){
-            boolean blocked = (boolean) session.getAttribute("blocked");
-            if(blocked && !path.equals(BAN)) {
+        if (session.getAttribute(BLOCKED) != null) {
+            boolean blocked = (boolean) session.getAttribute(BLOCKED);
+            if (blocked && !path.equals(BAN)) {
                 response.sendRedirect(request.getContextPath() + BAN);
                 return;
             }

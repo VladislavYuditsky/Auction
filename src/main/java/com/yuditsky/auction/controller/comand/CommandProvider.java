@@ -41,6 +41,11 @@ public class CommandProvider {
         repository.put(CommandName.REPAY_CREDIT, new RepayCreditCommand());
         repository.put(CommandName.CHANGE_LOCALE, new ChangeLocaleCommand());
         repository.put(CommandName.BAN, new BanCommand());
+        repository.put(CommandName.DIRECT_AUCTION, new DirectAuctionCommand());
+        repository.put(CommandName.REVERS_AUCTION, new ReversAuctionCommand());
+        repository.put(CommandName.SELL, new SellCommand());
+        repository.put(CommandName.UPDATE_LOT, new UpdateLotCommand());
+        repository.put(CommandName.CREATE_USER, new CreateUserCommand());
         repository.put(CommandName.WRONG_REQUEST, new WrongRequestCommand());
     }
 

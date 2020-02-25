@@ -14,7 +14,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -29,8 +28,8 @@ public class CreditServiceImpl implements CreditService {
     private final Validator validator;
 
     public CreditServiceImpl() {
-        DAOFactory factory = DAOFactory.getInstance();
-        creditDAO = factory.getCreditDAO();
+        DAOFactory daoFactory = DAOFactory.getInstance();
+        creditDAO = daoFactory.getCreditDAO();
 
         validator = new Validator();
     }
@@ -67,12 +66,9 @@ public class CreditServiceImpl implements CreditService {
 
     @Override
     public boolean subtractBalance(int creditId, BigDecimal sum, User borrower) throws ServiceException {
-        if(!validator.checkSum(sum)){
+        if(!validator.checkBigDecimal(sum)){
             throw new ServiceException("Invalid sum");
         }
-
-        ServiceFactory factory = ServiceFactory.getInstance();
-        UserService userService = factory.getUserService();
 
         if (borrower.getBalance().compareTo(sum) >= 0) {
 
@@ -83,8 +79,10 @@ public class CreditServiceImpl implements CreditService {
             if(newBalance.compareTo(NULL) >= 0){
                 updateBalance(credit, newBalance);
 
-                userService.subtractBalance(borrower, sum);
+                ServiceFactory serviceFactory = ServiceFactory.getInstance();
+                UserService userService = serviceFactory.getUserService();
 
+                userService.subtractBalance(borrower, sum);
                 return true;
             }
         }

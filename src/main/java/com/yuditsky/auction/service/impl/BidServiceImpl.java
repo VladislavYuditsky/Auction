@@ -11,7 +11,6 @@ import org.apache.logging.log4j.Logger;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 import static com.yuditsky.auction.Const.NULL;
@@ -25,15 +24,15 @@ public class BidServiceImpl implements BidService {
     private final Validator validator;
 
     public BidServiceImpl() {
-        DAOFactory factory = DAOFactory.getInstance();
-        bidDAO = factory.getBidDAO();
+        DAOFactory daoFactory = DAOFactory.getInstance();
+        bidDAO = daoFactory.getBidDAO();
 
         validator = new Validator();
     }
 
     @Override
     public void save(Bid bid) throws ServiceException {
-        if(!validator.checkBid(bid)){
+        if (!validator.checkBid(bid)) {
             throw new ServiceException("Invalid bid data");
         }
 
@@ -58,12 +57,7 @@ public class BidServiceImpl implements BidService {
     @Override
     public boolean isRebid(Bid bid) throws ServiceException {
         Bid maxBid = findWithMaxSumByAuctionId(bid.getAuctionId());
-
-        if (maxBid.getBidderId() == bid.getBidderId()) {
-            return true;
-        }
-
-        return false;
+        return maxBid.getBidderId() == bid.getBidderId();
     }
 
     @Override
@@ -88,80 +82,31 @@ public class BidServiceImpl implements BidService {
 
     @Override
     public Bid findWithMaxSumByAuctionId(int id) throws ServiceException {
-        List<Bid> bids = findByAuctionId(id);
-
-        if (bids.size() > 0) {
-            Bid maxBid = bids.iterator().next(); //Stream API ///////////////
-            for (Bid bid : bids) {
-                BigDecimal maxSum = maxBid.getSum();
-                BigDecimal curSum = bid.getSum();
-
-                if (maxSum.compareTo(curSum) < 0) {
-                    maxBid = bid;
-                }
-            }
-
-            return maxBid;
-        } else {
-            return null;
+        try {
+            return bidDAO.findWithMaxSumByAuctionId(id);
+        } catch (DAOException e) {
+            logger.error("Can't find bid with max sum by auction id=" + id, e);
+            throw new ServiceException(e);
         }
     }
 
     @Override
     public Bid findMinByBidderIdAndAuctionId(int bidderId, int auctionId) throws ServiceException {
         try {
-            List<Bid> bidderBids = bidDAO.findByBidderId(bidderId);
-            List<Bid> auctionBids = bidDAO.findByAuctionId(auctionId);
-
-            List<Bid> commonBids = new ArrayList<>();
-
-            for (Bid bid : bidderBids) {
-                if (auctionBids.contains(bid)) {
-                    commonBids.add(bid);
-                }
-            }
-
-            if (commonBids.size() > 0) {
-                Bid minBid = commonBids.iterator().next();
-
-                for (Bid bid : commonBids) {
-                    BigDecimal minSum = minBid.getSum();
-                    BigDecimal curSum = bid.getSum();
-
-                    if (minSum.compareTo(curSum) > 0) {
-                        minBid = bid;
-                    }
-                }
-
-                return minBid;
-            } else {
-                return null;
-            }
-
+            return bidDAO.findWithMinSumByBidderIdAndAuctionId(bidderId, auctionId);
         } catch (DAOException e) {
-            logger.error("Can't find min bid by bidder id and auction id", e);
+            logger.error("Can't find bid with min sum by bidder id and auction id", e);
             throw new ServiceException(e);
         }
     }
 
     @Override
     public Bid findWithMinSumByAuctionId(int id) throws ServiceException {
-        List<Bid> bids = findByAuctionId(id);
-
-        if (bids.size() > 0) {
-            Bid minBid = bids.iterator().next();
-            for (Bid bid : bids) {
-                BigDecimal minSum = minBid.getSum();
-                BigDecimal curSum = bid.getSum();
-
-                if (minSum.compareTo(curSum) > 0) {
-                    minBid = bid;
-                }
-            }
-
-            return minBid;
-        } else {
-            return null;
+        try {
+            return bidDAO.findWithMinSumByAuctionId(id);
+        } catch (DAOException e) {
+            logger.error("Can't find bid with min sum by auction id", e);
+            throw new ServiceException(e);
         }
     }
 
@@ -176,20 +121,19 @@ public class BidServiceImpl implements BidService {
     }
 
     @Override
-    public boolean showPrice(Lot lot, User bidder) throws ServiceException {
+    public boolean createBid(Lot lot, User bidder) throws ServiceException {
         BigDecimal lotStartPrice = lot.getStartPrice();
         BigDecimal userBalance = bidder.getBalance();
 
-        ServiceFactory factory = ServiceFactory.getInstance();
-        AuctionService auctionService = factory.getAuctionService();
-        UserService userService = factory.getUserService();
+        ServiceFactory serviceFactory = ServiceFactory.getInstance();
+        AuctionService auctionService = serviceFactory.getAuctionService();
+        UserService userService = serviceFactory.getUserService();
 
         if (lotStartPrice.compareTo(userBalance) < 0) {
 
             Auction auction = auctionService.findByLotId(lot.getId());
 
             Bid bid = new Bid(bidder.getId(), NULL, LocalDateTime.now(), auction.getId());
-
             Bid minBid = findWithMinSumByAuctionId(auction.getId());
 
             BigDecimal gap = lot.getStartPrice().multiply(REVERS_AUCTION_COEFFICIENT);
@@ -201,22 +145,15 @@ public class BidServiceImpl implements BidService {
 
                 if (bidSum.compareTo(NULL) >= 0) {
                     bid.setSum(bidSum);
-
-                    save(bid);
-                } else {
-                    save(bid);
                 }
             } else {
                 BigDecimal bidSum = lot.getStartPrice().subtract(gap).setScale(4, ROUND_DOWN);
                 if (bidSum.compareTo(NULL) >= 0) {
                     bid.setSum(bidSum);
-
-                    save(bid);
-                } else {
-                    save(bid);
                 }
             }
 
+            save(bid);
             return true;
         }
 
@@ -225,9 +162,8 @@ public class BidServiceImpl implements BidService {
 
     @Override
     public boolean createBid(Lot lot, User bidder, BigDecimal bidSum) throws ServiceException {
-
-        ServiceFactory factory = ServiceFactory.getInstance();
-        AuctionService auctionService = factory.getAuctionService();
+        ServiceFactory serviceFactory = ServiceFactory.getInstance();
+        AuctionService auctionService = serviceFactory.getAuctionService();
 
         Auction auction = auctionService.findByLotId(lot.getId());
 

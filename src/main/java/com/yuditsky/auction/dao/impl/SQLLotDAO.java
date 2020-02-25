@@ -5,6 +5,7 @@ import com.yuditsky.auction.dao.DAOException;
 import com.yuditsky.auction.dao.LotDAO;
 import com.yuditsky.auction.dao.connection.ConnectionPool;
 import com.yuditsky.auction.dao.connection.ConnectionPoolException;
+import com.yuditsky.auction.entity.AuctionType;
 import com.yuditsky.auction.entity.Lot;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
@@ -25,9 +26,9 @@ public class SQLLotDAO extends SQLAbstractDAO<Lot> implements LotDAO {
 
     @Override
     protected List<Lot> parseResultSet(ResultSet resultSet) throws DAOException {
-        try{
+        try {
             List<Lot> lots = new ArrayList<>();
-            while (resultSet.next()){
+            while (resultSet.next()) {
                 int id = resultSet.getInt("lot_id");
                 String name = resultSet.getString("name");
                 String description = resultSet.getString("description");
@@ -109,7 +110,7 @@ public class SQLLotDAO extends SQLAbstractDAO<Lot> implements LotDAO {
             connection = connectionPool.takeConnection();
             statement = connection.prepareStatement(Const.SELECT_LOT_BY_OWNER_ID);
 
-            statement.setString(1, String.valueOf(id));
+            statement.setInt(1, id);
 
             resultSet = statement.executeQuery();
 
@@ -125,88 +126,78 @@ public class SQLLotDAO extends SQLAbstractDAO<Lot> implements LotDAO {
         }
     }
 
-    /*@Override
-    public void updateDescription(Lot lot, String newDescription) throws DAOException {
+    @Override
+    public List<Lot> findAwaitingPaymentLots(int userId) throws DAOException {
+        Connection connection = null;
+        PreparedStatement statement = null;
+        ResultSet resultSet = null;
         try {
-            Connection connection = connectionPool.takeConnection();
-            PreparedStatement preparedStatement = connection.prepareStatement(Const.UPDATE_LOT_DESCRIPTION);
+            connection = connectionPool.takeConnection();
+            statement = connection.prepareStatement(Const.SELECT_AWAITING_PAYMENT_LOTS);
 
-            preparedStatement.setString(1, newDescription);
-            preparedStatement.setString(2, String.valueOf(lot.getId()));
+            statement.setInt(1, userId);
 
-            preparedStatement.executeUpdate();
+            resultSet = statement.executeQuery();
 
-            connectionPool.closeConnection(connection, preparedStatement);
+            return parseResultSet(resultSet);
         } catch (SQLException e) {
-            logger.log(Level.ERROR, "Error compiling sql request", e);
+            logger.log(Level.ERROR, "SQL error", e);
             throw new DAOException(e);
         } catch (ConnectionPoolException e) {
             logger.log(Level.ERROR, "Can't take connection", e);
             throw new DAOException(e);
+        } finally {
+            connectionPool.closeConnection(connection, statement, resultSet);
         }
     }
 
     @Override
-    public void updateLocation(Lot lot, String newLocation) throws DAOException {
+    public List<Lot> findActiveLotByAuctionType(AuctionType type) throws DAOException {
+        Connection connection = null;
+        PreparedStatement statement = null;
+        ResultSet resultSet = null;
         try {
-            Connection connection = connectionPool.takeConnection();
-            PreparedStatement preparedStatement = connection.prepareStatement(Const.UPDATE_LOT_LOCATION);
+            connection = connectionPool.takeConnection();
+            statement = connection.prepareStatement(Const.SELECT_ACTIVE_LOT_BY_AUCTION_TYPE);
 
-            preparedStatement.setString(1, newLocation);
-            preparedStatement.setString(2, String.valueOf(lot.getId()));
+            statement.setString(1, String.valueOf(type));
 
-            preparedStatement.executeUpdate();
+            resultSet = statement.executeQuery();
 
-            connectionPool.closeConnection(connection, preparedStatement);
+            return parseResultSet(resultSet);
         } catch (SQLException e) {
-            logger.log(Level.ERROR, "Error compiling sql request", e);
+            logger.log(Level.ERROR, "SQL error", e);
             throw new DAOException(e);
         } catch (ConnectionPoolException e) {
             logger.log(Level.ERROR, "Can't take connection", e);
             throw new DAOException(e);
+        } finally {
+            connectionPool.closeConnection(connection, statement, resultSet);
         }
     }
 
     @Override
-    public void updateStartPrice(Lot lot, BigDecimal newStartPrice) throws DAOException {
+    public List<Lot> findLotsWithUserBids(int userId) throws DAOException {
+        Connection connection = null;
+        PreparedStatement statement = null;
+        ResultSet resultSet = null;
         try {
-            Connection connection = connectionPool.takeConnection();
-            PreparedStatement preparedStatement = connection.prepareStatement(Const.UPDATE_LOT_START_PRICE);
+            connection = connectionPool.takeConnection();
+            statement = connection.prepareStatement(Const.SELECT_LOTS_WITH_USER_BIDS);
 
-            preparedStatement.setString(1, String.valueOf(newStartPrice));
-            preparedStatement.setString(2, String.valueOf(lot.getId()));
+            statement.setInt(1, userId);
 
-            preparedStatement.executeUpdate();
+            resultSet = statement.executeQuery();
 
-            connectionPool.closeConnection(connection, preparedStatement);
+            return parseResultSet(resultSet);
         } catch (SQLException e) {
-            logger.log(Level.ERROR, "Error compiling sql request", e);
+            logger.log(Level.ERROR, "SQL error", e);
             throw new DAOException(e);
         } catch (ConnectionPoolException e) {
             logger.log(Level.ERROR, "Can't take connection", e);
             throw new DAOException(e);
+        } finally {
+            connectionPool.closeConnection(connection, statement, resultSet);
         }
     }
-
-    @Override
-    public void updateMinPrice(Lot lot, BigDecimal newMinPrice) throws DAOException {
-        try {
-            Connection connection = connectionPool.takeConnection();
-            PreparedStatement preparedStatement = connection.prepareStatement(Const.UPDATE_LOT_MIN_PRICE);
-
-            preparedStatement.setString(1, String.valueOf(newMinPrice));
-            preparedStatement.setString(2, String.valueOf(lot.getId()));
-
-            preparedStatement.executeUpdate();
-
-            connectionPool.closeConnection(connection, preparedStatement);
-        } catch (SQLException e) {
-            logger.log(Level.ERROR, "Error compiling sql request", e);
-            throw new DAOException(e);
-        } catch (ConnectionPoolException e) {
-            logger.log(Level.ERROR, "Can't take connection", e);
-            throw new DAOException(e);
-        }
-    }*/
-
 }

@@ -18,7 +18,7 @@ public interface LotService {
 
     List<Lot> findActiveLotsByAuctionType(AuctionType type) throws ServiceException;
 
-    List<Lot> takeLotsWithUserBids(int userId) throws ServiceException;
+    List<Lot> findLotsWithUserBids(int userId) throws ServiceException;
 
     boolean buy(Lot lot, User buyer) throws ServiceException;
 

@@ -15,8 +15,10 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 
-import static com.yuditsky.auction.controller.comand.ConstProv.AUCTIONS_PAGE;
-import static com.yuditsky.auction.controller.comand.ConstProv.ERROR_PAGE;
+import static com.yuditsky.auction.controller.provider.JspPageProvider.AUCTIONS_PAGE;
+import static com.yuditsky.auction.controller.provider.JspPageProvider.ERROR_PAGE;
+import static com.yuditsky.auction.controller.provider.RequestAttributesNameProvider.LOTS;
+import static com.yuditsky.auction.controller.provider.RequestParametersNameProvider.AUCTION_TYPE;
 
 public class AuctionsCommand extends AbstractCommand {
     private final static Logger logger = LogManager.getLogger(AuctionsCommand.class);
@@ -30,7 +32,7 @@ public class AuctionsCommand extends AbstractCommand {
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String strType = request.getParameter("auctionType");
+        String strType = request.getParameter(AUCTION_TYPE);
         AuctionType type;
 
         if (strType == null) {
@@ -46,8 +48,7 @@ public class AuctionsCommand extends AbstractCommand {
 
         try {
             List<Lot> lots = lotService.findActiveLotsByAuctionType(type);
-
-            request.setAttribute("lots", lots);
+            request.setAttribute(LOTS, lots);
         } catch (ServiceException e) {
             logger.error("AuctionsCommand failed", e);
             forward(request, response, ERROR_PAGE);

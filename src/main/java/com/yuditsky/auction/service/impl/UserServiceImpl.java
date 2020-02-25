@@ -13,7 +13,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.math.BigDecimal;
-import java.security.Provider;
 import java.util.List;
 
 public class UserServiceImpl implements UserService {
@@ -44,7 +43,6 @@ public class UserServiceImpl implements UserService {
             }
 
             user.setRole(UserRole.USER);
-
             user.setPassword(encoder.encode(user.getPassword()));
 
             userDAO.save(user);
@@ -61,7 +59,7 @@ public class UserServiceImpl implements UserService {
         try {
             User user = userDAO.findByLogin(login);
 
-            if(!encoder.checkPassword(password, user.getPassword())){
+            if(user != null && !encoder.checkPassword(password, user.getPassword())){
                 user = null;
             }
 
@@ -104,6 +102,21 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public void updateSettings(User user, String email, String password) throws ServiceException {
+        if (password != null && !password.equals("")) {
+            updatePassword(user, password);
+        }
+
+        if (email != null && !email.equals("")) {
+            user.setEmail(email);
+        }
+
+        if (password != null | email != null) {
+            update(user);
+        }
+    }
+
+    @Override
     public void update(User user) throws ServiceException {
         try {
             userDAO.update(user);
@@ -113,77 +126,31 @@ public class UserServiceImpl implements UserService {
         }
     }
 
-    /*@Override
-    public void updatePassword(User user, String password) throws ServiceException {
-        DAOFactory factory = DAOFactory.getInstance();
-        UserDAO userDAO = factory.getUserDAO();
-        Encoder encoder = new Encoder();
-
-        try {
-            user.setPassword(encoder.encode(password)); // v contr
-            userDAO.update(user);
-            //userDAO.updatePassword(user, encoder.encode(password));
-        } catch (DAOException e) {
-            logger.error("Can't update password for user " + user.getLogin(), e);
-            throw new ServiceException(e);
-        }
-    }
-
     @Override
-    public void updateEmail(User user, String email) throws ServiceException {
-        DAOFactory factory = DAOFactory.getInstance();
-        UserDAO userDAO = factory.getUserDAO();
-        Encoder encoder = new Encoder();
-
-        try {
-            userDAO.updateEmail(user, email);
-        } catch (DAOException e) {
-            logger.error("Can't update email for user " + user.getLogin(), e);
-            throw new ServiceException(e);
-        }
-    }
-
-    @Override
-    public void updateBalance(User user, BigDecimal sum) throws ServiceException {
-        DAOFactory factory = DAOFactory.getInstance();
-        UserDAO userDAO = factory.getUserDAO();
-
-        try {
-            userDAO.updateBalance(user, sum);
-        } catch (DAOException e) {
-            logger.error("Can't update balance for user " + user.getLogin(), e);
-            throw new ServiceException(e);
-        }
-    }*/
-
-    @Override
-    public void addBalance(User user, BigDecimal sum) throws ServiceException { //
-        if(!validator.checkSum(sum)){
+    public void addBalance(User user, BigDecimal sum) throws ServiceException {
+        if(!validator.checkBigDecimal(sum)){
             throw new ServiceException("Invalid sum data");
         }
 
         BigDecimal newBalance = user.getBalance().add(sum);
         user.setBalance(newBalance);
         update(user);
-        //updateBalance(user, newBalance);
     }
 
     @Override
-    public void subtractBalance(User user, BigDecimal sum) throws ServiceException { //
-        if(!validator.checkSum(sum)){
+    public void subtractBalance(User user, BigDecimal sum) throws ServiceException {
+        if(!validator.checkBigDecimal(sum)){
             throw new ServiceException("Invalid sum data");
         }
 
         BigDecimal newBalance = user.getBalance().subtract(sum);
         user.setBalance(newBalance);
         update(user);
-        //updateBalance(user, newBalance);
     }
 
     @Override
     public void block(User user) throws ServiceException {
         user.setBlocked(true);
-
         update(user);
     }
 
@@ -194,6 +161,20 @@ public class UserServiceImpl implements UserService {
             logger.debug("User " + user.getLogin() + "deleted");
         } catch (DAOException e) {
             logger.error("Can't delete user " + user.getLogin(), e);
+            throw new ServiceException(e);
+        }
+    }
+
+    private void updatePassword(User user, String password) throws ServiceException {
+        if(!validator.checkPassword(password)){
+            throw new ServiceException("Invalid password");
+        }
+
+        try {
+            user.setPassword(encoder.encode(password));
+            userDAO.update(user);
+        } catch (DAOException e) {
+            logger.error("Can't update password for user " + user.getLogin(), e);
             throw new ServiceException(e);
         }
     }

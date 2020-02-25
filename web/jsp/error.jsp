@@ -1,0 +1,14 @@
+<%@include file="/jsp/parts/common.jsp" %>
+
+<html>
+<head>
+    <title>Auction</title>
+</head>
+<body>
+<jsp:include page="parts/navbar.jsp"/>
+
+<div class="container mt-3">
+    <fmt:message key="message.error" bundle="${pc}"/>
+</div>
+</body>
+</html>

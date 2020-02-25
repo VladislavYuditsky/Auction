@@ -1,6 +1,5 @@
 package com.yuditsky.auction.service.util;
 
-import com.yuditsky.auction.entity.Auction;
 import com.yuditsky.auction.entity.Bid;
 import com.yuditsky.auction.entity.Lot;
 import com.yuditsky.auction.entity.User;
@@ -12,20 +11,9 @@ import java.util.regex.Pattern;
 import static com.yuditsky.auction.Const.NULL;
 
 public class Validator {
-    private Pattern loginPattern = Pattern.compile("^[a-zA-Z\\u0430-\\u044F\\u0410-\\u042F]{1}[a-zA-Z\\u0430-\\u044F\\u0410-\\u042F\\d\\u002E\\u005F]{3,10}$");
-    private Pattern passwordPattern = Pattern.compile("^[a-zA-Z\\u0430-\\u044F\\u0410-\\u042F]{1}[a-zA-Z1-9\\u0430-\\u044F\\u0410-\\u042F]{5,20}$");
-    private Pattern textPattern = Pattern.compile("^[a-zA-Z\\u0430-\\u044F\\u0410-\\u042F0-9 ]{1,1000}$");
-    private Pattern emailPattern = Pattern.compile("^[a-zA-Z\\u0430-\\u044F\\u0410-\\u042F]{1}[a-zA-Z\\u0430-\\u044F\\u0410-\\u042F\\d\\u002E\\u005F]{3,10}$");
-    private Pattern namePattern = Pattern.compile("^[a-zA-Z\\u0430-\\u044F\\u0410-\\u042F]{1}[a-zA-Z\\u0430-\\u044F\\u0410-\\u042F]{3,10}$");
-    //drugoi pattern
-
-    /*public boolean checkRating(float rating) {
-        if (rating > 10 || rating < 0) {
-            return false;
-        } else {
-            return true;
-        }
-    }*/
+    private Pattern loginPattern = Pattern.compile("^[a-zA-Z1-9]{3,10}$");
+    private Pattern passwordPattern = Pattern.compile("^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=\\S+$).{5,10}$");
+    private Pattern emailPattern = Pattern.compile("^\\S+@\\S+\\.\\S+$");
 
     public boolean checkLogin(String login) {
         return checkString(login, loginPattern);
@@ -36,16 +24,11 @@ public class Validator {
     }
 
     public boolean checkText(String text) {
-        return checkString(text, textPattern);
-    }
-
-    public boolean checkName(String name){
-        return checkString(name, namePattern);
+        return text != null && !text.equals("");
     }
 
     public boolean checkEmail(String email){
-        //return checkString(email, emailPattern);
-        return true;
+        return checkString(email, emailPattern);
     }
 
     public boolean checkUser(User user) {
@@ -54,16 +37,16 @@ public class Validator {
     }
 
     public boolean checkBid(Bid bid){
-        return bid != null && checkSum(bid.getSum());
+        return bid != null && checkBigDecimal(bid.getSum());
     }
 
     public boolean checkLot(Lot lot){
-        return lot != null && checkName(lot.getName()) && checkText(lot.getDescription())
-                && checkName(lot.getLocation()) && checkSum(lot.getStartPrice());
+        return lot != null && checkText(lot.getName()) && checkText(lot.getDescription())
+                && checkText(lot.getLocation()) && checkBigDecimal(lot.getStartPrice());
     }
 
-    public boolean checkSum(BigDecimal sum){
-        return sum != null && sum.compareTo(NULL) > 0;
+    public boolean checkBigDecimal(BigDecimal value){
+        return value != null && value.compareTo(NULL) > 0;
     }
 
     private boolean checkString(String stringForChecking, Pattern patternForChecking) {
@@ -75,4 +58,5 @@ public class Validator {
 
         return matcher.matches();
     }
+
 }

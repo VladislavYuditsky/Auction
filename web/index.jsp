@@ -11,6 +11,6 @@
     <title>Auction</title>
   </head>
   <body>
-  <jsp:forward page="greeting.jsp"/>
+  <jsp:forward page="jsp/greeting.jsp"/>
   </body>
 </html>

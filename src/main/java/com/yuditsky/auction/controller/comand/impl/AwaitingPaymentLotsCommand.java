@@ -15,8 +15,10 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.List;
 
-import static com.yuditsky.auction.controller.comand.ConstProv.AWAITING_PAYMENT_LOTS_PAGE;
-import static com.yuditsky.auction.controller.comand.ConstProv.ERROR_PAGE;
+import static com.yuditsky.auction.controller.provider.JspPageProvider.AWAITING_PAYMENT_LOTS_PAGE;
+import static com.yuditsky.auction.controller.provider.JspPageProvider.ERROR_PAGE;
+import static com.yuditsky.auction.controller.provider.RequestAttributesNameProvider.LOTS;
+import static com.yuditsky.auction.controller.provider.SessionAttributesNameProvider.ID;
 
 public class AwaitingPaymentLotsCommand extends AbstractCommand {
     private final static Logger logger = LogManager.getLogger(AwaitingPaymentLotsCommand.class);
@@ -32,11 +34,11 @@ public class AwaitingPaymentLotsCommand extends AbstractCommand {
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
             HttpSession session = request.getSession();
-            int id = (int) session.getAttribute("id");
+            int id = (int) session.getAttribute(ID);
 
             List<Lot> lots = lotService.findAwaitingPaymentLots(id);
 
-            request.setAttribute("lots", lots);
+            request.setAttribute(LOTS, lots);
 
             forward(request, response, AWAITING_PAYMENT_LOTS_PAGE);
         } catch (ServiceException e) {

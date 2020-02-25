@@ -7,12 +7,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-import static com.yuditsky.auction.controller.comand.ConstProv.BAN_PAGE;
-import static com.yuditsky.auction.controller.comand.ConstProv.WRONG_REQUEST_PAGE;
+import static com.yuditsky.auction.controller.provider.JspPageProvider.NOT_FOUND_PAGE;
 
 public class WrongRequestCommand extends AbstractCommand {
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-        forward(request, response, WRONG_REQUEST_PAGE);
+        forward(request, response, NOT_FOUND_PAGE);
     }
 }
+

@@ -28,6 +28,9 @@ public class Const {
     public static final String SELECT_ALL_LOTS = "SELECT * FROM lot";
     public static final String SELECT_LOT_BY_ID = "SELECT * FROM lot WHERE lot_id=?";
     public static final String SELECT_LOT_BY_OWNER_ID = "SELECT * FROM lot WHERE owner_id=?";
+    public static final String SELECT_LOTS_WITH_USER_BIDS = "SELECT * FROM lot WHERE lot_id IN (SELECT lot_id FROM auction WHERE auction_id IN (SELECT auction_id FROM bid WHERE bidder_id=?))";
+    public static final String SELECT_ACTIVE_LOT_BY_AUCTION_TYPE = "SELECT * FROM lot WHERE lot_id IN (SELECT lot_id FROM auction WHERE auction_type=? AND status='active')";
+    public static final String SELECT_AWAITING_PAYMENT_LOTS = "SELECT * FROM lot WHERE lot_id IN (SELECT lot_id FROM auction WHERE winner_id=?)";
     public static final String UPDATE_LOT_BY_ID = "UPDATE lot SET name=?, description=?, location=?, start_price=?," +
             " owner_id=? WHERE lot_id=?";
     public static final String UPDATE_LOT_DESCRIPTION = "UPDATE lot SET description=? WHERE lot_id=?";
@@ -54,7 +57,9 @@ public class Const {
     public static final String SELECT_BID_BY_ID = "SELECT * FROM bid WHERE bid_id=?";
     public static final String SELECT_BID_BY_AUCTION_ID = "SELECT * FROM bid WHERE auction_id=?";
     public static final String SELECT_BID_BY_BIDDER_ID = "SELECT * FROM bid WHERE bidder_id=?";
-    public static final String SELECT_MIN_BID_BY_BIDDER_ID_AND_AUCTION_ID = "SELECT * FROM bid WHERE bidder_id=?, auction_id=?, sum=MIN(sum)";
+    public static final String SELECT_BID_WITH_MIN_SUM_BY_AUCTION_ID = "SELECT * FROM bid WHERE sum=(SELECT MIN(sum) FROM bid WHERE auction_id=?)";
+    public static final String SELECT_BID_WITH_MIN_SUM_BY_BIDDER_ID_AND_AUCTION_ID = "SELECT * FROM bid WHERE sum=(SELECT MIN(sum) FROM bid WHERE bidder_id=? AND auction_id=?)";
+    public static final String SELECT_BID_WITH_MAX_SUM_BY_AUCTION_ID = "SELECT * from bid WHERE sum=(SELECT MAX(sum) FROM bid WHERE auction_id=?)";
     public static final String UPDATE_BID_BY_ID = "UPDATE bid SET bidder_id=?, sum=?, time=?, auction_id=?" +
             " WHERE bid_id=?";
     public static final String UPDATE_BID_BIDDER_ID = "UPDATE bid SET bidder_id=? WHERE bid_id=?";

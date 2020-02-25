@@ -11,7 +11,10 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.math.BigDecimal;
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -90,7 +93,7 @@ public class SQLBidDAO extends SQLAbstractDAO<Bid> implements BidDAO {
             statement.setBigDecimal(2, bid.getSum());
             statement.setString(3, String.valueOf(bid.getTime()));
             statement.setInt(4, bid.getAuctionId());
-            statement.setInt(5,bid.getId());
+            statement.setInt(5, bid.getId());
         } catch (SQLException e) {
             logger.error("Can't prepare statement for insert", e);
             throw new DAOException(e);
@@ -106,7 +109,7 @@ public class SQLBidDAO extends SQLAbstractDAO<Bid> implements BidDAO {
             connection = connectionPool.takeConnection();
             statement = connection.prepareStatement(Const.SELECT_BID_BY_AUCTION_ID);
 
-            statement.setString(1, String.valueOf(auctionId));
+            statement.setInt(1, auctionId);
 
             resultSet = statement.executeQuery();
 
@@ -131,7 +134,7 @@ public class SQLBidDAO extends SQLAbstractDAO<Bid> implements BidDAO {
             connection = connectionPool.takeConnection();
             statement = connection.prepareStatement(Const.SELECT_BID_BY_BIDDER_ID);
 
-            statement.setString(1, String.valueOf(bidderId));
+            statement.setInt(1, bidderId);
 
             resultSet = statement.executeQuery();
 
@@ -147,87 +150,112 @@ public class SQLBidDAO extends SQLAbstractDAO<Bid> implements BidDAO {
         }
     }
 
-    /*@Override
-    public void updateBidderId(Bid bid, int newBidderId) throws DAOException {
+    @Override
+    public Bid findWithMaxSumByAuctionId(int auctionId) throws DAOException {
+        Connection connection = null;
+        PreparedStatement statement = null;
+        ResultSet resultSet = null;
         try {
-            Connection connection = connectionPool.takeConnection();
-            PreparedStatement preparedStatement = connection.prepareStatement(Const.UPDATE_BID_BIDDER_ID);
+            connection = connectionPool.takeConnection();
+            statement = connection.prepareStatement(Const.SELECT_BID_WITH_MAX_SUM_BY_AUCTION_ID);
 
-            preparedStatement.setString(1, String.valueOf(newBidderId));
-            preparedStatement.setString(2, String.valueOf(bid.getId()));
+            statement.setInt(1, auctionId);
 
-            preparedStatement.executeUpdate();
+            resultSet = statement.executeQuery();
 
-            connectionPool.closeConnection(connection, preparedStatement);
+            List<Bid> bids = parseResultSet(resultSet);
+
+            if (bids.size() == 0) {
+                return null;
+            }
+
+            if (bids.size() > 1) {
+                logger.error("More than one record found with max sum by auction id");
+                throw new DAOException();
+            }
+
+            return bids.iterator().next();
         } catch (SQLException e) {
-            logger.log(Level.ERROR, "Error compiling sql request", e);
+            logger.log(Level.ERROR, "SQL error", e);
             throw new DAOException(e);
         } catch (ConnectionPoolException e) {
             logger.log(Level.ERROR, "Can't take connection", e);
             throw new DAOException(e);
+        } finally {
+            connectionPool.closeConnection(connection, statement, resultSet);
         }
     }
 
     @Override
-    public void updateSum(Bid bid, BigDecimal newSum) throws DAOException {
+    public Bid findWithMinSumByBidderIdAndAuctionId(int bidderId, int auctionId) throws DAOException {
+        Connection connection = null;
+        PreparedStatement statement = null;
+        ResultSet resultSet = null;
         try {
-            Connection connection = connectionPool.takeConnection();
-            PreparedStatement preparedStatement = connection.prepareStatement(Const.UPDATE_BID_SUM);
+            connection = connectionPool.takeConnection();
+            statement = connection.prepareStatement(Const.SELECT_BID_WITH_MIN_SUM_BY_BIDDER_ID_AND_AUCTION_ID);
 
-            preparedStatement.setString(1, String.valueOf(newSum));
-            preparedStatement.setString(2, String.valueOf(bid.getId()));
+            statement.setInt(1, bidderId);
+            statement.setInt(2, auctionId);
 
-            preparedStatement.executeUpdate();
+            resultSet = statement.executeQuery();
 
-            connectionPool.closeConnection(connection, preparedStatement);
+            List<Bid> bids = parseResultSet(resultSet);
+
+            if (bids.size() == 0) {
+                return null;
+            }
+
+            if (bids.size() > 1) {
+                logger.error("More than one record found with min sum by bidder id and auction id");
+                throw new DAOException();
+            }
+
+            return bids.iterator().next();
         } catch (SQLException e) {
-            logger.log(Level.ERROR, "Error compiling sql request", e);
+            logger.log(Level.ERROR, "SQL error", e);
             throw new DAOException(e);
         } catch (ConnectionPoolException e) {
             logger.log(Level.ERROR, "Can't take connection", e);
             throw new DAOException(e);
+        } finally {
+            connectionPool.closeConnection(connection, statement, resultSet);
         }
     }
 
     @Override
-    public void updateTime(Bid bid, LocalDateTime newTime) throws DAOException {
+    public Bid findWithMinSumByAuctionId(int auctionId) throws DAOException {
+        Connection connection = null;
+        PreparedStatement statement = null;
+        ResultSet resultSet = null;
         try {
-            Connection connection = connectionPool.takeConnection();
-            PreparedStatement preparedStatement = connection.prepareStatement(Const.UPDATE_BID_TIME);
+            connection = connectionPool.takeConnection();
+            statement = connection.prepareStatement(Const.SELECT_BID_WITH_MIN_SUM_BY_AUCTION_ID);
 
-            preparedStatement.setString(1, String.valueOf(newTime));
-            preparedStatement.setString(2, String.valueOf(bid.getId()));
+            statement.setInt(1, auctionId);
 
-            preparedStatement.executeUpdate();
+            resultSet = statement.executeQuery();
 
-            connectionPool.closeConnection(connection, preparedStatement);
+            List<Bid> bids = parseResultSet(resultSet);
+
+            if (bids.size() == 0) {
+                return null;
+            }
+
+            if (bids.size() > 1) {
+                logger.error("More than one record found with min sum by auction id");
+                throw new DAOException();
+            }
+
+            return bids.iterator().next();
         } catch (SQLException e) {
-            logger.log(Level.ERROR, "Error compiling sql request", e);
+            logger.log(Level.ERROR, "SQL error", e);
             throw new DAOException(e);
         } catch (ConnectionPoolException e) {
             logger.log(Level.ERROR, "Can't take connection", e);
             throw new DAOException(e);
+        } finally {
+            connectionPool.closeConnection(connection, statement, resultSet);
         }
     }
-
-    @Override
-    public void updateAuctionId(Bid bid, int newAuctionId) throws DAOException {
-        try {
-            Connection connection = connectionPool.takeConnection();
-            PreparedStatement preparedStatement = connection.prepareStatement(Const.UPDATE_BID_AUCTION_ID);
-
-            preparedStatement.setString(1, String.valueOf(newAuctionId));
-            preparedStatement.setString(2, String.valueOf(bid.getId()));
-
-            preparedStatement.executeUpdate();
-
-            connectionPool.closeConnection(connection, preparedStatement);
-        } catch (SQLException e) {
-            logger.log(Level.ERROR, "Error compiling sql request", e);
-            throw new DAOException(e);
-        } catch (ConnectionPoolException e) {
-            logger.log(Level.ERROR, "Can't take connection", e);
-            throw new DAOException(e);
-        }
-    }*/
 }

@@ -1,7 +1,10 @@
 package com.yuditsky.auction.dao.impl;
 
 import com.yuditsky.auction.Const;
-import com.yuditsky.auction.dao.*;
+import com.yuditsky.auction.dao.AuctionDAO;
+import com.yuditsky.auction.dao.BidDAO;
+import com.yuditsky.auction.dao.DAOException;
+import com.yuditsky.auction.dao.DAOFactory;
 import com.yuditsky.auction.dao.connection.ConnectionPool;
 import com.yuditsky.auction.dao.connection.ConnectionPoolException;
 import com.yuditsky.auction.entity.Auction;
@@ -16,11 +19,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-
-import static com.yuditsky.auction.Const.DATA_TIME_FORMATTER;
 
 public class SQLAuctionDAO extends SQLAbstractDAO<Auction> implements AuctionDAO {
     private final static Logger logger = LogManager.getLogger(SQLAuctionDAO.class);
@@ -215,68 +215,4 @@ public class SQLAuctionDAO extends SQLAbstractDAO<Auction> implements AuctionDAO
             connectionPool.closeConnection(connection, statement, resultSet);
         }
     }
-/*
-    @Override
-    public void updateAuctionType(Auction auction, AuctionType newType) throws DAOException {
-        try {
-            Connection connection = connectionPool.takeConnection();
-            PreparedStatement preparedStatement = connection.prepareStatement(Const.UPDATE_AUCTION_TYPE);
-
-            preparedStatement.setString(1, String.valueOf(newType));
-            preparedStatement.setString(2, String.valueOf(auction.getId()));
-
-            preparedStatement.executeUpdate();
-
-            connectionPool.closeConnection(connection, preparedStatement);
-        } catch (SQLException e) {
-            logger.log(Level.ERROR, "Error compiling sql request", e);
-            throw new DAOException(e);
-        } catch (ConnectionPoolException e) {
-            logger.log(Level.ERROR, "Can't take connection", e);
-            throw new DAOException(e);
-        }
-    }
-
-    @Override
-    public void updateLotId(Auction auction, int newLotId) throws DAOException {
-        try {
-            Connection connection = connectionPool.takeConnection();
-            PreparedStatement preparedStatement = connection.prepareStatement(Const.UPDATE_AUCTION_LOT_ID);
-
-            preparedStatement.setString(1, String.valueOf(newLotId));
-            preparedStatement.setString(2, String.valueOf(auction.getId()));
-
-            preparedStatement.executeUpdate();
-
-            connectionPool.closeConnection(connection, preparedStatement);
-        } catch (SQLException e) {
-            logger.log(Level.ERROR, "Error compiling sql request", e);
-            throw new DAOException(e);
-        } catch (ConnectionPoolException e) {
-            logger.log(Level.ERROR, "Can't take connection", e);
-            throw new DAOException(e);
-        }
-    }
-
-    @Override
-    public void updateFinishTime(Auction auction, LocalDateTime newFinishTime) throws DAOException {
-        try {
-            Connection connection = connectionPool.takeConnection();
-            PreparedStatement preparedStatement = connection.prepareStatement(Const.UPDATE_AUCTION_FINISH_TIME);
-
-            preparedStatement.setString(1, String.valueOf(newFinishTime));
-            preparedStatement.setString(2, String.valueOf(auction.getId()));
-
-            preparedStatement.executeUpdate();
-
-            connectionPool.closeConnection(connection, preparedStatement);
-        } catch (SQLException e) {
-            logger.log(Level.ERROR, "Error compiling sql request", e);
-            throw new DAOException(e);
-        } catch (ConnectionPoolException e) {
-            logger.log(Level.ERROR, "Can't take connection", e);
-            throw new DAOException(e);
-        }
-    }
-*/
 }

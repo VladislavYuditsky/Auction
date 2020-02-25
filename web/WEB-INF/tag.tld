@@ -10,12 +10,6 @@
     <uri>http://auction.yuditsky.com</uri>
 
     <tag>
-        <name>FooterTag</name>
-        <tag-class>com.yuditsky.auction.tag.FooterTag</tag-class>
-        <body-content>empty</body-content>
-    </tag>
-
-    <tag>
         <name>GreetingTag</name>
         <tag-class>com.yuditsky.auction.tag.GreetingTag</tag-class>
         <body-content>empty</body-content>

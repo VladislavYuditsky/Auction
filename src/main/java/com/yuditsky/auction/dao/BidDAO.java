@@ -11,6 +11,12 @@ public interface BidDAO extends GenericDAO<Bid>{
 
     List<Bid> findByBidderId(int bidderId) throws DAOException;
 
+    Bid findWithMaxSumByAuctionId(int auctionId) throws DAOException;
+
+    Bid findWithMinSumByBidderIdAndAuctionId(int bidderId, int auctionId) throws DAOException;
+
+    Bid findWithMinSumByAuctionId(int auctionId) throws DAOException;
+
     /*void updateBidderId(Bid bid, int newBidderId) throws DAOException;
 
     void updateSum(Bid bid, BigDecimal newSum) throws DAOException;

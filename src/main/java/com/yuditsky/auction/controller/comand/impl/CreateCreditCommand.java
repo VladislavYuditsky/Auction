@@ -6,15 +6,23 @@ import com.yuditsky.auction.entity.AuctionType;
 import com.yuditsky.auction.entity.Bid;
 import com.yuditsky.auction.entity.User;
 import com.yuditsky.auction.service.*;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
-import static com.yuditsky.auction.controller.comand.ConstProv.CREATE_PAYMENT;
+import static com.yuditsky.auction.controller.provider.JspPageProvider.ERROR_PAGE;
+import static com.yuditsky.auction.controller.provider.RequestParametersNameProvider.LOT_ID;
+import static com.yuditsky.auction.controller.provider.ServletPathProvider.CREATE_PAYMENT;
+import static com.yuditsky.auction.controller.provider.SessionAttributesNameProvider.ID;
 
 public class CreateCreditCommand extends AbstractCommand {
+    private final static Logger logger = LogManager.getLogger(CreateCreditCommand.class);
+
     private final AuctionService auctionService;
     private final BidService bidService;
     private final CreditService creditService;
@@ -29,42 +37,37 @@ public class CreateCreditCommand extends AbstractCommand {
     }
 
     @Override
-    public void execute(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        HttpSession session = request.getSession();
+    public void execute(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+        try {
+            int lotId = Integer.parseInt(request.getParameter(LOT_ID));
+            Auction auction = auctionService.findByLotId(lotId);
 
-        String lotIdStr = request.getParameter("lotId");
+            if (auction != null) {
+                int winnerId = auction.getWinnerId();
 
-        if (lotIdStr != null) {
-            int lotId = Integer.parseInt(lotIdStr);
+                HttpSession session = request.getSession();
+                int currentUserId = (Integer) session.getAttribute(ID);
 
-            try {
-                Auction auction = auctionService.findByLotId(lotId);
+                if (winnerId == currentUserId) {
 
-                if (auction != null) {
-                    int winnerId = auction.getWinnerId();
+                    Bid bid;
+                    if (auction.getType() == AuctionType.DIRECT) {
+                        bid = bidService.findWithMaxSumByAuctionId(auction.getId());
+                    } else {
+                        bid = bidService.findWithMinSumByAuctionId(auction.getId());
+                    }
 
-                    int currentUserId = (Integer) session.getAttribute("id");
+                    creditService.createCredit(currentUserId, bid.getSum());
 
-                    if (winnerId == currentUserId) {
+                    User user = userService.findById(winnerId);
+                    userService.addBalance(user, bid.getSum());
 
-                        Bid bid;
-                        if (auction.getType() == AuctionType.DIRECT) {
-                            bid = bidService.findWithMaxSumByAuctionId(auction.getId());
-                        } else {
-                            bid = bidService.findWithMinSumByAuctionId(auction.getId());
-                        }
-
-                        creditService.createCredit(currentUserId, bid.getSum());
-
-                        User user = userService.findById(winnerId);
-                        userService.addBalance(user, bid.getSum());
-
-                        redirect(request, response, CREATE_PAYMENT + "?lotId=" + lotId);
-                    }//else 403
+                    redirect(request, response, CREATE_PAYMENT + "?" + LOT_ID + "=" + lotId);
                 }
-            } catch (ServiceException e) {
-                ///
             }
+        } catch (ServiceException | NumberFormatException e) {
+            logger.error("CreateCreditCommand failed", e);
+            forward(request, response, ERROR_PAGE);
         }
     }
 }

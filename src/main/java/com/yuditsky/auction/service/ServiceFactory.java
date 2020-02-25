@@ -3,14 +3,14 @@ package com.yuditsky.auction.service;
 import com.yuditsky.auction.service.impl.*;
 
 public class ServiceFactory {
-    private static ServiceFactory instance = new ServiceFactory();
+    private static final ServiceFactory instance = new ServiceFactory();
 
-    private UserService userServiceImpl = new UserServiceImpl();
-    private AuctionService auctionServiceImpl = new AuctionServiceImpl();
-    private BidService bidServiceImpl = new BidServiceImpl();
-    private CreditService creditServiceImpl = new CreditServiceImpl();
-    private LotService lotServiceImpl = new LotServiceImpl();
-    private PaymentService paymentServiceImpl = new PaymentServiceImpl();
+    private final UserService userServiceImpl = new UserServiceImpl();
+    private final AuctionService auctionServiceImpl = new AuctionServiceImpl();
+    private final BidService bidServiceImpl = new BidServiceImpl();
+    private final CreditService creditServiceImpl = new CreditServiceImpl();
+    private final LotService lotServiceImpl = new LotServiceImpl();
+    private final PaymentService paymentServiceImpl = new PaymentServiceImpl();
 
     private ServiceFactory() {
     }

@@ -16,7 +16,13 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
-import static com.yuditsky.auction.controller.comand.ConstProv.*;
+import static com.yuditsky.auction.controller.provider.JspPageProvider.ERROR_PAGE;
+import static com.yuditsky.auction.controller.provider.MessageProvider.INSUFFICIENT_FUNDS;
+import static com.yuditsky.auction.controller.provider.RequestParametersNameProvider.LOT_ID;
+import static com.yuditsky.auction.controller.provider.RequestParametersNameProvider.MESSAGE;
+import static com.yuditsky.auction.controller.provider.ServletPathProvider.AUCTION;
+import static com.yuditsky.auction.controller.provider.ServletPathProvider.USER_LOTS;
+import static com.yuditsky.auction.controller.provider.SessionAttributesNameProvider.ID;
 
 public class BuyCommand extends AbstractCommand {
     private final static Logger logger = LogManager.getLogger(BuyCommand.class);
@@ -32,29 +38,24 @@ public class BuyCommand extends AbstractCommand {
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
-        String lotIdStr = request.getParameter("lotId");
-
-        if (lotIdStr != null) {
-            int lotId = Integer.parseInt(lotIdStr);
+        try {
+            int lotId = Integer.parseInt(request.getParameter(LOT_ID));
 
             HttpSession session = request.getSession();
-            int userId = (Integer) session.getAttribute("id");
+            int userId = (int) session.getAttribute(ID);
 
-            try {
-                User user = userService.findById(userId);
+            User user = userService.findById(userId);
+            Lot lot = lotService.findById(lotId);
 
-                Lot lot = lotService.findById(lotId);
-
-                if (lotService.buy(lot, user)) {
-                    redirect(request, response, USER_LOTS);
-                } else {
-                    redirect(request, response, AUCTION);
-                }
-            } catch (ServiceException e) {
-                logger.error("BuyCommand failed", e);
-                forward(request, response, ERROR_PAGE);
+            if (lotService.buy(lot, user)) {
+                redirect(request, response, USER_LOTS);
+            } else {
+                redirect(request, response, AUCTION + "?" + LOT_ID + "=" + lotId + "&" +
+                        MESSAGE + "=" + INSUFFICIENT_FUNDS);
             }
+        } catch (ServiceException | NumberFormatException e) {
+            logger.error("BuyCommand failed", e);
+            forward(request, response, ERROR_PAGE);
         }
     }
 }

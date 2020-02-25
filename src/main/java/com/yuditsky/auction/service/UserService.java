@@ -16,6 +16,8 @@ public interface UserService {
 
     User findById(int id) throws ServiceException;
 
+    void updateSettings(User user, String email, String password) throws ServiceException;
+
     /*void updatePassword(User user, String password) throws ServiceException;
 
     void updateEmail(User user, String email) throws ServiceException;

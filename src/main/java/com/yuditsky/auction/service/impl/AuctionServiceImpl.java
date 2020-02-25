@@ -22,8 +22,8 @@ public class AuctionServiceImpl implements AuctionService {
     private final AuctionDAO auctionDAO;
 
     public AuctionServiceImpl() {
-        DAOFactory factory = DAOFactory.getInstance();
-        auctionDAO = factory.getAuctionDAO();
+        DAOFactory daoFactory = DAOFactory.getInstance();
+        auctionDAO = daoFactory.getAuctionDAO();
     }
 
     @Override
@@ -108,12 +108,11 @@ public class AuctionServiceImpl implements AuctionService {
 
     @Override
     public void finishAuction(Auction auction) throws ServiceException {
-        ServiceFactory factory = ServiceFactory.getInstance();
-        BidService bidService = factory.getBidService();
+        ServiceFactory serviceFactory = ServiceFactory.getInstance();
+        BidService bidService = serviceFactory.getBidService();
 
-        Bid bid;
         if (auction.getType() == AuctionType.DIRECT) {
-            bid = bidService.findWithMaxSumByAuctionId(auction.getId());
+            Bid bid = bidService.findWithMaxSumByAuctionId(auction.getId());
 
             if (bid != null) {
                 int winnerId = bid.getBidderId();
@@ -150,7 +149,6 @@ public class AuctionServiceImpl implements AuctionService {
             Auction auction = new Auction(type, lotId, AuctionStatus.WAITING);
 
             save(auction);
-
             return true;
         } else {
             return false;

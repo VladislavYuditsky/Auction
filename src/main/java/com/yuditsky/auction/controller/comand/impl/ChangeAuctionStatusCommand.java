@@ -14,7 +14,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-import static com.yuditsky.auction.controller.comand.ConstProv.*;
+import static com.yuditsky.auction.controller.provider.JspPageProvider.ERROR_PAGE;
+import static com.yuditsky.auction.controller.provider.RequestParametersNameProvider.AUCTION_ID;
+import static com.yuditsky.auction.controller.provider.ServletPathProvider.AUCTIONS;
+import static com.yuditsky.auction.controller.provider.ServletPathProvider.PROPOSED_AUCTIONS;
 
 public class ChangeAuctionStatusCommand extends AbstractCommand {
     private final static Logger logger = LogManager.getLogger(ChangeAuctionStatusCommand.class);
@@ -28,28 +31,23 @@ public class ChangeAuctionStatusCommand extends AbstractCommand {
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+        try {
+            int auctionId = Integer.parseInt(request.getParameter(AUCTION_ID));
 
-        String auctionIdStr = request.getParameter("auctionId");
+            Auction auction = auctionService.findById(auctionId);
 
-        if (auctionIdStr != null) {
-            int auctionId = Integer.parseInt(auctionIdStr);
+            auctionService.changeStatus(auction);
 
-            try {
-                Auction auction = auctionService.findById(auctionId);
+            auction = auctionService.findById(auction.getId());
 
-                auctionService.changeStatus(auction);
-
-                auction = auctionService.findById(auction.getId());
-
-                if (auction != null && auction.getStatus() == AuctionStatus.ACTIVE) {
-                    redirect(request, response, PROPOSED_AUCTIONS);
-                } else {
-                    redirect(request, response, AUCTIONS);
-                }
-            } catch (ServiceException e) {
-                logger.error("ChangeAuctionStatusCommand failed", e);
-                forward(request, response, ERROR_PAGE);
+            if (auction != null && auction.getStatus() == AuctionStatus.ACTIVE) {
+                redirect(request, response, PROPOSED_AUCTIONS);
+            } else {
+                redirect(request, response, AUCTIONS);
             }
+        } catch (ServiceException | NumberFormatException e) {
+            logger.error("ChangeAuctionStatusCommand failed", e);
+            forward(request, response, ERROR_PAGE);
         }
     }
 }

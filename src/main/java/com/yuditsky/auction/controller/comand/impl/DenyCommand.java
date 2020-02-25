@@ -2,19 +2,24 @@ package com.yuditsky.auction.controller.comand.impl;
 
 import com.yuditsky.auction.controller.comand.AbstractCommand;
 import com.yuditsky.auction.entity.Auction;
-import com.yuditsky.auction.entity.UserRole;
 import com.yuditsky.auction.service.AuctionService;
 import com.yuditsky.auction.service.ServiceException;
 import com.yuditsky.auction.service.ServiceFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
-import static com.yuditsky.auction.controller.comand.ConstProv.PROPOSED_AUCTIONS;
+import static com.yuditsky.auction.controller.provider.JspPageProvider.ERROR_PAGE;
+import static com.yuditsky.auction.controller.provider.RequestParametersNameProvider.AUCTION_ID;
+import static com.yuditsky.auction.controller.provider.ServletPathProvider.PROPOSED_AUCTIONS;
 
-public class DenyCommand extends AbstractCommand { //DeleteAuction ////////////////////////////////////
+public class DenyCommand extends AbstractCommand {
+    private final static Logger logger = LogManager.getLogger(DenyCommand.class);
+
     private final AuctionService auctionService;
 
     public DenyCommand() {
@@ -23,21 +28,16 @@ public class DenyCommand extends AbstractCommand { //DeleteAuction /////////////
     }
 
     @Override
-    public void execute(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        String auctionIdStr = request.getParameter("auctionId");
+    public void execute(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+        try {
+            int auctionId = Integer.parseInt(request.getParameter(AUCTION_ID));
+            Auction auction = auctionService.findById(auctionId);
+            auctionService.delete(auction);
 
-        if (auctionIdStr != null) { //Optional
-            int auctionId = Integer.parseInt(auctionIdStr);
-
-            try {
-                Auction auction = auctionService.findById(auctionId);
-
-                auctionService.delete(auction);
-
-                redirect(request, response, PROPOSED_AUCTIONS);
-            } catch (ServiceException e) {
-                /////
-            }
-        } //else 403
+            redirect(request, response, PROPOSED_AUCTIONS);
+        } catch (ServiceException | NumberFormatException e) {
+            logger.error("DenyCommand failed", e);
+            forward(request, response, ERROR_PAGE);
+        }
     }
 }

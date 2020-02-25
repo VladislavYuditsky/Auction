@@ -26,7 +26,7 @@ public interface BidService {
 
     boolean isRebid(Bid bid) throws ServiceException;
 
-    boolean showPrice(Lot lot, User bidder) throws ServiceException;
+    boolean createBid(Lot lot, User bidder) throws ServiceException;
 
     boolean createBid(Lot lot, User bidder, BigDecimal bidSum) throws ServiceException;
 }

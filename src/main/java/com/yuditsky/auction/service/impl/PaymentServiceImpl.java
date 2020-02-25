@@ -18,8 +18,8 @@ public class PaymentServiceImpl implements PaymentService {
     private final PaymentDAO paymentDAO;
 
     public PaymentServiceImpl() {
-        DAOFactory factory = DAOFactory.getInstance();
-        paymentDAO = factory.getPaymentDAO();
+        DAOFactory daofactory = DAOFactory.getInstance();
+        paymentDAO = daofactory.getPaymentDAO();
     }
 
     @Override
@@ -44,12 +44,12 @@ public class PaymentServiceImpl implements PaymentService {
 
     @Override
     public boolean createPayment(Lot lot, User payer) throws ServiceException {
-        ServiceFactory factory = ServiceFactory.getInstance();
-        AuctionService auctionService = factory.getAuctionService();
-        UserService userService = factory.getUserService();
-        BidService bidService = factory.getBidService();
-        PaymentService paymentService = factory.getPaymentService();
-        LotService lotService = factory.getLotService();
+        ServiceFactory serviceFactory = ServiceFactory.getInstance();
+        AuctionService auctionService = serviceFactory.getAuctionService();
+        UserService userService = serviceFactory.getUserService();
+        BidService bidService = serviceFactory.getBidService();
+        PaymentService paymentService = serviceFactory.getPaymentService();
+        LotService lotService = serviceFactory.getLotService();
 
         Auction auction = auctionService.findByLotId(lot.getId());
 
@@ -59,7 +59,7 @@ public class PaymentServiceImpl implements PaymentService {
             if (auction.getType() == AuctionType.DIRECT) {
                 bid = bidService.findWithMaxSumByAuctionId(auction.getId());
             } else {
-                bid = bidService.findWithMinSumByAuctionId(auction.getId());
+                bid = bidService.findMinByBidderIdAndAuctionId(payer.getId(), auction.getId());
             }
 
             BigDecimal lotPrice = bid.getSum();
@@ -71,8 +71,7 @@ public class PaymentServiceImpl implements PaymentService {
                 User owner = userService.findById(lot.getOwnerId());
                 userService.addBalance(owner, lotPrice);
 
-                lot.setOwnerId(payer.getId());
-                lotService.update(lot);
+                lotService.changeOwner(lot, payer);
 
                 Payment payment = new Payment(payer.getId(), lotPrice, lot.getId(), LocalDateTime.now());
                 paymentService.save(payment);

@@ -8,7 +8,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
-import static com.yuditsky.auction.controller.comand.ConstProv.*;
+import static com.yuditsky.auction.controller.provider.ServletPathProvider.*;
+import static com.yuditsky.auction.controller.provider.SessionAttributesNameProvider.ROLE;
 
 public class RoleFilter implements Filter {
     @Override
@@ -17,12 +18,12 @@ public class RoleFilter implements Filter {
         HttpServletResponse response = (HttpServletResponse) servletResponse;
 
         HttpSession session = request.getSession();
-        UserRole role = (UserRole) session.getAttribute("role");
+        UserRole role = (UserRole) session.getAttribute(ROLE);
 
         String path = request.getServletPath();
         if (role == UserRole.USER && (path.equals(BLOCK) || path.equals(CHANGE_AUCTION_STATUS) || path.equals(DENY) ||
                 path.equals(USERS) || path.equals(PROPOSED_AUCTIONS))) {
-            response.sendRedirect(request.getContextPath() + SIGN_IN); ///////////////////////////////
+            response.sendRedirect(request.getContextPath() + SIGN_IN);
         }
 
         chain.doFilter(request, response);
