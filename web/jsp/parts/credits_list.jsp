@@ -17,7 +17,10 @@
                         <fmt:message key="credit.borrower_id" bundle="${pc}"/> ${credit.borrowerId}
                     <c:if test="${credit.balance > 0}">
                 <form method="post" action="${pageContext.request.contextPath}/repay_credit?creditId=${credit.id}">
-                    <input type="text" name="repaidSum"/>
+                    <input type="text" id="number" name="repaidSum" class="form-control" required
+                           onchange="document.getElementById('numberError').style.display='none'"/>
+                    <div id="numberError" style="display: none" class="invalid-feedback"><fmt:message
+                            key="message.invalid_value" bundle="${pc}"/></div>
                     <button type="submit">Repay</button>
                 </form>
                 </c:if>
@@ -36,3 +39,5 @@
         </div>
     </c:forEach>
 </c:if>
+
+<script src="${pageContext.request.contextPath}/js/numberValidator.js"></script>

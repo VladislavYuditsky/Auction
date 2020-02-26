@@ -1,4 +1,4 @@
-import {validateLogin} from "./loginValidator";
+import {validateEmail} from "./emailValidator";
 import {validatePassword} from "./passwordValidator";
 
 document.getElementById("form").addEventListener('submit',
@@ -6,19 +6,19 @@ document.getElementById("form").addEventListener('submit',
         let isValid = true;
 
         let password = document.getElementById("password").value;
-        let login = document.getElementById("login").value;
+        let email = document.getElementById("email").value;
 
         if (validatePassword(password)) {
             isValid = false;
             document.getElementById('passwordError').style.display = 'block';
         }
 
-        if (validateLogin(login)) {
+        if(!validateEmail(email)){
             isValid = false;
-            document.getElementById('loginError').style.display = 'block';
+            document.getElementById('emailError').style.display = 'block';
         }
 
-        if(!isValid){
+        if (!isValid) {
             e.preventDefault();
         }
     }

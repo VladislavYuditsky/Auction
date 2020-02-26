@@ -18,8 +18,8 @@ public class AuthorizationFilter implements Filter {
         HttpSession session = request.getSession();
 
         String path = request.getServletPath();
-        if (!path.equals(SIGN_IN) && !path.equals(SIGN_UP) && !path.equals(CREATE_USER) && !path.equals(GREETING) && !path.equals(AUCTIONS)
-                && session.getAttribute(ID) == null) {
+        if (!path.equals(SIGN_IN) && !path.equals(SIGN_UP) && !path.equals(CREATE_USER) && !path.equals(GREETING)
+                && !path.equals(AUCTIONS) && !path.equals(CHANGE_LOCALE) && session.getAttribute(ID) == null) {
             response.sendRedirect(request.getContextPath() + SIGN_IN);
         } else {
             chain.doFilter(request, response);

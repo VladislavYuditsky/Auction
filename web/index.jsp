@@ -11,6 +11,10 @@
     <title>Auction</title>
   </head>
   <body>
-  <jsp:forward page="jsp/greeting.jsp"/>
+
   </body>
 </html>
+
+<script>
+  window.location.replace("${pageContext.request.contextPath}/greeting");
+</script>

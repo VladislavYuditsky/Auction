@@ -1,17 +1,17 @@
+import {validateEmail} from "./emailValidator";
+import {validateLogin} from "./loginValidator";
+import {validatePassword} from "./passwordValidator";
+
 document.getElementById("form").addEventListener('submit',
     function validate(e) {
         let isValid = true;
-
-        const loginPattern = /^[a-zA-Z1-9]{3,10}$/;
-        const passwordPattern = /^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=\S+$).{5,10}$/;
-        const emailPattern = /^\S+@\S+\.\S+$/;
 
         let password = document.getElementById("password").value;
         let confPassword = document.getElementById("confPassword").value;
         let login = document.getElementById("login").value;
         let email = document.getElementById("email").value;
 
-        if (!passwordPattern.exec(password)) {
+        if (validatePassword(password)) {
             isValid = false;
             document.getElementById('passwordError').style.display = 'block';
         } else {
@@ -21,12 +21,12 @@ document.getElementById("form").addEventListener('submit',
             }
         }
 
-        if (!loginPattern.exec(login)) {
+        if (validateLogin(login)) {
             isValid = false;
             document.getElementById('loginError').style.display = 'block';
         }
 
-        if(!emailPattern.exec(email)){
+        if(!validateEmail(email)){
             isValid = false;
             document.getElementById('emailError').style.display = 'block';
         }

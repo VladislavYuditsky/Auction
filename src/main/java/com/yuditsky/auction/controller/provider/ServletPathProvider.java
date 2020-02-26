@@ -21,4 +21,5 @@ public class ServletPathProvider {
     public static final String USER_CREDITS = "/user_credits";
     public static final String BAN = "/ban";
     public static final String CREATE_USER = "/create_user";
+    public static final String CHANGE_LOCALE = "/change_locale";
 }

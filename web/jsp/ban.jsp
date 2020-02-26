@@ -10,6 +10,8 @@
 <div class="container mt-3">
     <fmt:message key="message.banned" bundle="${pc}"/>
 </div>
+
+<jsp:include page="/jsp/parts/footer.jsp"/>
 </body>
 </html>
 

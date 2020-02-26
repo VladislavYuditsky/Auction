@@ -54,6 +54,7 @@ public class SignInCommand extends AbstractCommand {
                     request.setAttribute(PASSWORD, password);
                     request.setAttribute(LOGIN, login);
                     request.setAttribute(MESSAGE, WRONG_LOGIN_OR_PASSWORD);
+                    
                     forward(request, response, SIGN_IN_PAGE);
                 }
 

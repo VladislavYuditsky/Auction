@@ -94,4 +94,9 @@
         <filter-name>BlockedFilter</filter-name>
         <servlet-name>Controller</servlet-name>
     </filter-mapping>
+
+    <error-page>
+        <exception-type>java.lang.Exception</exception-type>
+        <location>/jsp/error.jsp</location>
+    </error-page>
 </web-app>

@@ -56,5 +56,6 @@
 </form>
 </div>
 <script src="${pageContext.request.contextPath}/js/signUpDataValidator.js"></script>
+<jsp:include page="/jsp/parts/footer.jsp"/>
 </body>
 </html>
