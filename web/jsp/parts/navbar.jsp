@@ -23,18 +23,6 @@
     </div>
 
     <ul class="navbar-nav flex-row ml-md-auto d-none d-md-flex">
-        <c:if test="${sessionScope.id==null}">
-            <li class="nav-item">
-                <a class="nav-link" href="${pageContext.request.contextPath}/sign_in">
-                    <fmt:message key="button.sign_in" bundle="${pc}"/>
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="${pageContext.request.contextPath}/sign_up">
-                    <fmt:message key="button.sign_up" bundle="${pc}"/>
-                </a>
-            </li>
-        </c:if>
         <c:if test="${sessionScope.id!=null}">
             <li class="nav-item">
                 <a class="nav-link" href="${pageContext.request.contextPath}/sell">
@@ -42,12 +30,13 @@
                 </a>
             </li>
             <li class="nav-item dropdown">
-                <a class="nav-item nav-link dropdown-toggle mr-md-2" href="#" id="bd-versions" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <a class="nav-item nav-link dropdown-toggle mr-md-2" href="#" id="bd-versions" data-toggle="dropdown"
+                   aria-haspopup="true" aria-expanded="false">
                         ${sessionScope.login}
                 </a>
                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="bd-versions">
                     <a class="dropdown-item"
-                       href="${pageContext.request.contextPath}/user_lots?id=${sessionScope.id}">
+                       href="${pageContext.request.contextPath}/user_lots">
                         <fmt:message key="navbar.my_lots" bundle="${pc}"/>
                     </a>
                     <a class="dropdown-item" href="${pageContext.request.contextPath}/user_bids">
@@ -72,7 +61,8 @@
             </li>
             <c:if test="${sessionScope.role=='ADMIN'}">
                 <li class="nav-item dropdown">
-                    <a class="nav-item nav-link dropdown-toggle mr-md-2" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <a class="nav-item nav-link dropdown-toggle mr-md-2" href="#" data-toggle="dropdown"
+                       aria-haspopup="true" aria-expanded="false">
                         <fmt:message key="navbar.admin_panel" bundle="${pc}"/>
                     </a>
                     <div class="dropdown-menu dropdown-menu-right" aria-labelledby="bd-versions">
@@ -86,8 +76,31 @@
                 </li>
             </c:if>
             <li class="nav-item">
+                <a class="nav-link" href="${pageContext.request.contextPath}/change_locale?page=${pageContext.request.servletPath}&query=${pageContext.request.queryString}">
+                    <fmt:message key="language" bundle="${pc}"/>
+                </a>
+            </li>
+            <li class="nav-item">
                 <a class="nav-link" href="${pageContext.request.contextPath}/sign_out">
                     <fmt:message key="button.sign_out" bundle="${pc}"/>
+                </a>
+            </li>
+        </c:if>
+
+        <c:if test="${sessionScope.id==null}">
+            <li class="nav-item">
+                <a class="nav-link" href="${pageContext.request.contextPath}/change_locale?page=${pageContext.request.servletPath}&query=${pageContext.request.queryString}">
+                    <fmt:message key="language" bundle="${pc}"/>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="${pageContext.request.contextPath}/sign_in">
+                    <fmt:message key="button.sign_in" bundle="${pc}"/>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="${pageContext.request.contextPath}/sign_up">
+                    <fmt:message key="button.sign_up" bundle="${pc}"/>
                 </a>
             </li>
         </c:if>

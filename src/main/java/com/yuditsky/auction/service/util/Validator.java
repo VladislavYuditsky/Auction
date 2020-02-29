@@ -8,7 +8,7 @@ import java.math.BigDecimal;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static com.yuditsky.auction.Const.NULL;
+import static com.yuditsky.auction.service.util.Constant.NULL;
 
 public class Validator {
     private Pattern loginPattern = Pattern.compile("^[a-zA-Z1-9]{3,10}$");
@@ -27,7 +27,7 @@ public class Validator {
         return text != null && !text.equals("");
     }
 
-    public boolean checkEmail(String email){
+    public boolean checkEmail(String email) {
         return checkString(email, emailPattern);
     }
 
@@ -36,16 +36,16 @@ public class Validator {
                 && checkLogin(user.getLogin());
     }
 
-    public boolean checkBid(Bid bid){
+    public boolean checkBid(Bid bid) {
         return bid != null && checkBigDecimal(bid.getSum());
     }
 
-    public boolean checkLot(Lot lot){
+    public boolean checkLot(Lot lot) {
         return lot != null && checkText(lot.getName()) && checkText(lot.getDescription())
                 && checkText(lot.getLocation()) && checkBigDecimal(lot.getStartPrice());
     }
 
-    public boolean checkBigDecimal(BigDecimal value){
+    public boolean checkBigDecimal(BigDecimal value) {
         return value != null && value.compareTo(NULL) > 0;
     }
 

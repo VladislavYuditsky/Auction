@@ -11,19 +11,24 @@
 <jsp:include page="parts/navbar.jsp"/>
 
 <div class="container mt-3">
-<c:if test="${auctions.size()!=0}">
-    <c:forEach var="auction" items="${auctions}">
-        <div class="card mb-3" >
-            <div class="card-body">
-                <a href="${pageContext.request.contextPath}/auction?lotId=${auction.lotId}"><h1>${auction.id}</h1></a>
-            </div>
-        </div>
-    </c:forEach>
-</c:if>
+    <c:choose>
+        <c:when test="${auctions.size()!=0}">
+            <c:forEach var="auction" items="${auctions}">
+                <div class="card mb-3" >
+                    <div class="card-body">
+                        <a href="${pageContext.request.contextPath}/auction?lotId=${auction.lotId}"><h1>${auction.id}</h1></a>
+                    </div>
+                </div>
+            </c:forEach>
 
-<c:if test="${auctions.size()==0}">
-    <fmt:message key="auctions.not_proposed" bundle="${pc}"/>
-</c:if>
+            <c:set var="servletPath" value="/proposed_auctions"/>
+            <%@include file="parts/pagination.jsp"%>
+        </c:when>
+
+        <c:otherwise>
+            <fmt:message key="auctions.not_proposed" bundle="${pc}"/>
+        </c:otherwise>
+    </c:choose>
 </div>
 
 <jsp:include page="/jsp/parts/footer.jsp"/>

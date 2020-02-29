@@ -13,6 +13,8 @@ public interface CreditService {
 
     List<Credit> findByBorrowerId(int id) throws ServiceException;
 
+    List<Credit> findByBorrowerId(int id, int limit, int offset) throws ServiceException;
+
     boolean subtractBalance(int creditId, BigDecimal sum, User borrower) throws ServiceException;
 
     void updateBalance(Credit credit, BigDecimal balance) throws ServiceException;

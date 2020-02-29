@@ -17,6 +17,8 @@ public interface AuctionService {
 
     List<Auction> findByStatus(AuctionStatus status) throws ServiceException;
 
+    List<Auction> findByStatus(AuctionStatus status, int limit, int offset) throws ServiceException;
+
     List<Auction> findByWinnerId(int id) throws ServiceException;
 
     Auction findByLotId(int id) throws ServiceException;

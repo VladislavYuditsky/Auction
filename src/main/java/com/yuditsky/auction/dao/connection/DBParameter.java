@@ -1,6 +1,7 @@
 package com.yuditsky.auction.dao.connection;
 
 public class DBParameter {
+    public static final String PROPERTIES_FILE_PATH = "db";
     public static final String DB_DRIVER = "db.driver";
     public static final String DB_URL = "db.url";
     public static final String DB_USER = "db.user";

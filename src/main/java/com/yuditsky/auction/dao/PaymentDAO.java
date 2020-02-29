@@ -10,6 +10,8 @@ public interface PaymentDAO extends GenericDAO<Payment>{
 
     List<Payment> findByPayerId(int payerId) throws DAOException;
 
+    List<Payment> findByPayerId(int payerId, int limit, int offset) throws DAOException;
+
     /*void updatePayerId(Payment payment, int newPayerId) throws DAOException;
 
     void updateSum(Payment payment, BigDecimal newSum) throws DAOException;

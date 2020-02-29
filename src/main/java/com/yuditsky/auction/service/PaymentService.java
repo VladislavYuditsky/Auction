@@ -11,5 +11,7 @@ public interface PaymentService {
 
     List<Payment> findByPayerId(int id) throws ServiceException;
 
+    List<Payment> findByPayerId(int id, int limit, int offset) throws ServiceException;
+
     boolean createPayment(Lot lot, User payer) throws ServiceException;
 }

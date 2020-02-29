@@ -1,6 +1,6 @@
 package com.yuditsky.auction.dao.impl;
 
-import com.yuditsky.auction.Const;
+import com.yuditsky.auction.dao.impl.util.QueryProvider;
 import com.yuditsky.auction.dao.*;
 import com.yuditsky.auction.dao.connection.ConnectionPool;
 import com.yuditsky.auction.dao.connection.ConnectionPoolException;
@@ -61,27 +61,27 @@ public class SQLUserDAO extends SQLAbstractDAO<User> implements UserDAO {
 
     @Override
     protected String getSelectByIdQuery() {
-        return Const.SELECT_USER_BY_ID;
+        return QueryProvider.SELECT_USER_BY_ID;
     }
 
     @Override
     protected String getSelectAllQuery() {
-        return Const.SELECT_ALL_USERS;
+        return QueryProvider.SELECT_ALL_USERS;
     }
 
     @Override
     protected String getInsertQuery() {
-        return Const.INSERT_USER;
+        return QueryProvider.INSERT_USER;
     }
 
     @Override
     protected String getUpdateQuery() {
-        return Const.UPDATE_USER_BY_ID;
+        return QueryProvider.UPDATE_USER_BY_ID;
     }
 
     @Override
     protected String getDeleteQuery() {
-        return Const.DELETE_USER_BY_ID;
+        return QueryProvider.DELETE_USER_BY_ID;
     }
 
     @Override
@@ -118,7 +118,7 @@ public class SQLUserDAO extends SQLAbstractDAO<User> implements UserDAO {
         ResultSet resultSet = null;
         try {
             connection = connectionPool.takeConnection();
-            statement = connection.prepareStatement(Const.SELECT_USER_BY_LOGIN);
+            statement = connection.prepareStatement(QueryProvider.SELECT_USER_BY_LOGIN);
 
             statement.setString(1, String.valueOf(login));
 
@@ -154,7 +154,7 @@ public class SQLUserDAO extends SQLAbstractDAO<User> implements UserDAO {
         ResultSet resultSet = null;
         try {
             connection = connectionPool.takeConnection();
-            statement = connection.prepareStatement(Const.SELECT_USER_BY_LOGIN_AND_PASSWORD);
+            statement = connection.prepareStatement(QueryProvider.SELECT_USER_BY_LOGIN_AND_PASSWORD);
 
             statement.setString(1, String.valueOf(login));
             statement.setString(2, String.valueOf(password));

@@ -11,10 +11,18 @@
 <jsp:include page="parts/navbar.jsp"/>
 
 <div class="container mt-3">
-<jsp:include page="parts/payments_list.jsp"/>
-<c:if test="${payments.size()==0}">
-    <fmt:message key="payments.no_payments" bundle="${pc}"/>
-</c:if>
+    <c:choose>
+        <c:when test="${payments.size()==0}">
+            <fmt:message key="payments.no_payments" bundle="${pc}"/>
+        </c:when>
+
+        <c:otherwise>
+            <jsp:include page="parts/payments_list.jsp"/>
+
+            <c:set var="servletPath" value="/user_payments"/>
+            <%@include file="parts/pagination.jsp" %>
+        </c:otherwise>
+    </c:choose>
 </div>
 
 <jsp:include page="/jsp/parts/footer.jsp"/>

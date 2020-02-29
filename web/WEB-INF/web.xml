@@ -11,43 +11,7 @@
 
     <servlet-mapping>
         <servlet-name>Controller</servlet-name>
-        <url-pattern>/sign_in</url-pattern>
-        <url-pattern>/sign_up</url-pattern>
-        <url-pattern>/greeting</url-pattern>
-        <url-pattern>/sign_out</url-pattern>
-        <url-pattern>/create_lot</url-pattern>
-        <url-pattern>/user_lots</url-pattern>
-        <url-pattern>/user_bids</url-pattern>
-        <url-pattern>/awaiting_payment_lots</url-pattern>
-        <url-pattern>/create_payment</url-pattern>
-        <url-pattern>/user_payments</url-pattern>
-        <url-pattern>/user_credits</url-pattern>
-        <url-pattern>/settings</url-pattern>
-        <url-pattern>/replenish_balance</url-pattern>
-        <url-pattern>/proposed_auctions</url-pattern>
-        <url-pattern>/users</url-pattern>
-        <url-pattern>/auction</url-pattern>
-        <url-pattern>/buy</url-pattern>
-        <url-pattern>/show_price</url-pattern>
-        <url-pattern>/change_auction_status</url-pattern>
-        <url-pattern>/edit_lot</url-pattern>
-        <url-pattern>/create_auction</url-pattern>
-        <url-pattern>/delete_lot</url-pattern>
-        <url-pattern>/deny</url-pattern>
-        <url-pattern>/block</url-pattern>
-        <url-pattern>/create_credit</url-pattern>
-        <url-pattern>/auctions</url-pattern>
-        <url-pattern>/user_balance</url-pattern>
-        <url-pattern>/create_bid</url-pattern>
-        <url-pattern>/update_settings</url-pattern>
-        <url-pattern>/repay_credit</url-pattern>
-        <url-pattern>/change_locale</url-pattern>
-        <url-pattern>/ban</url-pattern>
-        <url-pattern>/direct_auction</url-pattern>
-        <url-pattern>/revers_auction</url-pattern>
-        <url-pattern>/sell</url-pattern>
-        <url-pattern>/update_lot</url-pattern>
-        <url-pattern>/create_user</url-pattern>
+        <url-pattern>/</url-pattern>
     </servlet-mapping>
 
     <filter>

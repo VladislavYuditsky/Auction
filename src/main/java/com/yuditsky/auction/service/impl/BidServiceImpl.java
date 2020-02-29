@@ -13,8 +13,8 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import static com.yuditsky.auction.Const.NULL;
-import static com.yuditsky.auction.Const.REVERS_AUCTION_COEFFICIENT;
+import static com.yuditsky.auction.service.util.Constant.NULL;
+import static com.yuditsky.auction.service.util.Constant.REVERS_AUCTION_COEFFICIENT;
 import static java.math.BigDecimal.ROUND_DOWN;
 
 public class BidServiceImpl implements BidService {

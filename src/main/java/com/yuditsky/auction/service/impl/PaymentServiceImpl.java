@@ -43,6 +43,16 @@ public class PaymentServiceImpl implements PaymentService {
     }
 
     @Override
+    public List<Payment> findByPayerId(int id, int limit, int offset) throws ServiceException {
+        try {
+            return paymentDAO.findByPayerId(id, limit, offset);
+        } catch (DAOException e) {
+            logger.error("Can't find payments by payer id = " + id, e);
+            throw new ServiceException(e);
+        }
+    }
+
+    @Override
     public boolean createPayment(Lot lot, User payer) throws ServiceException {
         ServiceFactory serviceFactory = ServiceFactory.getInstance();
         AuctionService auctionService = serviceFactory.getAuctionService();
@@ -62,7 +72,7 @@ public class PaymentServiceImpl implements PaymentService {
                 bid = bidService.findMinByBidderIdAndAuctionId(payer.getId(), auction.getId());
             }
 
-            BigDecimal lotPrice = bid.getSum();
+            BigDecimal lotPrice = (bid != null ? bid.getSum() : lot.getStartPrice());
             BigDecimal userBalance = payer.getBalance();
 
             if (userBalance.compareTo(lotPrice) > 0) {

@@ -1,6 +1,6 @@
 package com.yuditsky.auction.dao.impl;
 
-import com.yuditsky.auction.Const;
+import com.yuditsky.auction.dao.impl.util.QueryProvider;
 import com.yuditsky.auction.dao.AuctionDAO;
 import com.yuditsky.auction.dao.BidDAO;
 import com.yuditsky.auction.dao.DAOException;
@@ -11,6 +11,7 @@ import com.yuditsky.auction.entity.Auction;
 import com.yuditsky.auction.entity.AuctionStatus;
 import com.yuditsky.auction.entity.AuctionType;
 import com.yuditsky.auction.entity.Bid;
+import com.yuditsky.auction.service.ServiceException;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -55,27 +56,27 @@ public class SQLAuctionDAO extends SQLAbstractDAO<Auction> implements AuctionDAO
 
     @Override
     protected String getSelectByIdQuery() {
-        return Const.SELECT_AUCTION_BY_ID;
+        return QueryProvider.SELECT_AUCTION_BY_ID;
     }
 
     @Override
     protected String getSelectAllQuery() {
-        return Const.SELECT_ALL_AUCTIONS;
+        return QueryProvider.SELECT_ALL_AUCTIONS;
     }
 
     @Override
     protected String getInsertQuery() {
-        return Const.INSERT_AUCTION;
+        return QueryProvider.INSERT_AUCTION;
     }
 
     @Override
     protected String getUpdateQuery() {
-        return Const.UPDATE_AUCTION_BY_ID;
+        return QueryProvider.UPDATE_AUCTION_BY_ID;
     }
 
     @Override
     protected String getDeleteQuery() {
-        return Const.DELETE_AUCTION_BY_ID;
+        return QueryProvider.DELETE_AUCTION_BY_ID;
     }
 
     @Override
@@ -112,7 +113,7 @@ public class SQLAuctionDAO extends SQLAbstractDAO<Auction> implements AuctionDAO
         ResultSet resultSet = null;
         try {
             connection = connectionPool.takeConnection();
-            statement = connection.prepareStatement(Const.SELECT_AUCTION_BY_TYPE);
+            statement = connection.prepareStatement(QueryProvider.SELECT_AUCTION_BY_TYPE);
 
             statement.setString(1, String.valueOf(type));
 
@@ -137,9 +138,36 @@ public class SQLAuctionDAO extends SQLAbstractDAO<Auction> implements AuctionDAO
         ResultSet resultSet = null;
         try {
             connection = connectionPool.takeConnection();
-            statement = connection.prepareStatement(Const.SELECT_AUCTION_BY_STATUS);
+            statement = connection.prepareStatement(QueryProvider.SELECT_AUCTION_BY_STATUS);
 
             statement.setString(1, String.valueOf(status));
+
+            resultSet = statement.executeQuery();
+
+            return parseResultSet(resultSet);
+        } catch (SQLException e) {
+            logger.log(Level.ERROR, "SQL error", e);
+            throw new DAOException(e);
+        } catch (ConnectionPoolException e) {
+            logger.log(Level.ERROR, "Can't take connection", e);
+            throw new DAOException(e);
+        } finally {
+            connectionPool.closeConnection(connection, statement, resultSet);
+        }
+    }
+
+    @Override
+    public List<Auction> findByStatus(AuctionStatus status, int limit, int offset) throws DAOException {
+        Connection connection = null;
+        PreparedStatement statement = null;
+        ResultSet resultSet = null;
+        try {
+            connection = connectionPool.takeConnection();
+            statement = connection.prepareStatement(QueryProvider.SELECT_AUCTION_BY_STATUS_WITH_LIMIT_AND_OFFSET);
+
+            statement.setString(1, String.valueOf(status));
+            statement.setInt(2, limit);
+            statement.setInt(3, offset);
 
             resultSet = statement.executeQuery();
 
@@ -162,7 +190,7 @@ public class SQLAuctionDAO extends SQLAbstractDAO<Auction> implements AuctionDAO
         ResultSet resultSet = null;
         try {
             connection = connectionPool.takeConnection();
-            statement = connection.prepareStatement(Const.SELECT_AUCTION_BY_WINNER_ID);
+            statement = connection.prepareStatement(QueryProvider.SELECT_AUCTION_BY_WINNER_ID);
 
             statement.setString(1, String.valueOf(id));
 
@@ -187,7 +215,7 @@ public class SQLAuctionDAO extends SQLAbstractDAO<Auction> implements AuctionDAO
         ResultSet resultSet = null;
         try {
             connection = connectionPool.takeConnection();
-            statement = connection.prepareStatement(Const.SELECT_AUCTION_BY_LOT_ID);
+            statement = connection.prepareStatement(QueryProvider.SELECT_AUCTION_BY_LOT_ID);
 
             statement.setInt(1, id);
 

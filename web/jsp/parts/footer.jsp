@@ -1,12 +1,5 @@
 <%@include file="/jsp/parts/common.jsp" %>
 
-<link rel="stylesheet" href="${pageContext.request.contextPath}/css/footer.css">
-<footer>
-    <a href="${pageContext.request.contextPath}/change_locale?page=${pageContext.request.servletPath}&query=${pageContext.request.queryString}"><fmt:message key="language" bundle="${pc}"/> </a>
-<%--    <a href="${pageContext.request.contextPath  }/atrack?locale=ru"><fmt:message key="locale.lang.ru" bundle="${pc}"/></a>--%>
-</footer>
-
-
 <!-- Optional JavaScript -->
 <!-- jQuery first, then Popper.js, then Bootstrap JS -->
 <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>

@@ -1,6 +1,6 @@
 package com.yuditsky.auction.dao.impl;
 
-import com.yuditsky.auction.Const;
+import com.yuditsky.auction.dao.impl.util.QueryProvider;
 import com.yuditsky.auction.dao.CreditDAO;
 import com.yuditsky.auction.dao.DAOException;
 import com.yuditsky.auction.dao.connection.ConnectionPool;
@@ -19,7 +19,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.yuditsky.auction.Const.DATA_TIME_FORMATTER;
+import static com.yuditsky.auction.dao.impl.util.Constant.DATA_TIME_FORMATTER;
 
 public class SQLCreditDAO extends SQLAbstractDAO<Credit> implements CreditDAO {
     private final static Logger logger = LogManager.getLogger(SQLCreditDAO.class);
@@ -52,27 +52,27 @@ public class SQLCreditDAO extends SQLAbstractDAO<Credit> implements CreditDAO {
 
     @Override
     protected String getSelectByIdQuery() {
-        return Const.SELECT_CREDIT_BY_ID;
+        return QueryProvider.SELECT_CREDIT_BY_ID;
     }
 
     @Override
     protected String getSelectAllQuery() {
-        return Const.SELECT_ALL_CREDITS;
+        return QueryProvider.SELECT_ALL_CREDITS;
     }
 
     @Override
     protected String getInsertQuery() {
-        return Const.INSERT_CREDIT;
+        return QueryProvider.INSERT_CREDIT;
     }
 
     @Override
     protected String getUpdateQuery() {
-        return Const.UPDATE_CREDIT_BY_ID;
+        return QueryProvider.UPDATE_CREDIT_BY_ID;
     }
 
     @Override
     protected String getDeleteQuery() {
-        return Const.DELETE_CREDIT_BY_ID;
+        return QueryProvider.DELETE_CREDIT_BY_ID;
     }
 
     @Override
@@ -111,9 +111,36 @@ public class SQLCreditDAO extends SQLAbstractDAO<Credit> implements CreditDAO {
         ResultSet resultSet = null;
         try {
             connection = connectionPool.takeConnection();
-            statement = connection.prepareStatement(Const.SELECT_CREDIT_BY_BORROWER_ID);
+            statement = connection.prepareStatement(QueryProvider.SELECT_CREDIT_BY_BORROWER_ID);
 
-            statement.setString(1, String.valueOf(borrowerId));
+            statement.setInt(1,borrowerId);
+
+            resultSet = statement.executeQuery();
+
+            return parseResultSet(resultSet);
+        } catch (SQLException e) {
+            logger.log(Level.ERROR, "SQL error", e);
+            throw new DAOException(e);
+        } catch (ConnectionPoolException e) {
+            logger.log(Level.ERROR, "Can't take connection", e);
+            throw new DAOException(e);
+        } finally {
+            connectionPool.closeConnection(connection, statement, resultSet);
+        }
+    }
+
+    @Override
+    public List<Credit> findByBorrowerId(int borrowerId, int limit, int offset) throws DAOException {
+        Connection connection = null;
+        PreparedStatement statement = null;
+        ResultSet resultSet = null;
+        try {
+            connection = connectionPool.takeConnection();
+            statement = connection.prepareStatement(QueryProvider.SELECT_CREDIT_BY_BORROWER_ID_WITH_LIMIT_AND_OFFSET);
+
+            statement.setInt(1,borrowerId);
+            statement.setInt(2, limit);
+            statement.setInt(3, offset);
 
             resultSet = statement.executeQuery();
 
@@ -135,7 +162,7 @@ public class SQLCreditDAO extends SQLAbstractDAO<Credit> implements CreditDAO {
         PreparedStatement statement = null;
         try {
             connection = connectionPool.takeConnection();
-            statement = connection.prepareStatement(Const.UPDATE_CREDIT_BALANCE);
+            statement = connection.prepareStatement(QueryProvider.UPDATE_CREDIT_BALANCE);
 
             statement.setBigDecimal(1, newBalance);
             statement.setInt(2, credit.getId());

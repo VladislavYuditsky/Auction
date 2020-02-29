@@ -20,4 +20,7 @@ public class RequestParametersNameProvider {
     public static final String DESCRIPTION = "description";
     public static final String LOCATION = "location";
     public static final String START_PRICE = "startPrice";
+
+    public static final String CURRENT_PAGE = "currentPage";
+    public static final String PAGES_NUMBER = "pagesNumber";
 }

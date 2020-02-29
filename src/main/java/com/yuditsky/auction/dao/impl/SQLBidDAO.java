@@ -1,6 +1,6 @@
 package com.yuditsky.auction.dao.impl;
 
-import com.yuditsky.auction.Const;
+import com.yuditsky.auction.dao.impl.util.QueryProvider;
 import com.yuditsky.auction.dao.BidDAO;
 import com.yuditsky.auction.dao.DAOException;
 import com.yuditsky.auction.dao.connection.ConnectionPool;
@@ -19,7 +19,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.yuditsky.auction.Const.DATA_TIME_FORMATTER;
+import static com.yuditsky.auction.dao.impl.util.Constant.DATA_TIME_FORMATTER;
 
 public class SQLBidDAO extends SQLAbstractDAO<Bid> implements BidDAO {
     private final static Logger logger = LogManager.getLogger(SQLBidDAO.class);
@@ -50,27 +50,27 @@ public class SQLBidDAO extends SQLAbstractDAO<Bid> implements BidDAO {
 
     @Override
     protected String getSelectByIdQuery() {
-        return Const.SELECT_BID_BY_ID;
+        return QueryProvider.SELECT_BID_BY_ID;
     }
 
     @Override
     protected String getSelectAllQuery() {
-        return Const.SELECT_ALL_BIDS;
+        return QueryProvider.SELECT_ALL_BIDS;
     }
 
     @Override
     protected String getInsertQuery() {
-        return Const.INSERT_BID;
+        return QueryProvider.INSERT_BID;
     }
 
     @Override
     protected String getUpdateQuery() {
-        return Const.UPDATE_BID_BY_ID;
+        return QueryProvider.UPDATE_BID_BY_ID;
     }
 
     @Override
     protected String getDeleteQuery() {
-        return Const.DELETE_BID_BY_ID;
+        return QueryProvider.DELETE_BID_BY_ID;
     }
 
     @Override
@@ -107,7 +107,7 @@ public class SQLBidDAO extends SQLAbstractDAO<Bid> implements BidDAO {
         ResultSet resultSet = null;
         try {
             connection = connectionPool.takeConnection();
-            statement = connection.prepareStatement(Const.SELECT_BID_BY_AUCTION_ID);
+            statement = connection.prepareStatement(QueryProvider.SELECT_BID_BY_AUCTION_ID);
 
             statement.setInt(1, auctionId);
 
@@ -132,7 +132,7 @@ public class SQLBidDAO extends SQLAbstractDAO<Bid> implements BidDAO {
         ResultSet resultSet = null;
         try {
             connection = connectionPool.takeConnection();
-            statement = connection.prepareStatement(Const.SELECT_BID_BY_BIDDER_ID);
+            statement = connection.prepareStatement(QueryProvider.SELECT_BID_BY_BIDDER_ID);
 
             statement.setInt(1, bidderId);
 
@@ -157,7 +157,7 @@ public class SQLBidDAO extends SQLAbstractDAO<Bid> implements BidDAO {
         ResultSet resultSet = null;
         try {
             connection = connectionPool.takeConnection();
-            statement = connection.prepareStatement(Const.SELECT_BID_WITH_MAX_SUM_BY_AUCTION_ID);
+            statement = connection.prepareStatement(QueryProvider.SELECT_BID_WITH_MAX_SUM_BY_AUCTION_ID);
 
             statement.setInt(1, auctionId);
 
@@ -193,7 +193,7 @@ public class SQLBidDAO extends SQLAbstractDAO<Bid> implements BidDAO {
         ResultSet resultSet = null;
         try {
             connection = connectionPool.takeConnection();
-            statement = connection.prepareStatement(Const.SELECT_BID_WITH_MIN_SUM_BY_BIDDER_ID_AND_AUCTION_ID);
+            statement = connection.prepareStatement(QueryProvider.SELECT_BID_WITH_MIN_SUM_BY_BIDDER_ID_AND_AUCTION_ID);
 
             statement.setInt(1, bidderId);
             statement.setInt(2, auctionId);
@@ -230,7 +230,7 @@ public class SQLBidDAO extends SQLAbstractDAO<Bid> implements BidDAO {
         ResultSet resultSet = null;
         try {
             connection = connectionPool.takeConnection();
-            statement = connection.prepareStatement(Const.SELECT_BID_WITH_MIN_SUM_BY_AUCTION_ID);
+            statement = connection.prepareStatement(QueryProvider.SELECT_BID_WITH_MIN_SUM_BY_AUCTION_ID);
 
             statement.setInt(1, auctionId);
 

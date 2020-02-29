@@ -3,10 +3,7 @@ package com.yuditsky.auction.service.impl;
 import com.yuditsky.auction.dao.AuctionDAO;
 import com.yuditsky.auction.dao.DAOException;
 import com.yuditsky.auction.dao.DAOFactory;
-import com.yuditsky.auction.entity.Auction;
-import com.yuditsky.auction.entity.AuctionStatus;
-import com.yuditsky.auction.entity.AuctionType;
-import com.yuditsky.auction.entity.Bid;
+import com.yuditsky.auction.entity.*;
 import com.yuditsky.auction.service.AuctionService;
 import com.yuditsky.auction.service.BidService;
 import com.yuditsky.auction.service.ServiceException;
@@ -15,6 +12,8 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.util.List;
+
+import static java.lang.Math.ceil;
 
 public class AuctionServiceImpl implements AuctionService {
     private final static Logger logger = LogManager.getLogger(AuctionServiceImpl.class);
@@ -60,6 +59,16 @@ public class AuctionServiceImpl implements AuctionService {
     public List<Auction> findByStatus(AuctionStatus status) throws ServiceException {
         try {
             return auctionDAO.findByStatus(status);
+        } catch (DAOException e) {
+            logger.error("Can't find auctions by status", e);
+            throw new ServiceException(e);
+        }
+    }
+
+    @Override
+    public List<Auction> findByStatus(AuctionStatus status, int limit, int offset) throws ServiceException {
+        try {
+            return auctionDAO.findByStatus(status, limit, offset);
         } catch (DAOException e) {
             logger.error("Can't find auctions by status", e);
             throw new ServiceException(e);
@@ -125,7 +134,9 @@ public class AuctionServiceImpl implements AuctionService {
                 delete(auction);
             }
         } else {
-            delete(auction);
+            //delete(auction);
+            auction.setStatus(AuctionStatus.COMPLETED);
+            update(auction);
         }
     }
 

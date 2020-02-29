@@ -1,6 +1,6 @@
 package com.yuditsky.auction.dao.impl;
 
-import com.yuditsky.auction.Const;
+import com.yuditsky.auction.dao.impl.util.QueryProvider;
 import com.yuditsky.auction.dao.DAOException;
 import com.yuditsky.auction.dao.PaymentDAO;
 import com.yuditsky.auction.dao.connection.ConnectionPool;
@@ -19,7 +19,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.yuditsky.auction.Const.DATA_TIME_FORMATTER;
+import static com.yuditsky.auction.dao.impl.util.Constant.DATA_TIME_FORMATTER;
 
 public class SQLPaymentDAO extends SQLAbstractDAO<Payment> implements PaymentDAO {
     private final static Logger logger = LogManager.getLogger(SQLPaymentDAO.class);
@@ -50,27 +50,27 @@ public class SQLPaymentDAO extends SQLAbstractDAO<Payment> implements PaymentDAO
 
     @Override
     protected String getSelectByIdQuery() {
-        return Const.SELECT_PAYMENT_BY_ID;
+        return QueryProvider.SELECT_PAYMENT_BY_ID;
     }
 
     @Override
     protected String getSelectAllQuery() {
-        return Const.SELECT_ALL_PAYMENTS;
+        return QueryProvider.SELECT_ALL_PAYMENTS;
     }
 
     @Override
     protected String getInsertQuery() {
-        return Const.INSERT_PAYMENT;
+        return QueryProvider.INSERT_PAYMENT;
     }
 
     @Override
     protected String getUpdateQuery() {
-        return Const.UPDATE_PAYMENT_BY_ID;
+        return QueryProvider.UPDATE_PAYMENT_BY_ID;
     }
 
     @Override
     protected String getDeleteQuery() {
-        return Const.DELETE_PAYMENT_BY_ID;
+        return QueryProvider.DELETE_PAYMENT_BY_ID;
     }
 
     @Override
@@ -107,9 +107,36 @@ public class SQLPaymentDAO extends SQLAbstractDAO<Payment> implements PaymentDAO
         ResultSet resultSet = null;
         try {
             connection = connectionPool.takeConnection();
-            statement = connection.prepareStatement(Const.SELECT_PAYMENT_BY_PAYER_ID);
+            statement = connection.prepareStatement(QueryProvider.SELECT_PAYMENT_BY_PAYER_ID);
 
-            statement.setString(1, String.valueOf(id));
+            statement.setInt(1, id);
+
+            resultSet = statement.executeQuery();
+
+            return parseResultSet(resultSet);
+        } catch (SQLException e) {
+            logger.log(Level.ERROR, "SQL error", e);
+            throw new DAOException(e);
+        } catch (ConnectionPoolException e) {
+            logger.log(Level.ERROR, "Can't take connection", e);
+            throw new DAOException(e);
+        } finally {
+            connectionPool.closeConnection(connection, statement, resultSet);
+        }
+    }
+
+    @Override
+    public List<Payment> findByPayerId(int payerId, int limit, int offset) throws DAOException {
+        Connection connection = null;
+        PreparedStatement statement = null;
+        ResultSet resultSet = null;
+        try {
+            connection = connectionPool.takeConnection();
+            statement = connection.prepareStatement(QueryProvider.SELECT_PAYMENT_BY_PAYER_ID_WITH_LIMIT_AND_OFFSET);
+
+            statement.setInt(1, payerId);
+            statement.setInt(2, limit);
+            statement.setInt(3, offset);
 
             resultSet = statement.executeQuery();
 

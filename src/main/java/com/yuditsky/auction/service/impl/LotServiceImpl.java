@@ -50,6 +50,16 @@ public class LotServiceImpl implements LotService {
     }
 
     @Override
+    public List<Lot> findByOwnerId(int id, int limit, int offset) throws ServiceException {
+        try {
+            return lotDAO.findByOwnerId(id, limit, offset);
+        } catch (DAOException e) {
+            logger.error("Can't find lots by owner id = " + id, e);
+            throw new ServiceException(e);
+        }
+    }
+
+    @Override
     public Lot findById(int id) throws ServiceException {
         try {
             return lotDAO.findById(id);
@@ -70,6 +80,16 @@ public class LotServiceImpl implements LotService {
     }
 
     @Override
+    public List<Lot> findAwaitingPaymentLots(int userId, int limit, int offset) throws ServiceException {
+        try {
+            return lotDAO.findAwaitingPaymentLots(userId, limit, offset);
+        } catch (DAOException e) {
+            logger.error("Can't find awaiting payment lot by user id=" + userId, e);
+            throw new ServiceException(e);
+        }
+    }
+
+    @Override
     public List<Lot> findActiveLotsByAuctionType(AuctionType type) throws ServiceException {
         try {
             return lotDAO.findActiveLotByAuctionType(type);
@@ -80,9 +100,29 @@ public class LotServiceImpl implements LotService {
     }
 
     @Override
+    public List<Lot> findActiveLotsByAuctionType(AuctionType type, int limit, int offset) throws ServiceException {
+        try {
+            return lotDAO.findActiveLotByAuctionType(type, limit, offset);
+        } catch (DAOException e) {
+            logger.error("Can't find active lot by auction type=" + type, e);
+            throw new ServiceException(e);
+        }
+    }
+
+    @Override
     public List<Lot> findLotsWithUserBids(int userId) throws ServiceException {
         try {
             return lotDAO.findLotsWithUserBids(userId);
+        } catch (DAOException e) {
+            logger.error("Can't find lots with user bids", e);
+            throw new ServiceException(e);
+        }
+    }
+
+    @Override
+    public List<Lot> findLotsWithUserBids(int userId, int limit, int offset) throws ServiceException {
+        try {
+            return lotDAO.findLotsWithUserBids(userId, limit, offset);
         } catch (DAOException e) {
             logger.error("Can't find lots with user bids", e);
             throw new ServiceException(e);

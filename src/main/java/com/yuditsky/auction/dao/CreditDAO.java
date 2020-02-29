@@ -9,5 +9,7 @@ public interface CreditDAO extends GenericDAO<Credit>{
 
     List<Credit> findByBorrowerId(int borrowerId) throws DAOException;
 
+    List<Credit> findByBorrowerId(int borrowerId, int limit, int offset) throws DAOException;
+
     void updateBalance(Credit credit, BigDecimal newBalance) throws DAOException;
 }

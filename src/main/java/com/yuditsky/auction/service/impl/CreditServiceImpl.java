@@ -17,8 +17,8 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import static com.yuditsky.auction.Const.CREDIT_PERCENT;
-import static com.yuditsky.auction.Const.NULL;
+import static com.yuditsky.auction.service.util.Constant.CREDIT_PERCENT;
+import static com.yuditsky.auction.service.util.Constant.NULL;
 import static java.math.BigDecimal.ROUND_DOWN;
 
 public class CreditServiceImpl implements CreditService {
@@ -65,8 +65,18 @@ public class CreditServiceImpl implements CreditService {
     }
 
     @Override
+    public List<Credit> findByBorrowerId(int id, int limit, int offset) throws ServiceException {
+        try {
+            return creditDAO.findByBorrowerId(id, limit, offset);
+        } catch (DAOException e) {
+            logger.error("Can't find credits by borrower id=" + id, e);
+            throw new ServiceException(e);
+        }
+    }
+
+    @Override
     public boolean subtractBalance(int creditId, BigDecimal sum, User borrower) throws ServiceException {
-        if(!validator.checkBigDecimal(sum)){
+        if (!validator.checkBigDecimal(sum)) {
             throw new ServiceException("Invalid sum");
         }
 
@@ -76,7 +86,7 @@ public class CreditServiceImpl implements CreditService {
 
             BigDecimal newBalance = credit.getBalance().subtract(sum).setScale(4, ROUND_DOWN);
 
-            if(newBalance.compareTo(NULL) >= 0){
+            if (newBalance.compareTo(NULL) >= 0) {
                 updateBalance(credit, newBalance);
 
                 ServiceFactory serviceFactory = ServiceFactory.getInstance();

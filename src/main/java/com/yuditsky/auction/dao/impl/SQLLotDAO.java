@@ -1,6 +1,6 @@
 package com.yuditsky.auction.dao.impl;
 
-import com.yuditsky.auction.Const;
+import com.yuditsky.auction.dao.impl.util.QueryProvider;
 import com.yuditsky.auction.dao.DAOException;
 import com.yuditsky.auction.dao.LotDAO;
 import com.yuditsky.auction.dao.connection.ConnectionPool;
@@ -49,27 +49,27 @@ public class SQLLotDAO extends SQLAbstractDAO<Lot> implements LotDAO {
 
     @Override
     protected String getSelectByIdQuery() {
-        return Const.SELECT_LOT_BY_ID;
+        return QueryProvider.SELECT_LOT_BY_ID;
     }
 
     @Override
     protected String getSelectAllQuery() {
-        return Const.SELECT_ALL_LOTS;
+        return QueryProvider.SELECT_ALL_LOTS;
     }
 
     @Override
     protected String getInsertQuery() {
-        return Const.INSERT_LOT;
+        return QueryProvider.INSERT_LOT;
     }
 
     @Override
     protected String getUpdateQuery() {
-        return Const.UPDATE_LOT_BY_ID;
+        return QueryProvider.UPDATE_LOT_BY_ID;
     }
 
     @Override
     protected String getDeleteQuery() {
-        return Const.DELETE_LOT_BY_ID;
+        return QueryProvider.DELETE_LOT_BY_ID;
     }
 
     @Override
@@ -108,9 +108,36 @@ public class SQLLotDAO extends SQLAbstractDAO<Lot> implements LotDAO {
         ResultSet resultSet = null;
         try {
             connection = connectionPool.takeConnection();
-            statement = connection.prepareStatement(Const.SELECT_LOT_BY_OWNER_ID);
+            statement = connection.prepareStatement(QueryProvider.SELECT_LOT_BY_OWNER_ID);
 
             statement.setInt(1, id);
+
+            resultSet = statement.executeQuery();
+
+            return parseResultSet(resultSet);
+        } catch (SQLException e) {
+            logger.log(Level.ERROR, "SQL error", e);
+            throw new DAOException(e);
+        } catch (ConnectionPoolException e) {
+            logger.log(Level.ERROR, "Can't take connection", e);
+            throw new DAOException(e);
+        } finally {
+            connectionPool.closeConnection(connection, statement, resultSet);
+        }
+    }
+
+    @Override
+    public List<Lot> findByOwnerId(int id, int limit, int offset) throws DAOException {
+        Connection connection = null;
+        PreparedStatement statement = null;
+        ResultSet resultSet = null;
+        try {
+            connection = connectionPool.takeConnection();
+            statement = connection.prepareStatement(QueryProvider.SELECT_LOT_BY_OWNER_ID_WITH_LIMIT_AND_OFFSET);
+
+            statement.setInt(1, id);
+            statement.setInt(2, limit);
+            statement.setInt(3, offset);
 
             resultSet = statement.executeQuery();
 
@@ -133,9 +160,36 @@ public class SQLLotDAO extends SQLAbstractDAO<Lot> implements LotDAO {
         ResultSet resultSet = null;
         try {
             connection = connectionPool.takeConnection();
-            statement = connection.prepareStatement(Const.SELECT_AWAITING_PAYMENT_LOTS);
+            statement = connection.prepareStatement(QueryProvider.SELECT_AWAITING_PAYMENT_LOTS);
 
             statement.setInt(1, userId);
+
+            resultSet = statement.executeQuery();
+
+            return parseResultSet(resultSet);
+        } catch (SQLException e) {
+            logger.log(Level.ERROR, "SQL error", e);
+            throw new DAOException(e);
+        } catch (ConnectionPoolException e) {
+            logger.log(Level.ERROR, "Can't take connection", e);
+            throw new DAOException(e);
+        } finally {
+            connectionPool.closeConnection(connection, statement, resultSet);
+        }
+    }
+
+    @Override
+    public List<Lot> findAwaitingPaymentLots(int userId, int limit, int offset) throws DAOException {
+        Connection connection = null;
+        PreparedStatement statement = null;
+        ResultSet resultSet = null;
+        try {
+            connection = connectionPool.takeConnection();
+            statement = connection.prepareStatement(QueryProvider.SELECT_AWAITING_PAYMENT_LOTS_WITH_LIMIT_AND_OFFSET);
+
+            statement.setInt(1, userId);
+            statement.setInt(2, limit);
+            statement.setInt(3, offset);
 
             resultSet = statement.executeQuery();
 
@@ -158,9 +212,36 @@ public class SQLLotDAO extends SQLAbstractDAO<Lot> implements LotDAO {
         ResultSet resultSet = null;
         try {
             connection = connectionPool.takeConnection();
-            statement = connection.prepareStatement(Const.SELECT_ACTIVE_LOT_BY_AUCTION_TYPE);
+            statement = connection.prepareStatement(QueryProvider.SELECT_ACTIVE_LOT_BY_AUCTION_TYPE);
 
             statement.setString(1, String.valueOf(type));
+
+            resultSet = statement.executeQuery();
+
+            return parseResultSet(resultSet);
+        } catch (SQLException e) {
+            logger.log(Level.ERROR, "SQL error", e);
+            throw new DAOException(e);
+        } catch (ConnectionPoolException e) {
+            logger.log(Level.ERROR, "Can't take connection", e);
+            throw new DAOException(e);
+        } finally {
+            connectionPool.closeConnection(connection, statement, resultSet);
+        }
+    }
+
+    @Override
+    public List<Lot> findActiveLotByAuctionType(AuctionType type,int limit, int offset) throws DAOException {
+        Connection connection = null;
+        PreparedStatement statement = null;
+        ResultSet resultSet = null;
+        try {
+            connection = connectionPool.takeConnection();
+            statement = connection.prepareStatement(QueryProvider.SELECT_ACTIVE_LOT_BY_AUCTION_TYPE_WITH_LIMIT_AND_OFFSET);
+
+            statement.setString(1, String.valueOf(type));
+            statement.setInt(2, limit);
+            statement.setInt(3, offset);
 
             resultSet = statement.executeQuery();
 
@@ -183,9 +264,36 @@ public class SQLLotDAO extends SQLAbstractDAO<Lot> implements LotDAO {
         ResultSet resultSet = null;
         try {
             connection = connectionPool.takeConnection();
-            statement = connection.prepareStatement(Const.SELECT_LOTS_WITH_USER_BIDS);
+            statement = connection.prepareStatement(QueryProvider.SELECT_LOTS_WITH_USER_BIDS);
 
             statement.setInt(1, userId);
+
+            resultSet = statement.executeQuery();
+
+            return parseResultSet(resultSet);
+        } catch (SQLException e) {
+            logger.log(Level.ERROR, "SQL error", e);
+            throw new DAOException(e);
+        } catch (ConnectionPoolException e) {
+            logger.log(Level.ERROR, "Can't take connection", e);
+            throw new DAOException(e);
+        } finally {
+            connectionPool.closeConnection(connection, statement, resultSet);
+        }
+    }
+
+    @Override
+    public List<Lot> findLotsWithUserBids(int userId, int limit, int offset) throws DAOException {
+        Connection connection = null;
+        PreparedStatement statement = null;
+        ResultSet resultSet = null;
+        try {
+            connection = connectionPool.takeConnection();
+            statement = connection.prepareStatement(QueryProvider.SELECT_LOTS_WITH_USER_BIDS_WITH_LIMIT_AND_OFFSET);
+
+            statement.setInt(1, userId);
+            statement.setInt(2, limit);
+            statement.setInt(3, offset);
 
             resultSet = statement.executeQuery();
 
