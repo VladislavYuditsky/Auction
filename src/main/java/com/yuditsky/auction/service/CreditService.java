@@ -20,4 +20,6 @@ public interface CreditService {
     void updateBalance(Credit credit, BigDecimal balance) throws ServiceException;
 
     void createCredit(int borrowerId, BigDecimal sum) throws ServiceException;
+
+    List<Integer> findDebtors() throws ServiceException;
 }

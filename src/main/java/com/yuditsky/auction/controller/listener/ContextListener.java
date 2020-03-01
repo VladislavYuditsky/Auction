@@ -1,6 +1,7 @@
-package com.yuditsky.auction.listener;
+package com.yuditsky.auction.controller.listener;
 
 import com.yuditsky.auction.dao.connection.ConnectionPool;
+import com.yuditsky.auction.controller.manager.UserBlockManager;
 
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
@@ -13,6 +14,7 @@ public class ContextListener implements ServletContextListener {
     @Override
     public void contextInitialized(ServletContextEvent sce) {
         connectionPool = ConnectionPool.getInstance();
+        UserBlockManager userBlockManager = new UserBlockManager();
     }
 
     @Override

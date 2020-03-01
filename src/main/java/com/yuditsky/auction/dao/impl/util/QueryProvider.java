@@ -8,6 +8,9 @@ public class QueryProvider {
     public static final String UPDATE_USER_BY_ID = "UPDATE user SET password=?, email=?, role=?, blocked=?, balance=?" +
             " WHERE user_id=?";
     public static final String DELETE_USER_BY_ID = "DELETE FROM user WHERE user_id=?";
+    public static final String BLOCK_DEBTORS = "UPDATE user SET blocked=1 WHERE user_id IN  (SELECT borrower_id as id" +
+            " FROM (SELECT * FROM user AS u) u JOIN credit AS c ON u.user_id=c.borrower_id WHERE end_date < NOW() AND" +
+            " blocked=0 AND c.balance != 0 ORDER BY borrower_id)";
 
     public static final String INSERT_LOT = "INSERT INTO lot (name, description, location, start_price, owner_id)" +
             " VALUES(?,?,?,?,?)";
@@ -84,4 +87,6 @@ public class QueryProvider {
             " borrower_id=? WHERE credit_id=?";
     public static final String UPDATE_CREDIT_BALANCE = "UPDATE credit SET balance=? WHERE credit_id=?";
     public static final String DELETE_CREDIT_BY_ID = "DELETE FROM credit WHERE credit_id=?";
+    public static final String FIND_DEBTORS = "SELECT DISTINCT borrower_id FROM user AS u JOIN credit AS c ON" +
+            " u.user_id=c.borrower_id WHERE end_date < NOW() AND blocked=0  AND c.balance != 0";
 }

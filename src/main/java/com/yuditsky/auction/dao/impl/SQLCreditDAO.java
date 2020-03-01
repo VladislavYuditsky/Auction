@@ -179,4 +179,33 @@ public class SQLCreditDAO extends SQLAbstractDAO<Credit> implements CreditDAO {
             connectionPool.closeConnection(connection, statement);
         }
     }
+
+    @Override
+    public List<Integer> findDebtors() throws DAOException {
+        Connection connection = null;
+        PreparedStatement statement = null;
+        ResultSet resultSet = null;
+        try {
+            connection = connectionPool.takeConnection();
+            statement = connection.prepareStatement(QueryProvider.FIND_DEBTORS);
+
+            resultSet = statement.executeQuery();
+
+            List<Integer> debtorsId = new ArrayList<>();
+            while (resultSet.next()) {
+                int debtorId = resultSet.getInt(BORROWER_ID);
+                debtorsId.add(debtorId);
+            }
+
+            return debtorsId.size() > 0 ? debtorsId : null;
+        } catch (SQLException e) {
+            logger.log(Level.ERROR, "SQL error", e);
+            throw new DAOException(e);
+        } catch (ConnectionPoolException e) {
+            logger.log(Level.ERROR, "Can't take connection", e);
+            throw new DAOException(e);
+        } finally {
+            connectionPool.closeConnection(connection, statement);
+        }
+    }
 }

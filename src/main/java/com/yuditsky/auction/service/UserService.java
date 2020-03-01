@@ -27,4 +27,6 @@ public interface UserService {
     void changeBlockStatus(User user) throws ServiceException;
 
     void delete(User user) throws ServiceException;
+
+    void blockDebtors() throws ServiceException;
 }

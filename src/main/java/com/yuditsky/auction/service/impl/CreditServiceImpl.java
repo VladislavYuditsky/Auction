@@ -3,6 +3,7 @@ package com.yuditsky.auction.service.impl;
 import com.yuditsky.auction.dao.CreditDAO;
 import com.yuditsky.auction.dao.DAOException;
 import com.yuditsky.auction.dao.DAOFactory;
+import com.yuditsky.auction.dao.UserDAO;
 import com.yuditsky.auction.entity.Credit;
 import com.yuditsky.auction.entity.User;
 import com.yuditsky.auction.service.CreditService;
@@ -118,5 +119,15 @@ public class CreditServiceImpl implements CreditService {
         Credit credit = new Credit(CREDIT_PERCENT, endDate, creditSum, creditSum, borrowerId);
 
         save(credit);
+    }
+
+    @Override
+    public List<Integer> findDebtors() throws ServiceException {
+        try {
+            return creditDAO.findDebtors();
+        } catch (DAOException e){
+            logger.error("Can't blockDebtors debtors", e);
+            throw new ServiceException(e);
+        }
     }
 }

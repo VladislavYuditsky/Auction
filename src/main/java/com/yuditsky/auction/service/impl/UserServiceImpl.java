@@ -170,6 +170,16 @@ public class UserServiceImpl implements UserService {
         }
     }
 
+    @Override
+    public void blockDebtors() throws ServiceException {
+        try {
+            userDAO.blockDebtors();
+        } catch (DAOException e) {
+            logger.error("Can't blockDebtors debtors", e);
+            throw new ServiceException(e);
+        }
+    }
+
     private void updatePassword(User user, String password) throws ServiceException {
         if(!validator.checkPassword(password)){
             throw new ServiceException("Invalid password");
