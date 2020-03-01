@@ -4,7 +4,7 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
-public class Bid implements Identified{
+public class Bid implements Identified {
     private int id;
     private int bidderId;
     private BigDecimal sum;

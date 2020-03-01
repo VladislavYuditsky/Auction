@@ -1,10 +1,10 @@
 package com.yuditsky.auction.dao.impl;
 
-import com.yuditsky.auction.dao.impl.util.QueryProvider;
 import com.yuditsky.auction.dao.BidDAO;
 import com.yuditsky.auction.dao.DAOException;
 import com.yuditsky.auction.dao.connection.ConnectionPool;
 import com.yuditsky.auction.dao.connection.ConnectionPoolException;
+import com.yuditsky.auction.dao.impl.util.QueryProvider;
 import com.yuditsky.auction.entity.Bid;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.yuditsky.auction.dao.impl.util.Constant.DATA_TIME_FORMATTER;
+import static com.yuditsky.auction.dao.impl.util.DBColumnNamesProvider.*;
 
 public class SQLBidDAO extends SQLAbstractDAO<Bid> implements BidDAO {
     private final static Logger logger = LogManager.getLogger(SQLBidDAO.class);
@@ -31,11 +32,11 @@ public class SQLBidDAO extends SQLAbstractDAO<Bid> implements BidDAO {
         try {
             List<Bid> bids = new ArrayList<>();
             while (resultSet.next()) {
-                int bidId = resultSet.getInt("bid_id");
-                int bidderId = resultSet.getInt("bidder_id");
-                BigDecimal sum = resultSet.getBigDecimal("sum");
-                LocalDateTime time = LocalDateTime.parse(resultSet.getString("time"), DATA_TIME_FORMATTER);
-                int auctionId = resultSet.getInt("auction_id");
+                int bidId = resultSet.getInt(BID_ID);
+                int bidderId = resultSet.getInt(BIDDER_ID);
+                BigDecimal sum = resultSet.getBigDecimal(SUM);
+                LocalDateTime time = LocalDateTime.parse(resultSet.getString(TIME), DATA_TIME_FORMATTER);
+                int auctionId = resultSet.getInt(AUCTION_ID);
 
                 Bid bid = new Bid(bidId, bidderId, sum, time, auctionId);
                 bids.add(bid);

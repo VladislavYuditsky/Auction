@@ -1,10 +1,10 @@
 package com.yuditsky.auction.dao.impl;
 
-import com.yuditsky.auction.dao.impl.util.QueryProvider;
 import com.yuditsky.auction.dao.DAOException;
 import com.yuditsky.auction.dao.PaymentDAO;
 import com.yuditsky.auction.dao.connection.ConnectionPool;
 import com.yuditsky.auction.dao.connection.ConnectionPoolException;
+import com.yuditsky.auction.dao.impl.util.QueryProvider;
 import com.yuditsky.auction.entity.Payment;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.yuditsky.auction.dao.impl.util.Constant.DATA_TIME_FORMATTER;
+import static com.yuditsky.auction.dao.impl.util.DBColumnNamesProvider.*;
 
 public class SQLPaymentDAO extends SQLAbstractDAO<Payment> implements PaymentDAO {
     private final static Logger logger = LogManager.getLogger(SQLPaymentDAO.class);
@@ -31,11 +32,11 @@ public class SQLPaymentDAO extends SQLAbstractDAO<Payment> implements PaymentDAO
         try {
             List<Payment> payments = new ArrayList<>();
             while (resultSet.next()) {
-                int paymentId = resultSet.getInt("payment_id");
-                int payerId = resultSet.getInt("payer_id");
-                BigDecimal sum = resultSet.getBigDecimal("sum");
-                int lotId = resultSet.getInt("lot_id");
-                LocalDateTime date = LocalDateTime.parse(resultSet.getString("date"), DATA_TIME_FORMATTER);
+                int paymentId = resultSet.getInt(PAYMENT_ID);
+                int payerId = resultSet.getInt(PAYER_ID);
+                BigDecimal sum = resultSet.getBigDecimal(SUM);
+                int lotId = resultSet.getInt(LOT_ID);
+                LocalDateTime date = LocalDateTime.parse(resultSet.getString(DATE), DATA_TIME_FORMATTER);
 
                 Payment payment = new Payment(paymentId, payerId, sum, lotId, date);
                 payments.add(payment);
@@ -43,7 +44,7 @@ public class SQLPaymentDAO extends SQLAbstractDAO<Payment> implements PaymentDAO
 
             return payments;
         } catch (SQLException e) {
-            logger.error("Can't parse resulSet", e);
+            logger.error("Can't parse resultSet", e);
             throw new DAOException(e);
         }
     }
@@ -151,67 +152,4 @@ public class SQLPaymentDAO extends SQLAbstractDAO<Payment> implements PaymentDAO
             connectionPool.closeConnection(connection, statement, resultSet);
         }
     }
-
-    /*@Override
-    public void updateSum(Payment payment, BigDecimal newSum) throws DAOException {
-        try {
-            Connection connection = connectionPool.takeConnection();
-            PreparedStatement preparedStatement = connection.prepareStatement(Const.UPDATE_PAYMENT_SUM);
-
-            preparedStatement.setString(1, String.valueOf(newSum));
-            preparedStatement.setString(2, String.valueOf(payment.getId()));
-
-            preparedStatement.executeUpdate();
-
-            connectionPool.closeConnection(connection, preparedStatement);
-        } catch (SQLException e) {
-            logger.log(Level.ERROR, "Error compiling sql request", e);
-            throw new DAOException(e);
-        } catch (ConnectionPoolException e) {
-            logger.log(Level.ERROR, "Can't take connection", e);
-            throw new DAOException(e);
-        }
-    }
-
-    @Override
-    public void updateLotId(Payment payment, int newLotId) throws DAOException {
-        try {
-            Connection connection = connectionPool.takeConnection();
-            PreparedStatement preparedStatement = connection.prepareStatement(Const.UPDATE_PAYMENT_LOT_ID);
-
-            preparedStatement.setString(1, String.valueOf(newLotId));
-            preparedStatement.setString(2, String.valueOf(payment.getId()));
-
-            preparedStatement.executeUpdate();
-
-            connectionPool.closeConnection(connection, preparedStatement);
-        } catch (SQLException e) {
-            logger.log(Level.ERROR, "Error compiling sql request", e);
-            throw new DAOException(e);
-        } catch (ConnectionPoolException e) {
-            logger.log(Level.ERROR, "Can't take connection", e);
-            throw new DAOException(e);
-        }
-    }
-
-    @Override
-    public void updateDate(Payment payment, LocalDateTime newDate) throws DAOException {
-        try {
-            Connection connection = connectionPool.takeConnection();
-            PreparedStatement preparedStatement = connection.prepareStatement(Const.UPDATE_PAYMENT_DATE);
-
-            preparedStatement.setString(1, String.valueOf(newDate));
-            preparedStatement.setString(2, String.valueOf(payment.getId()));
-
-            preparedStatement.executeUpdate();
-
-            connectionPool.closeConnection(connection, preparedStatement);
-        } catch (SQLException e) {
-            logger.log(Level.ERROR, "Error compiling sql request", e);
-            throw new DAOException(e);
-        } catch (ConnectionPoolException e) {
-            logger.log(Level.ERROR, "Can't take connection", e);
-            throw new DAOException(e);
-        }
-    }*/
 }

@@ -1,8 +1,5 @@
 package com.yuditsky.auction.controller.comand;
 
-import com.yuditsky.auction.service.AuctionService;
-import com.yuditsky.auction.service.ServiceFactory;
-
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;

@@ -11,7 +11,7 @@ document.getElementById("formWithNumber").addEventListener('submit',
             document.getElementById('numberError').style.display = 'block';
         }
 
-        if(!isValid){
+        if (!isValid) {
             e.preventDefault();
         }
     }

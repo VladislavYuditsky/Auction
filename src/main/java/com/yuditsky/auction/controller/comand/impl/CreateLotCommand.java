@@ -15,7 +15,7 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.math.BigDecimal;
 
-import static com.yuditsky.auction.controller.provider.JspPageProvider.*;
+import static com.yuditsky.auction.controller.provider.JspPageProvider.ERROR_PAGE;
 import static com.yuditsky.auction.controller.provider.RequestParametersNameProvider.*;
 import static com.yuditsky.auction.controller.provider.ServletPathProvider.USER_LOTS;
 import static com.yuditsky.auction.controller.provider.SessionAttributesNameProvider.ID;

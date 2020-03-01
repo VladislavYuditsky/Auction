@@ -76,7 +76,8 @@
                 </li>
             </c:if>
             <li class="nav-item">
-                <a class="nav-link" href="${pageContext.request.contextPath}/change_locale?page=${pageContext.request.servletPath}&query=${pageContext.request.queryString}">
+                <a class="nav-link"
+                   href="${pageContext.request.contextPath}/change_locale?page=${pageContext.request.servletPath}&query=${pageContext.request.queryString}">
                     <fmt:message key="language" bundle="${pc}"/>
                 </a>
             </li>
@@ -89,7 +90,8 @@
 
         <c:if test="${sessionScope.id==null}">
             <li class="nav-item">
-                <a class="nav-link" href="${pageContext.request.contextPath}/change_locale?page=${pageContext.request.servletPath}&query=${pageContext.request.queryString}">
+                <a class="nav-link"
+                   href="${pageContext.request.contextPath}/change_locale?page=${pageContext.request.servletPath}&query=${pageContext.request.queryString}">
                     <fmt:message key="language" bundle="${pc}"/>
                 </a>
             </li>

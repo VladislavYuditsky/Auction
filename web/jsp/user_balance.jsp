@@ -20,8 +20,10 @@
                 <fmt:message key="user.balance.replenish_sum" bundle="${pc}"/>
             </label>
             <div class="col-sm-6">
-                <input type="text" id="number" name="replenishSum" class="form-control" required onchange="document.getElementById('numberError').style.display='none'"/>
-                <div id="numberError" style="display: none" class="invalid-feedback" ><fmt:message key="message.invalid_value" bundle="${pc}"/></div>
+                <input type="text" id="number" name="replenishSum" class="form-control" required
+                       onchange="document.getElementById('numberError').style.display='none'"/>
+                <div id="numberError" style="display: none" class="invalid-feedback"><fmt:message
+                        key="message.invalid_value" bundle="${pc}"/></div>
             </div>
         </div>
         <button type="submit" class="btn btn-dark">
@@ -45,7 +47,7 @@
                 document.getElementById('numberError').style.display = 'block';
             }
 
-            if(!isValid){
+            if (!isValid) {
                 e.preventDefault();
             }
         }

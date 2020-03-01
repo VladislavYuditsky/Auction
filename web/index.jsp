@@ -7,14 +7,14 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
-  <head>
+<head>
     <title>Auction</title>
-  </head>
-  <body>
+</head>
+<body>
 
-  </body>
+</body>
 </html>
 
 <script>
-  window.location.replace("${pageContext.request.contextPath}/greeting");
+    window.location.replace("${pageContext.request.contextPath}/greeting");
 </script>

@@ -5,7 +5,7 @@ import com.yuditsky.auction.entity.Credit;
 import java.math.BigDecimal;
 import java.util.List;
 
-public interface CreditDAO extends GenericDAO<Credit>{
+public interface CreditDAO extends GenericDAO<Credit> {
 
     List<Credit> findByBorrowerId(int borrowerId) throws DAOException;
 

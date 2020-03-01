@@ -71,16 +71,6 @@ public class BidServiceImpl implements BidService {
     }
 
     @Override
-    public List<Bid> findByBidderId(int id) throws ServiceException {
-        try {
-            return bidDAO.findByBidderId(id);
-        } catch (DAOException e) {
-            logger.error("Can't find bids by bidder id=" + id, e);
-            throw new ServiceException(e);
-        }
-    }
-
-    @Override
     public Bid findWithMaxSumByAuctionId(int id) throws ServiceException {
         try {
             return bidDAO.findWithMaxSumByAuctionId(id);

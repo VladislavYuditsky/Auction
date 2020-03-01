@@ -18,12 +18,6 @@ public interface UserService {
 
     void updateSettings(User user, String email, String password) throws ServiceException;
 
-    /*void updatePassword(User user, String password) throws ServiceException;
-
-    void updateEmail(User user, String email) throws ServiceException;
-
-    void updateBalance(User user, BigDecimal sum) throws ServiceException;*/
-
     void update(User user) throws ServiceException;
 
     void addBalance(User user, BigDecimal sum) throws ServiceException;

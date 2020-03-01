@@ -1,6 +1,5 @@
 package com.yuditsky.auction.entity;
 
-import java.util.List;
 import java.util.Objects;
 
 public class Auction implements Identified {
@@ -9,13 +8,11 @@ public class Auction implements Identified {
     private int lotId;
     private AuctionStatus status;
     private int winnerId;
-    private List<Bid> bids;
 
-    public Auction(int id, AuctionType type, int lotId, List<Bid> bids, AuctionStatus status, int winnerId) {
+    public Auction(int id, AuctionType type, int lotId, AuctionStatus status, int winnerId) {
         this.id = id;
         this.type = type;
         this.lotId = lotId;
-        this.bids = bids;
         this.status = status;
         this.winnerId = winnerId;
     }
@@ -53,14 +50,6 @@ public class Auction implements Identified {
         this.lotId = lotId;
     }
 
-    public List<Bid> getBids() {
-        return bids;
-    }
-
-    public void setBids(List<Bid> bids) {
-        this.bids = bids;
-    }
-
     public AuctionStatus getStatus() {
         return status;
     }
@@ -86,13 +75,12 @@ public class Auction implements Identified {
                 lotId == auction.lotId &&
                 winnerId == auction.winnerId &&
                 type == auction.type &&
-                status == auction.status &&
-                bids.equals(auction.bids);
+                status == auction.status;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, type, lotId, status, winnerId, bids);
+        return Objects.hash(id, type, lotId, status, winnerId);
     }
 
     @Override
@@ -103,7 +91,6 @@ public class Auction implements Identified {
                 ", lotId=" + lotId +
                 ", status=" + status +
                 ", winnerId=" + winnerId +
-                ", bids=" + bids +
                 '}';
     }
 }

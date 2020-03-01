@@ -22,12 +22,4 @@ public interface LotDAO extends GenericDAO<Lot> {
     List<Lot> findLotsWithUserBids(int userId) throws DAOException;
 
     List<Lot> findLotsWithUserBids(int userId, int limit, int offset) throws DAOException;
-
-    /*void updateDescription(Lot lot, String description) throws DAOException;
-
-    void updateLocation(Lot lot, String location) throws DAOException;
-
-    void updateStartPrice(Lot lot, BigDecimal startPrice) throws DAOException;
-
-    void updateMinPrice(Lot lot, BigDecimal minPrice) throws DAOException;*/
 }

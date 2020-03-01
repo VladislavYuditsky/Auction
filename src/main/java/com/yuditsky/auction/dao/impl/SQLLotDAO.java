@@ -1,10 +1,10 @@
 package com.yuditsky.auction.dao.impl;
 
-import com.yuditsky.auction.dao.impl.util.QueryProvider;
 import com.yuditsky.auction.dao.DAOException;
 import com.yuditsky.auction.dao.LotDAO;
 import com.yuditsky.auction.dao.connection.ConnectionPool;
 import com.yuditsky.auction.dao.connection.ConnectionPoolException;
+import com.yuditsky.auction.dao.impl.util.QueryProvider;
 import com.yuditsky.auction.entity.AuctionType;
 import com.yuditsky.auction.entity.Lot;
 import org.apache.logging.log4j.Level;
@@ -19,6 +19,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.yuditsky.auction.dao.impl.util.DBColumnNamesProvider.*;
+
 public class SQLLotDAO extends SQLAbstractDAO<Lot> implements LotDAO {
     private final static Logger logger = LogManager.getLogger(SQLLotDAO.class);
 
@@ -29,12 +31,12 @@ public class SQLLotDAO extends SQLAbstractDAO<Lot> implements LotDAO {
         try {
             List<Lot> lots = new ArrayList<>();
             while (resultSet.next()) {
-                int id = resultSet.getInt("lot_id");
-                String name = resultSet.getString("name");
-                String description = resultSet.getString("description");
-                String location = resultSet.getString("location");
-                BigDecimal startPrice = resultSet.getBigDecimal("start_price");
-                int ownerId = resultSet.getInt("owner_id");
+                int id = resultSet.getInt(LOT_ID);
+                String name = resultSet.getString(NAME);
+                String description = resultSet.getString(DESCRIPTION);
+                String location = resultSet.getString(LOCATION);
+                BigDecimal startPrice = resultSet.getBigDecimal(START_PRICE);
+                int ownerId = resultSet.getInt(OWNER_ID);
 
                 Lot lot = new Lot(id, name, description, location, ownerId, startPrice);
                 lots.add(lot);
@@ -231,7 +233,7 @@ public class SQLLotDAO extends SQLAbstractDAO<Lot> implements LotDAO {
     }
 
     @Override
-    public List<Lot> findActiveLotByAuctionType(AuctionType type,int limit, int offset) throws DAOException {
+    public List<Lot> findActiveLotByAuctionType(AuctionType type, int limit, int offset) throws DAOException {
         Connection connection = null;
         PreparedStatement statement = null;
         ResultSet resultSet = null;

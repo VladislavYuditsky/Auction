@@ -11,15 +11,12 @@ import org.apache.logging.log4j.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
 import static com.yuditsky.auction.controller.provider.JspPageProvider.ERROR_PAGE;
 import static com.yuditsky.auction.controller.provider.JspPageProvider.SIGN_UP_PAGE;
 import static com.yuditsky.auction.controller.provider.MessageProvider.USER_ALREADY_EXISTS;
-import static com.yuditsky.auction.controller.provider.RequestAttributesNameProvider.USER;
 import static com.yuditsky.auction.controller.provider.RequestParametersNameProvider.*;
-import static com.yuditsky.auction.controller.provider.RequestParametersNameProvider.EMAIL;
 import static com.yuditsky.auction.controller.provider.ServletPathProvider.SIGN_IN;
 
 public class CreateUserCommand extends AbstractCommand {

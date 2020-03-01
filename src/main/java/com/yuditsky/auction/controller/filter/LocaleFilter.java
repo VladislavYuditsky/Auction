@@ -15,7 +15,7 @@ public class LocaleFilter implements Filter {
         HttpServletRequest req = (HttpServletRequest) servletRequest;
         HttpSession session = req.getSession();
 
-        if (session.getAttribute(LOCALE) == null){
+        if (session.getAttribute(LOCALE) == null) {
             session.setAttribute(LOCALE, DEFAULT_LOCALE);
         }
 

@@ -20,7 +20,7 @@
             <jsp:include page="parts/auctions_list.jsp"/>
 
             <c:set var="servletPath" value="/auctions?auctionType=${requestScope.auctionType}"/>
-            <%@include file="parts/pagination.jsp"%>
+            <%@include file="parts/pagination.jsp" %>
         </c:otherwise>
     </c:choose>
 </div>

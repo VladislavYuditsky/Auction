@@ -11,14 +11,12 @@ import org.apache.logging.log4j.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
 import static com.yuditsky.auction.controller.provider.JspPageProvider.ERROR_PAGE;
 import static com.yuditsky.auction.controller.provider.RequestParametersNameProvider.AUCTION_ID;
 import static com.yuditsky.auction.controller.provider.RequestParametersNameProvider.USER_ID;
 import static com.yuditsky.auction.controller.provider.ServletPathProvider.DENY;
-import static com.yuditsky.auction.controller.provider.SessionAttributesNameProvider.BLOCKED;
 
 public class BlockCommand extends AbstractCommand {
     private final static Logger logger = LogManager.getLogger(BlockCommand.class);

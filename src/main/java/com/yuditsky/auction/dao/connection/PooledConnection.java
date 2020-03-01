@@ -10,7 +10,7 @@ public class PooledConnection implements Connection {
 
     public PooledConnection(Connection connection) throws SQLException {
         this.connection = connection;
-        this.connection.setAutoCommit(true); ////
+        this.connection.setAutoCommit(true);
     }
 
     public void reallyClose() throws SQLException {
@@ -23,7 +23,7 @@ public class PooledConnection implements Connection {
             throw new SQLException("Attempting to close closed connection");
         }
 
-        if (connection.isReadOnly()) { //
+        if (connection.isReadOnly()) {
             connection.setReadOnly(false);
         }
 

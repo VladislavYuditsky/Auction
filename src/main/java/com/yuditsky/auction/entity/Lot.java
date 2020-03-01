@@ -3,7 +3,7 @@ package com.yuditsky.auction.entity;
 import java.math.BigDecimal;
 import java.util.Objects;
 
-public class Lot implements Identified{
+public class Lot implements Identified {
     private int id;
     private String name;
     private String description;

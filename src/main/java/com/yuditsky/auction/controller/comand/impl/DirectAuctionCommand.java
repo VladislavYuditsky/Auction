@@ -15,7 +15,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-import static com.yuditsky.auction.controller.provider.JspPageProvider.*;
+import static com.yuditsky.auction.controller.provider.JspPageProvider.DIRECT_AUCTION_PAGE;
+import static com.yuditsky.auction.controller.provider.JspPageProvider.ERROR_PAGE;
 import static com.yuditsky.auction.controller.provider.RequestAttributesNameProvider.BID;
 import static com.yuditsky.auction.controller.provider.RequestParametersNameProvider.LOT_ID;
 

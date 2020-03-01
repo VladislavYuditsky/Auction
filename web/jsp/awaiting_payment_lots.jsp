@@ -22,7 +22,7 @@
         </c:forEach>
 
         <c:set var="servletPath" value="/awaiting_payment_lots"/>
-        <%@include file="parts/pagination.jsp"%>
+        <%@include file="parts/pagination.jsp" %>
     </c:if>
     <c:if test="${lots.size()==0}">
         <fmt:message key="lots.no_lots" bundle="${pc}"/>

@@ -1,6 +1,5 @@
 package com.yuditsky.auction.dao.connection;
 
-import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -60,25 +59,25 @@ public class ConnectionPool {
                 connectionQueue.add(pooledConnection);
             }
         } catch (SQLException e) {
-            //logger.log(Level.ERROR, "Can't init connection pool data", e);
+            logger.error("Can't init connection pool data", e);
             throw new ConnectionPoolException(e);
         } catch (ClassNotFoundException e) {
-            //logger.log(Level.ERROR, "Can't find database driver class", e);
+            logger.error("Can't find database driver class", e);
             throw new ConnectionPoolException(e);
         }
     }
 
-    public void dispose() { //
+    public void dispose() throws ConnectionPoolException {
         clearConnectionQueue();
     }
 
-    public void clearConnectionQueue() {
+    public void clearConnectionQueue() throws ConnectionPoolException {
         try {
             closeConnectionsQueue(givenAwayConnectionQueue);
             closeConnectionsQueue(connectionQueue);
         } catch (SQLException e) {
-            //bez throw&
-            //logger.log(Level.ERROR, "Error closing the connection", e);
+            logger.error("Error closing the connection", e);
+            throw new ConnectionPoolException(e);
         }
     }
 
@@ -88,60 +87,21 @@ public class ConnectionPool {
             connection = connectionQueue.take();
             givenAwayConnectionQueue.add(connection);
         } catch (InterruptedException e) {
-            logger.log(Level.ERROR, "Error connecting to the datasource", e);
+            logger.error("Error connecting to the datasource", e);
             throw new ConnectionPoolException(e);
         }
         return connection;
     }
 
-    //poryadok&
     public void closeConnection(Connection connection, Statement statement, ResultSet resultSet) {
-        try {
-            if (connection != null) {
-                connection.close();
-            }
-        } catch (SQLException e) {
-            //bez throw&
-            logger.log(Level.ERROR, "Connection isn't return to the pool", e);
-        }
-
-        try {
-            if (resultSet != null) {
-                resultSet.close();
-            }
-        } catch (SQLException e) {
-            //
-            logger.log(Level.ERROR, "ResultSet isn't closed", e);
-        }
-
-        try {
-            if (statement != null) {
-                statement.close();
-            }
-        } catch (SQLException e) {
-            logger.log(Level.ERROR, "Statement isn't closed", e);
-            //
-        }
+        closeResultSet(resultSet);
+        closeStatement(statement);
+        closeConnection(connection);
     }
 
     public void closeConnection(Connection connection, Statement statement) {
-        try {
-            if (connection != null) {
-                connection.close();
-            }
-        } catch (SQLException e) {
-            logger.log(Level.ERROR, "Connection isn't return to the pool", e);
-            //
-        }
-
-        try {
-            if (connection != null) {
-                statement.close();
-            }
-        } catch (SQLException e) {
-            logger.log(Level.ERROR, "ResultSet isn't closed", e);
-            //
-        }
+        closeStatement(statement);
+        closeConnection(connection);
     }
 
     private void closeConnectionsQueue(BlockingQueue<Connection> queue) throws SQLException {
@@ -162,6 +122,36 @@ public class ConnectionPool {
 
         if (!connectionQueue.offer(connection)) {
             throw new SQLException("Error allocating connection in the pool");
+        }
+    }
+
+    private void closeStatement(Statement statement) {
+        try {
+            if (statement != null) {
+                statement.close();
+            }
+        } catch (SQLException e) {
+            logger.error("Statement isn't closed", e);
+        }
+    }
+
+    private void closeResultSet(ResultSet resultSet) {
+        try {
+            if (resultSet != null) {
+                resultSet.close();
+            }
+        } catch (SQLException e) {
+            logger.error("ResultSet isn't closed", e);
+        }
+    }
+
+    private void closeConnection(Connection connection) {
+        try {
+            if (connection != null) {
+                connection.close();
+            }
+        } catch (SQLException e) {
+            logger.error("Connection isn't return to the pool", e);
         }
     }
 }

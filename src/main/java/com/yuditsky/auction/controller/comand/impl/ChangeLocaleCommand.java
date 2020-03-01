@@ -30,10 +30,10 @@ public class ChangeLocaleCommand extends AbstractCommand {
         }
 
         String page = request.getParameter(PAGE);
-        page = page.replace("/jsp","");
+        page = page.replace("/jsp", "");
         page = page.replace(".jsp", "");
 
-        if(page.equals(DIRECT_AUCTION) || page.equals(REVERS_AUCTION)){
+        if (page.equals(DIRECT_AUCTION) || page.equals(REVERS_AUCTION)) {
             page = AUCTION;
         }
 

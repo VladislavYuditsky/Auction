@@ -40,4 +40,6 @@
     </c:forEach>
 </c:if>
 
-<script src="${pageContext.request.contextPath}/js/numberValidator.js"></script>
+<script>
+    <jsp:directive.include file="/js/numberValidator.js"/>
+</script>

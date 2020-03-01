@@ -4,7 +4,7 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
-public class Credit implements Identified{
+public class Credit implements Identified {
     private int id;
     private BigDecimal percent;
     private LocalDateTime endDate;

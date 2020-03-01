@@ -1,6 +1,6 @@
 package com.yuditsky.auction.service;
 
-public class ServiceException extends Exception{
+public class ServiceException extends Exception {
     public ServiceException() {
         super();
     }

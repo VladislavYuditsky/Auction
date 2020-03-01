@@ -1,10 +1,9 @@
 package com.yuditsky.auction.entity;
 
 import java.math.BigDecimal;
-import java.util.List;
 import java.util.Objects;
 
-public class User implements Identified{
+public class User implements Identified {
     private int id;
     private String login;
     private String password;
@@ -12,13 +11,8 @@ public class User implements Identified{
     private String email;
     private BigDecimal balance;
     private boolean blocked;
-    private List<Bid> bids;
-    private List<Lot> lots;
-    private List<Payment> payments;
-    private List<Credit> credits;
 
-    public User(int id, String login, String password, UserRole role, String email, BigDecimal balance,
-                boolean blocked, List<Bid> bids, List<Lot> lots, List<Payment> payments, List<Credit> credits) {
+    public User(int id, String login, String password, UserRole role, String email, BigDecimal balance, boolean blocked) {
         this.id = id;
         this.login = login;
         this.password = password;
@@ -26,10 +20,6 @@ public class User implements Identified{
         this.email = email;
         this.balance = balance;
         this.blocked = blocked;
-        this.bids = bids;
-        this.lots = lots;
-        this.payments = payments;
-        this.credits = credits;
     }
 
     public User(String login, String password, String email) {
@@ -97,38 +87,6 @@ public class User implements Identified{
         this.blocked = blocked;
     }
 
-    public List<Bid> getBids() {
-        return bids;
-    }
-
-    public void setBids(List<Bid> bids) {
-        this.bids = bids;
-    }
-
-    public List<Lot> getLots() {
-        return lots;
-    }
-
-    public void setLots(List<Lot> lots) {
-        this.lots = lots;
-    }
-
-    public List<Payment> getPayments() {
-        return payments;
-    }
-
-    public void setPayments(List<Payment> payments) {
-        this.payments = payments;
-    }
-
-    public List<Credit> getCredits() {
-        return credits;
-    }
-
-    public void setCredits(List<Credit> credits) {
-        this.credits = credits;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -140,16 +98,12 @@ public class User implements Identified{
                 password.equals(user.password) &&
                 role == user.role &&
                 email.equals(user.email) &&
-                balance.equals(user.balance) &&
-                bids.equals(user.bids) &&
-                lots.equals(user.lots) &&
-                payments.equals(user.payments) &&
-                credits.equals(user.credits);
+                balance.equals(user.balance);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, login, password, role, email, balance, blocked, bids, lots, payments, credits);
+        return Objects.hash(id, login, password, role, email, balance, blocked);
     }
 
     @Override
@@ -162,10 +116,6 @@ public class User implements Identified{
                 ", email='" + email + '\'' +
                 ", balance=" + balance +
                 ", blocked=" + blocked +
-                ", bids=" + bids +
-                ", lots=" + lots +
-                ", payments=" + payments +
-                ", credits=" + credits +
                 '}';
     }
 }

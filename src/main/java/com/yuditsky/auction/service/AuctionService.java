@@ -3,9 +3,7 @@ package com.yuditsky.auction.service;
 import com.yuditsky.auction.entity.Auction;
 import com.yuditsky.auction.entity.AuctionStatus;
 import com.yuditsky.auction.entity.AuctionType;
-import com.yuditsky.auction.entity.Lot;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 public interface AuctionService {
@@ -13,13 +11,9 @@ public interface AuctionService {
 
     Auction findById(int id) throws ServiceException;
 
-    List<Auction> findByType(AuctionType type) throws ServiceException;
-
     List<Auction> findByStatus(AuctionStatus status) throws ServiceException;
 
     List<Auction> findByStatus(AuctionStatus status, int limit, int offset) throws ServiceException;
-
-    List<Auction> findByWinnerId(int id) throws ServiceException;
 
     Auction findByLotId(int id) throws ServiceException;
 

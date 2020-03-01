@@ -8,11 +8,9 @@ import java.math.BigDecimal;
 import java.util.List;
 
 public interface BidService {
-    void save (Bid bid) throws ServiceException;
+    void save(Bid bid) throws ServiceException;
 
     List<Bid> findByAuctionId(int id) throws ServiceException;
-
-    List<Bid> findByBidderId(int id) throws ServiceException;
 
     Bid findWithMaxSumByAuctionId(int id) throws ServiceException;
 

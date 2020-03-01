@@ -1,17 +1,16 @@
 package com.yuditsky.auction.dao.impl;
 
-import com.yuditsky.auction.dao.impl.util.QueryProvider;
 import com.yuditsky.auction.dao.AuctionDAO;
 import com.yuditsky.auction.dao.BidDAO;
 import com.yuditsky.auction.dao.DAOException;
 import com.yuditsky.auction.dao.DAOFactory;
 import com.yuditsky.auction.dao.connection.ConnectionPool;
 import com.yuditsky.auction.dao.connection.ConnectionPoolException;
+import com.yuditsky.auction.dao.impl.util.QueryProvider;
 import com.yuditsky.auction.entity.Auction;
 import com.yuditsky.auction.entity.AuctionStatus;
 import com.yuditsky.auction.entity.AuctionType;
 import com.yuditsky.auction.entity.Bid;
-import com.yuditsky.auction.service.ServiceException;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -23,6 +22,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.yuditsky.auction.dao.impl.util.DBColumnNamesProvider.*;
+
 public class SQLAuctionDAO extends SQLAbstractDAO<Auction> implements AuctionDAO {
     private final static Logger logger = LogManager.getLogger(SQLAuctionDAO.class);
 
@@ -33,17 +34,13 @@ public class SQLAuctionDAO extends SQLAbstractDAO<Auction> implements AuctionDAO
         try {
             List<Auction> auctions = new ArrayList<>();
             while (resultSet.next()) {
-                int auctionId = resultSet.getInt("auction_id");
-                AuctionType type = AuctionType.valueOf(resultSet.getString("auction_type").toUpperCase());
-                int lotId = resultSet.getInt("lot_id");
-                AuctionStatus status = AuctionStatus.valueOf(resultSet.getString("status").toUpperCase());
-                int winnerId = resultSet.getInt("winner_id");
+                int auctionId = resultSet.getInt(AUCTION_ID);
+                AuctionType type = AuctionType.valueOf(resultSet.getString(AUCTION_TYPE).toUpperCase());
+                int lotId = resultSet.getInt(LOT_ID);
+                AuctionStatus status = AuctionStatus.valueOf(resultSet.getString(STATUS).toUpperCase());
+                int winnerId = resultSet.getInt(WINNER_ID);
 
-                DAOFactory factory = DAOFactory.getInstance();
-                BidDAO bidDAO = factory.getBidDAO();
-                List<Bid> bids = bidDAO.findByAuctionId(auctionId);
-
-                Auction auction = new Auction(auctionId, type, lotId, bids, status, winnerId);
+                Auction auction = new Auction(auctionId, type, lotId, status, winnerId);
                 auctions.add(auction);
             }
 

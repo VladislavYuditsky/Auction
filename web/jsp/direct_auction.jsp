@@ -32,8 +32,10 @@
         <form method="post" id="formWithNumber" action="${pageContext.request.contextPath}/create_bid?lotId=${lot.id}">
             <div class="form-group row">
                 <div class="col-sm-2">
-                    <input type="text" id="number" name="bidSum" class="form-control" required onchange="document.getElementById('numberError').style.display='none'"/>
-                    <div id="numberError" style="display: none" class="invalid-feedback" ><fmt:message key="message.invalid_value" bundle="${pc}"/></div>
+                    <input type="text" id="number" name="bidSum" class="form-control" required
+                           onchange="document.getElementById('numberError').style.display='none'"/>
+                    <div id="numberError" style="display: none" class="invalid-feedback"><fmt:message
+                            key="message.invalid_value" bundle="${pc}"/></div>
                 </div>
                 <div class="col-sm-6">
                     <button type="submit" class="btn btn-dark">
@@ -67,7 +69,10 @@
 
 </div>
 
-<script src="${pageContext.request.contextPath}/js/numberValidator.js"></script>
 <jsp:include page="/jsp/parts/footer.jsp"/>
 </body>
 </html>
+
+<script>
+    <jsp:directive.include file="/js/numberValidator.js"/>
+</script>

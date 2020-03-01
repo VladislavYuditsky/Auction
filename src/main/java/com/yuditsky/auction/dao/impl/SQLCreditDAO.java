@@ -1,10 +1,10 @@
 package com.yuditsky.auction.dao.impl;
 
-import com.yuditsky.auction.dao.impl.util.QueryProvider;
 import com.yuditsky.auction.dao.CreditDAO;
 import com.yuditsky.auction.dao.DAOException;
 import com.yuditsky.auction.dao.connection.ConnectionPool;
 import com.yuditsky.auction.dao.connection.ConnectionPoolException;
+import com.yuditsky.auction.dao.impl.util.QueryProvider;
 import com.yuditsky.auction.entity.Credit;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.yuditsky.auction.dao.impl.util.Constant.DATA_TIME_FORMATTER;
+import static com.yuditsky.auction.dao.impl.util.DBColumnNamesProvider.*;
 
 public class SQLCreditDAO extends SQLAbstractDAO<Credit> implements CreditDAO {
     private final static Logger logger = LogManager.getLogger(SQLCreditDAO.class);
@@ -31,13 +32,13 @@ public class SQLCreditDAO extends SQLAbstractDAO<Credit> implements CreditDAO {
         try {
             List<Credit> credits = new ArrayList<>();
             while (resultSet.next()) {
-                int creditId = resultSet.getInt("credit_id");
-                BigDecimal percent = resultSet.getBigDecimal("percent");
-                LocalDateTime endDate = LocalDateTime.parse(resultSet.getString("end_date"),
+                int creditId = resultSet.getInt(CREDIT_ID);
+                BigDecimal percent = resultSet.getBigDecimal(PERCENT);
+                LocalDateTime endDate = LocalDateTime.parse(resultSet.getString(END_DATE),
                         DATA_TIME_FORMATTER);
-                BigDecimal balance = resultSet.getBigDecimal("balance");
-                BigDecimal sum = resultSet.getBigDecimal("sum");
-                int borrowerId = resultSet.getInt("borrower_id");
+                BigDecimal balance = resultSet.getBigDecimal(BALANCE);
+                BigDecimal sum = resultSet.getBigDecimal(SUM);
+                int borrowerId = resultSet.getInt(BORROWER_ID);
 
                 Credit credit = new Credit(creditId, percent, endDate, balance, sum, borrowerId);
                 credits.add(credit);
@@ -113,7 +114,7 @@ public class SQLCreditDAO extends SQLAbstractDAO<Credit> implements CreditDAO {
             connection = connectionPool.takeConnection();
             statement = connection.prepareStatement(QueryProvider.SELECT_CREDIT_BY_BORROWER_ID);
 
-            statement.setInt(1,borrowerId);
+            statement.setInt(1, borrowerId);
 
             resultSet = statement.executeQuery();
 
@@ -138,7 +139,7 @@ public class SQLCreditDAO extends SQLAbstractDAO<Credit> implements CreditDAO {
             connection = connectionPool.takeConnection();
             statement = connection.prepareStatement(QueryProvider.SELECT_CREDIT_BY_BORROWER_ID_WITH_LIMIT_AND_OFFSET);
 
-            statement.setInt(1,borrowerId);
+            statement.setInt(1, borrowerId);
             statement.setInt(2, limit);
             statement.setInt(3, offset);
 

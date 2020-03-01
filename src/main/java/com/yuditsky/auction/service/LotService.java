@@ -4,7 +4,6 @@ import com.yuditsky.auction.entity.AuctionType;
 import com.yuditsky.auction.entity.Lot;
 import com.yuditsky.auction.entity.User;
 
-import javax.swing.*;
 import java.util.List;
 
 public interface LotService {
