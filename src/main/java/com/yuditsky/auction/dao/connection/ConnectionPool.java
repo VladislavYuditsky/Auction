@@ -67,17 +67,16 @@ public class ConnectionPool {
         }
     }
 
-    public void dispose() throws ConnectionPoolException {
+    public void dispose() {
         clearConnectionQueue();
     }
 
-    public void clearConnectionQueue() throws ConnectionPoolException {
+    public void clearConnectionQueue() {
         try {
             closeConnectionsQueue(givenAwayConnectionQueue);
             closeConnectionsQueue(connectionQueue);
         } catch (SQLException e) {
             logger.error("Error closing the connection", e);
-            throw new ConnectionPoolException(e);
         }
     }
 
