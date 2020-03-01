@@ -32,7 +32,7 @@ public class CommandProvider {
         repository.put(CommandName.EDIT_LOT, new EditLotCommand());
         repository.put(CommandName.DELETE_LOT, new DeleteLotCommand());
         repository.put(CommandName.DENY, new DenyCommand());
-        repository.put(CommandName.BLOCK, new BlockCommand());
+        repository.put(CommandName.CHANGE_BLOCK_STATUS, new ChangeUserBlockStatusCommand());
         repository.put(CommandName.CREATE_CREDIT, new CreateCreditCommand());
         repository.put(CommandName.BUY, new BuyCommand());
         repository.put(CommandName.CREATE_BID, new CreateBidCommand());

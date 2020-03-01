@@ -28,7 +28,7 @@
                 </div>
             </form>
             <form method="post"
-                  action="${pageContext.request.contextPath}/block?userId=${lot.ownerId}&auctionId=${auction.id}">
+                  action="${pageContext.request.contextPath}/change_block_status?userId=${lot.ownerId}&auctionId=${auction.id}">
                 <div class="col-sm-1">
                     <button type="submit" class="btn btn-dark">
                         <fmt:message key="button.block_author" bundle="${pc}"/>

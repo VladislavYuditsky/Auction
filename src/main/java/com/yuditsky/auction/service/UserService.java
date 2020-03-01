@@ -24,7 +24,7 @@ public interface UserService {
 
     void subtractBalance(User user, BigDecimal sum) throws ServiceException;
 
-    void block(User user) throws ServiceException;
+    void changeBlockStatus(User user) throws ServiceException;
 
     void delete(User user) throws ServiceException;
 }

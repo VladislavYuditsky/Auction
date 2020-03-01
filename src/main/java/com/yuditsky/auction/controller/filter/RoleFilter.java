@@ -21,7 +21,7 @@ public class RoleFilter implements Filter {
         UserRole role = (UserRole) session.getAttribute(ROLE);
 
         String path = request.getServletPath();
-        if (role == UserRole.USER && (path.equals(BLOCK) || path.equals(CHANGE_AUCTION_STATUS) || path.equals(DENY) ||
+        if (role == UserRole.USER && (path.equals(CHANGE_BLOCK_STATUS) || path.equals(CHANGE_AUCTION_STATUS) || path.equals(DENY) ||
                 path.equals(USERS) || path.equals(PROPOSED_AUCTIONS))) {
             response.sendRedirect(request.getContextPath() + SIGN_IN);
         }

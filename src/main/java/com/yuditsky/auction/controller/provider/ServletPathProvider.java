@@ -15,7 +15,7 @@ public class ServletPathProvider {
     public static final String USER_BALANCE = "/user_balance";
     public static final String AUCTION = "/auction";
     public static final String GREETING = "/greeting";
-    public static final String BLOCK = "/block";
+    public static final String CHANGE_BLOCK_STATUS = "/change_block_status";
     public static final String CHANGE_AUCTION_STATUS = "/change_auction_status";
     public static final String USERS = "/users";
     public static final String USER_CREDITS = "/user_credits";

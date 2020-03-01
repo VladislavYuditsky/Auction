@@ -149,8 +149,13 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void block(User user) throws ServiceException {
-        user.setBlocked(true);
+    public void changeBlockStatus(User user) throws ServiceException {
+        if(user.isBlocked()){
+            user.setBlocked(false);
+        } else {
+            user.setBlocked(true);
+        }
+
         update(user);
     }
 

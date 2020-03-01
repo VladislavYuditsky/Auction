@@ -24,7 +24,7 @@ public enum CommandName {
     EDIT_LOT,
     DELETE_LOT,
     DENY,
-    BLOCK,
+    CHANGE_BLOCK_STATUS,
     CREATE_CREDIT,
     BUY,
     CREATE_BID,

@@ -17,28 +17,39 @@ import static com.yuditsky.auction.controller.provider.JspPageProvider.ERROR_PAG
 import static com.yuditsky.auction.controller.provider.RequestParametersNameProvider.AUCTION_ID;
 import static com.yuditsky.auction.controller.provider.RequestParametersNameProvider.USER_ID;
 import static com.yuditsky.auction.controller.provider.ServletPathProvider.DENY;
+import static com.yuditsky.auction.controller.provider.ServletPathProvider.USERS;
 
-public class BlockCommand extends AbstractCommand {
-    private final static Logger logger = LogManager.getLogger(BlockCommand.class);
+public class ChangeUserBlockStatusCommand extends AbstractCommand {
+    private final static Logger logger = LogManager.getLogger(ChangeUserBlockStatusCommand.class);
 
     private final UserService userService;
 
-    public BlockCommand() {
+    public ChangeUserBlockStatusCommand() {
         ServiceFactory factory = ServiceFactory.getInstance();
         userService = factory.getUserService();
     }
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+        Integer auctionId;
+        try{
+            auctionId = Integer.parseInt(request.getParameter(AUCTION_ID));
+        } catch (NumberFormatException e){
+            auctionId = null;
+        }
+
         try {
             int userId = Integer.parseInt(request.getParameter(USER_ID));
-            int auctionId = Integer.parseInt(request.getParameter(AUCTION_ID));
 
             User user = userService.findById(userId);
 
-            userService.block(user);
+            userService.changeBlockStatus(user);
 
-            redirect(request, response, DENY + "?" + AUCTION_ID + "=" + auctionId);
+            if(auctionId != null){
+                redirect(request, response, DENY + "?" + AUCTION_ID + "=" + auctionId);
+            } else {
+                redirect(request, response, USERS);
+            }
         } catch (ServiceException | NumberFormatException e) {
             logger.error("BlockCommand failed", e);
             forward(request, response, ERROR_PAGE);
