@@ -5,22 +5,21 @@ import com.yuditsky.auction.entity.UserRole;
 import com.yuditsky.auction.service.ServiceException;
 import com.yuditsky.auction.service.ServiceFactory;
 import com.yuditsky.auction.service.UserService;
-import com.yuditsky.auction.service.util.Encoder;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
 
-import static java.math.BigDecimal.ROUND_DOWN;
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 
 public class UserServiceImplTest {
     private static UserService userService;
-    private User testUser = new User(1, "loggg", "passss", UserRole.USER, "mail",
-            new BigDecimal(1).setScale(4, ROUND_DOWN), false, new ArrayList<>(),
-            new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
+
+    private User testUser = new User(4, "service", "Test1", UserRole.USER, "test1@gmail.com",
+            new BigDecimal("0.0000"), false);
+
+    private User dbUser = new User(1, "test", "Test0", UserRole.USER, "test@mail.ru",
+            new BigDecimal("0.0000"), false);
 
     @BeforeClass
     public static void init() {
@@ -29,52 +28,90 @@ public class UserServiceImplTest {
     }
 
     @Test
-    public void addUserTest() throws ServiceException {
-        userService.save(testUser);
-    }
-
-    @Test
-    public void loadUserByLoginAndPasswordTest() throws ServiceException {
+    public void saveTest() throws ServiceException {
         User expected = testUser;
-        User actual = userService.findByLoginAndPassword(testUser.getLogin(), testUser.getPassword());
+
+        userService.save(expected);
+
+        User actual = userService.findById(testUser.getId());
+
         assertEquals(expected, actual);
     }
 
     @Test
-    public void findAllTest() throws ServiceException {
-        List<User> users = userService.findAll();
-        //System.out.println(users);
+    public void saveUserThatAlreadyExistsTest() throws ServiceException {
+        boolean actual = userService.save(dbUser);
+        assertFalse(actual);
     }
 
-    /*@Test
-    public void updatePasswordTest() throws ServiceException {
-        String newPass = "1234";
-        userService.updatePassword(testUser, newPass);
-        Encoder encoder = new Encoder();
-        String expected = encoder.encode(newPass);
-        String actual = userService.findByLogin(testUser.getLogin()).getPassword();
+    @Test
+    public void findByLoginTest() throws ServiceException {
+        User actual = userService.findByLogin(dbUser.getLogin());
+        User expected = dbUser;
+
         assertEquals(expected, actual);
-    }*/
+    }
 
     @Test
-    public void deleteUserTest() throws ServiceException {
-        userService.delete(testUser);
+    public void findByIdTest() throws ServiceException {
+        User actual = userService.findById(dbUser.getId());
+        User expected = dbUser;
+
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    public void updateSettingsTest() throws ServiceException{
+        User userForUpdate = userService.findById(3);
+
+        String expected = "new_email@gmail.com";
+
+        userService.updateSettings(userForUpdate, expected, null);
+
+        String actual = userService.findByLogin(userForUpdate.getLogin()).getEmail();
+
+        assertEquals(expected, actual);
     }
 
     @Test
     public void subtractBalanceTest() throws ServiceException {
-        BigDecimal subSum = new BigDecimal("1").setScale(4,ROUND_DOWN);
-        BigDecimal expected = testUser.getBalance().subtract(subSum);
-        userService.subtractBalance(testUser, subSum);
-        BigDecimal actual = userService.findByLogin(testUser.getLogin()).getBalance();
+        User userForUpdate = userService.findById(3);
+
+        BigDecimal subSum = new BigDecimal("1");
+        BigDecimal expected = userForUpdate.getBalance().subtract(subSum);
+        userService.subtractBalance(userForUpdate, subSum);
+        BigDecimal actual = userService.findByLogin(userForUpdate.getLogin()).getBalance();
         assertEquals(expected, actual);
     }
     @Test
     public void addBalanceTest() throws ServiceException {
+        User userForUpdate = userService.findById(3);
+
         BigDecimal addSum = new BigDecimal("3");
-        BigDecimal expected = testUser.getBalance().add(addSum);
-        userService.addBalance(testUser, addSum);
-        BigDecimal actual = userService.findByLogin(testUser.getLogin()).getBalance();
+        BigDecimal expected = userForUpdate.getBalance().add(addSum);
+        userService.addBalance(userForUpdate, addSum);
+        BigDecimal actual = userService.findByLogin(userForUpdate.getLogin()).getBalance();
         assertEquals(expected, actual);
+    }
+
+    @Test
+    public void changeBlockStatusTest() throws ServiceException {
+        User userForUpdate = userService.findById(3);
+
+        userService.changeBlockStatus(userForUpdate);
+        boolean actual = userService.findByLogin(userForUpdate.getLogin()).isBlocked();
+
+        assertTrue(actual);
+    }
+
+    @Test
+    public void deleteTest() throws ServiceException {
+        User userForDelete = userService.findById(2);
+
+        userService.delete(userForDelete);
+
+        User actual = userService.findByLogin(userForDelete.getLogin());
+
+        assertNull(actual);
     }
 }

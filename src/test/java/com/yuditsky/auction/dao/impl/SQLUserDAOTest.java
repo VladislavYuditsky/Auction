@@ -1,93 +1,89 @@
 package com.yuditsky.auction.dao.impl;
 
 import com.yuditsky.auction.dao.DAOException;
+import com.yuditsky.auction.dao.DAOFactory;
 import com.yuditsky.auction.dao.UserDAO;
-import com.yuditsky.auction.dao.connection.ConnectionPool;
-import com.yuditsky.auction.dao.connection.ConnectionPoolException;
 import com.yuditsky.auction.entity.User;
 import com.yuditsky.auction.entity.UserRole;
-import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
+import java.util.List;
 
-import static java.math.BigDecimal.ROUND_DOWN;
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 
 public class SQLUserDAOTest {
-    /*private static final ConnectionPool connectionPool = ConnectionPool.getInstance();
-    private static final UserDAO userDAO = new SQLUserDAO();
+    private static UserDAO userDAO;
 
-    User testUser = new User(2, "qwertry3", "12345", null, "qwe", null,
-            true, new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
+    private User testUser = new User(4, "test1", "Test1", UserRole.USER, "test1@gmail.com",
+            new BigDecimal("0.0000"), false);
+
+    private User dbUser = new User(1, "test", "Test0", UserRole.USER, "test@mail.ru",
+            new BigDecimal("0.0000"), false);
 
     @BeforeClass
-    public static void init() throws ConnectionPoolException {
-        connectionPool.initPoolData();
+    public static void init() {
+        DAOFactory factory = DAOFactory.getInstance();
+        userDAO = factory.getUserDAO();
     }
 
     @Test
-    public void signUpTest() throws DAOException {
+    public void saveTest() throws DAOException {
         userDAO.save(testUser);
-    }
 
-    @Test
-    public void signInTest() throws DAOException {
         User expected = testUser;
-        User actual = userDAO.findByLoginAndPassword(testUser.getLogin(), testUser.getPassword());
+        User actual = userDAO.findById(testUser.getId());
+
         assertEquals(expected, actual);
     }
 
     @Test
-    public void findUserByLoginTest() throws DAOException {
-        User expected = testUser;
-        User actual = userDAO.findByLogin(testUser.getLogin());
+    public void findByIdTest() throws DAOException {
+        User expected = dbUser;
+        User actual = userDAO.findById(dbUser.getId());
+
         assertEquals(expected, actual);
     }
 
     @Test
-    public void changePasswordTest() throws DAOException {
-        String expected = "5432111";
-        userDAO.updatePassword(testUser, expected);
-        String actual = userDAO.findByLogin(testUser.getLogin()).getPassword();
+    public void findAllTest() throws DAOException {
+        List<User> users = userDAO.findAll();
+        assertTrue(users.contains(dbUser));
+    }
+
+    @Test
+    public void updateTest() throws DAOException {
+        User userForUpdate = userDAO.findById(3);
+
+        userForUpdate.setPassword("Pass1");
+
+        User expected = userForUpdate;
+
+        userDAO.update(expected);
+
+        User actual = userDAO.findById(3);
+
         assertEquals(expected, actual);
     }
 
     @Test
-    public void changeEmailTest() throws DAOException {
-        String expected = "123@gmail.com";
-        userDAO.updateEmail(testUser, expected);
-        String actual = userDAO.findByLogin(testUser.getLogin()).getEmail();
-        assertEquals(expected, actual);
-    }
+    public void findByLoginTest() throws DAOException {
+        User expected = dbUser;
 
-    //setScale(3, ROUND_DOWN)
+        User actual = userDAO.findByLogin(dbUser.getLogin());
 
-    @Test
-    public void changeBalanceTest() throws DAOException {
-        BigDecimal expected = new BigDecimal("123.99987").setScale(4, ROUND_DOWN);
-        userDAO.updateBalance(testUser, expected);
-        BigDecimal actual = userDAO.findByLogin(testUser.getLogin()).getBalance();
         assertEquals(expected, actual);
     }
 
     @Test
-    public void changeRoleTest() throws DAOException {
-        UserRole expected = UserRole.USER;
-        userDAO.updateRole(testUser, expected);
-        UserRole actual = userDAO.findByLogin(testUser.getLogin()).getRole();
-        assertEquals(expected, actual);
-    }
+    public void deleteTest() throws DAOException {
+        User userForDelete = userDAO.findById(2);
 
-    @Test
-    public void deleteUserTest() throws DAOException {
-        userDAO.delete(testUser);
-    }
+        userDAO.delete(userForDelete);
 
-    @AfterClass
-    public static void dispose() {
-        connectionPool.dispose();
-    }*/
+        User user = userDAO.findById(2);
+
+        assertNull(user);
+    }
 }

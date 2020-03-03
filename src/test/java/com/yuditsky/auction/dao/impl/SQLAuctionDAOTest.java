@@ -2,75 +2,85 @@ package com.yuditsky.auction.dao.impl;
 
 import com.yuditsky.auction.dao.AuctionDAO;
 import com.yuditsky.auction.dao.DAOException;
-import com.yuditsky.auction.dao.connection.ConnectionPool;
-import com.yuditsky.auction.dao.connection.ConnectionPoolException;
+import com.yuditsky.auction.dao.DAOFactory;
 import com.yuditsky.auction.entity.Auction;
+import com.yuditsky.auction.entity.AuctionStatus;
 import com.yuditsky.auction.entity.AuctionType;
-import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import java.time.LocalDateTime;
-import java.util.ArrayList;
+import java.util.List;
 
-import static com.yuditsky.auction.Const.DATA_TIME_FORMATTER;
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 
 public class SQLAuctionDAOTest {
-    /*private static final ConnectionPool connectionPool = ConnectionPool.getInstance();
-    private static final AuctionDAO auctionDAO = new SQLAuctionDAO();
+    private static AuctionDAO auctionDAO;
 
-    private Auction testAuction = new Auction(AuctionType.DIRECT, 1, LocalDateTime.now());
+    private static Auction testAuction;
+    private static Auction dbAuction;
 
     @BeforeClass
-    public static void init() throws ConnectionPoolException {
-        connectionPool.initPoolData();
+    public static void init() {
+        DAOFactory factory = DAOFactory.getInstance();
+        auctionDAO = factory.getAuctionDAO();
+
+        testAuction = new Auction(4, AuctionType.DIRECT, 1, AuctionStatus.ACTIVE, 0);
+        dbAuction = new Auction(1, AuctionType.DIRECT, 1, AuctionStatus.COMPLETED, 1);
     }
 
     @Test
-    public void addAuctionTest() throws DAOException {
+    public void saveTest() throws DAOException {
         auctionDAO.save(testAuction);
+
+        Auction expected = testAuction;
+        Auction actual = auctionDAO.findById(testAuction.getId());
+
+        assertEquals(expected, actual);
     }
 
     @Test
-    public void findAuctionByIdTest() throws DAOException {
-        Auction expected = new Auction(3, AuctionType.DIRECT, 1, new ArrayList<>(),
-                LocalDateTime.parse("2020-01-24 01:15:32", DATA_TIME_FORMATTER));
+    public void findByIdTest() throws DAOException {
+        Auction expected = dbAuction;
+        Auction actual = auctionDAO.findById(1);
+
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    public void findAllTest() throws DAOException {
+        List<Auction> actions = auctionDAO.findAll();
+        assertTrue(actions.contains(dbAuction));
+    }
+
+    @Test
+    public void updateTest() throws DAOException {
+        Auction auctionForUpdate = auctionDAO.findById(3);
+
+        auctionForUpdate.setType(AuctionType.REVERS);
+        Auction expected = auctionForUpdate;
+
+        auctionDAO.update(expected);
+
         Auction actual = auctionDAO.findById(3);
+
         assertEquals(expected, actual);
     }
 
     @Test
-    public void changeAuctionTypeTest() throws DAOException {
-        AuctionType expected = AuctionType.REVERS;
-        auctionDAO.updateAuctionType(testAuction, expected);
-        AuctionType actual = auctionDAO.findById(3).getType();
-        assertEquals(expected, actual);
+    public void deleteTest() throws DAOException {
+        Auction auctionForDelete = auctionDAO.findById(2);
+
+        auctionDAO.delete(auctionForDelete);
+
+        Auction auction = auctionDAO.findById(2);
+
+        assertNull(auction);
     }
 
     @Test
-    public void changeLotIdTest() throws DAOException {
-        int expected = 5;
-        auctionDAO.updateLotId(testAuction, expected);
-        int actual = auctionDAO.findById(3).getLotId();
-        assertEquals(expected, actual);
-    }
+    public void findByStatusTest() throws DAOException {
+        List<Auction> actions = auctionDAO.findByStatus(AuctionStatus.COMPLETED);
 
-    @Test
-    public void changeFinishTimeTest() throws DAOException {
-        LocalDateTime expected = LocalDateTime.now();
-        auctionDAO.updateFinishTime(testAuction, expected);
-        LocalDateTime actual = auctionDAO.findById(3).getFinishTime();
-        assertEquals(expected, actual);
+        assertTrue(actions.contains(dbAuction));
     }
-
-    @Test
-    public void deleteAuctionTest() throws DAOException {
-        auctionDAO.delete(testAuction);
-    }
-
-    @AfterClass
-    public static void dispose() {
-        connectionPool.dispose();
-    }*/
 }

@@ -1,92 +1,91 @@
 package com.yuditsky.auction.dao.impl;
 
 import com.yuditsky.auction.dao.DAOException;
+import com.yuditsky.auction.dao.DAOFactory;
 import com.yuditsky.auction.dao.PaymentDAO;
-import com.yuditsky.auction.dao.connection.ConnectionPool;
-import com.yuditsky.auction.dao.connection.ConnectionPoolException;
 import com.yuditsky.auction.entity.Payment;
-import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
-import static java.math.BigDecimal.ROUND_DOWN;
-import static org.junit.Assert.assertEquals;
+import static com.yuditsky.auction.dao.impl.util.Constant.DATA_TIME_FORMATTER;
+import static org.junit.Assert.*;
 
 public class SQLPaymentDAOTest {
-   /* private static final ConnectionPool connectionPool = ConnectionPool.getInstance();
-    private static final PaymentDAO paymentDAO = new SQLPaymentDAO();
+    private static PaymentDAO paymentDAO;
 
-    private Payment testPayment = new Payment(1, 1,
-            new BigDecimal(1.1234).setScale(4, ROUND_DOWN), 1, LocalDateTime.now());
+    private static Payment testPayment;
+    private static Payment dbPayment;
 
     @BeforeClass
-    public static void init() throws ConnectionPoolException {
-        connectionPool.initPoolData();
+    public static void init() {
+        DAOFactory factory = DAOFactory.getInstance();
+        paymentDAO = factory.getPaymentDAO();
+
+        LocalDateTime localDateTime = LocalDateTime.parse(LocalDateTime.now().format(DATA_TIME_FORMATTER),
+                DATA_TIME_FORMATTER);
+        testPayment = new Payment(4, 1, new BigDecimal("1.2345"), 1, localDateTime);
+
+        dbPayment = new Payment(1, 1, new BigDecimal("1.1234"), 1,
+                LocalDateTime.parse("2020-01-01 12:12:12", DATA_TIME_FORMATTER));
     }
 
     @Test
-    public void addPaymentTest() throws DAOException {
+    public void saveTest() throws DAOException {
         paymentDAO.save(testPayment);
-    }
 
-    @Test
-    public void findPaymentByIdTest() throws DAOException {
         Payment expected = testPayment;
         Payment actual = paymentDAO.findById(testPayment.getId());
+
         assertEquals(expected, actual);
     }
 
     @Test
-    public void findPaymentIdsByPayerIdTest() throws DAOException {
-        List<Integer> expected = new ArrayList<>();
-        List<Integer> actual = paymentDAO.findByPayerId(2);
+    public void findByIdTest() throws DAOException {
+        Payment expected = dbPayment;
+        Payment actual = paymentDAO.findById(1);
+
         assertEquals(expected, actual);
     }
 
     @Test
-    public void changePayerIdTest() throws DAOException {
-        int expected = 2;
-        paymentDAO.updatePayerId(testPayment, expected);
-        int actual = paymentDAO.findById(1).getPayerId();
+    public void findAllTest() throws DAOException {
+        List<Payment> payments = paymentDAO.findAll();
+        assertTrue(payments.contains(dbPayment));
+    }
+
+    @Test
+    public void findByPayerIdTest() throws DAOException {
+        List<Payment> payments = paymentDAO.findByPayerId(1);
+        assertTrue(payments.contains(dbPayment));
+    }
+
+    @Test
+    public void updateTest() throws DAOException {
+        BigDecimal newSum = new BigDecimal("1.1111");
+        Payment paymentForUpdate = paymentDAO.findById(3);
+
+        paymentForUpdate.setSum(newSum);
+        Payment expected = paymentForUpdate;
+
+        paymentDAO.update(expected);
+
+        Payment actual = paymentDAO.findById(3);
+
         assertEquals(expected, actual);
     }
 
     @Test
-    public void changeSumTest() throws DAOException {
-        BigDecimal expected = new BigDecimal(23.23232).setScale(4, ROUND_DOWN);
-        paymentDAO.updateSum(testPayment, expected);
-        BigDecimal actual = paymentDAO.findById(1).getSum();
-        assertEquals(expected, actual);
-    }
+    public void deleteTest() throws DAOException {
+        Payment paymentForDelete = paymentDAO.findById(2);
 
-    @Test
-    public void changeLotIdTest() throws DAOException {
-        int expected = 2;
-        paymentDAO.updateLotId(testPayment, expected);
-        int actual = paymentDAO.findById(1).getLotId();
-        assertEquals(expected, actual);
-    }
+        paymentDAO.delete(paymentForDelete);
 
-    @Test
-    public void changeDateTest() throws DAOException {
-        LocalDateTime expected = LocalDateTime.now();
-        paymentDAO.updateDate(testPayment, expected);
-        LocalDateTime actual = paymentDAO.findById(1).getDate();
-        assertEquals(expected, actual);
-    }
+        Payment payment = paymentDAO.findById(2);
 
-    @Test
-    public void deletePaymentByIdTest() throws DAOException {
-        paymentDAO.delete(testPayment);
+        assertNull(payment);
     }
-
-    @AfterClass
-    public static void dispose() {
-        connectionPool.dispose();
-    }*/
 }
