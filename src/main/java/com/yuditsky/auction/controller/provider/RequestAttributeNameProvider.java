@@ -1,6 +1,9 @@
 package com.yuditsky.auction.controller.provider;
 
-public class RequestAttributesNameProvider {
+/**
+ * Contains all request attribute names and provides them.
+ */
+public class RequestAttributeNameProvider {
     public static final String BID = "bid";
     public static final String LOT = "lot";
     public static final String AUCTION = "auction";

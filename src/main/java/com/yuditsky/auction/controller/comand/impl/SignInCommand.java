@@ -17,12 +17,16 @@ import java.io.IOException;
 import static com.yuditsky.auction.controller.provider.JspPageProvider.ERROR_PAGE;
 import static com.yuditsky.auction.controller.provider.JspPageProvider.SIGN_IN_PAGE;
 import static com.yuditsky.auction.controller.provider.MessageProvider.WRONG_LOGIN_OR_PASSWORD;
-import static com.yuditsky.auction.controller.provider.RequestAttributesNameProvider.MESSAGE;
-import static com.yuditsky.auction.controller.provider.RequestParametersNameProvider.LOGIN;
-import static com.yuditsky.auction.controller.provider.RequestParametersNameProvider.PASSWORD;
+import static com.yuditsky.auction.controller.provider.RequestAttributeNameProvider.MESSAGE;
+import static com.yuditsky.auction.controller.provider.RequestParameterNameProvider.LOGIN;
+import static com.yuditsky.auction.controller.provider.RequestParameterNameProvider.PASSWORD;
 import static com.yuditsky.auction.controller.provider.ServletPathProvider.GREETING;
-import static com.yuditsky.auction.controller.provider.SessionAttributesNameProvider.*;
+import static com.yuditsky.auction.controller.provider.SessionAttributeNameProvider.*;
 
+/**
+ * Serves the sign_in request.
+ * This command available for not authorized users.
+ */
 public class SignInCommand extends AbstractCommand {
     private final static Logger logger = LogManager.getLogger(SignInCommand.class);
 

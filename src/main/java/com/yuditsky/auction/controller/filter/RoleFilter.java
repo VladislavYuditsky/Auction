@@ -9,8 +9,11 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
 import static com.yuditsky.auction.controller.provider.ServletPathProvider.*;
-import static com.yuditsky.auction.controller.provider.SessionAttributesNameProvider.ROLE;
+import static com.yuditsky.auction.controller.provider.SessionAttributeNameProvider.ROLE;
 
+/**
+ * Filters user requests based on their role.
+ */
 public class RoleFilter implements Filter {
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain chain) throws IOException, ServletException {

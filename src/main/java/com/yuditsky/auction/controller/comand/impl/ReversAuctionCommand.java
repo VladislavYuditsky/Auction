@@ -18,10 +18,14 @@ import java.io.IOException;
 
 import static com.yuditsky.auction.controller.provider.JspPageProvider.ERROR_PAGE;
 import static com.yuditsky.auction.controller.provider.JspPageProvider.REVERS_AUCTION_PAGE;
-import static com.yuditsky.auction.controller.provider.RequestAttributesNameProvider.BID;
-import static com.yuditsky.auction.controller.provider.RequestParametersNameProvider.LOT_ID;
-import static com.yuditsky.auction.controller.provider.SessionAttributesNameProvider.ID;
+import static com.yuditsky.auction.controller.provider.RequestAttributeNameProvider.BID;
+import static com.yuditsky.auction.controller.provider.RequestParameterNameProvider.LOT_ID;
+import static com.yuditsky.auction.controller.provider.SessionAttributeNameProvider.ID;
 
+/**
+ * Serves the revers_auction request.
+ * This command available for authorized users.
+ */
 public class ReversAuctionCommand extends AbstractCommand {
     private final static Logger logger = LogManager.getLogger(ReversAuctionCommand.class);
 

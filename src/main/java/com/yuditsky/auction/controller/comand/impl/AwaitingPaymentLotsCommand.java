@@ -19,11 +19,15 @@ import java.util.List;
 import static com.yuditsky.auction.controller.comand.impl.util.PaginationHelper.NUMBER_OF_RECORDS_ON_PAGE;
 import static com.yuditsky.auction.controller.provider.JspPageProvider.AWAITING_PAYMENT_LOTS_PAGE;
 import static com.yuditsky.auction.controller.provider.JspPageProvider.ERROR_PAGE;
-import static com.yuditsky.auction.controller.provider.RequestAttributesNameProvider.LOTS;
-import static com.yuditsky.auction.controller.provider.RequestParametersNameProvider.CURRENT_PAGE;
-import static com.yuditsky.auction.controller.provider.RequestParametersNameProvider.PAGES_NUMBER;
-import static com.yuditsky.auction.controller.provider.SessionAttributesNameProvider.ID;
+import static com.yuditsky.auction.controller.provider.RequestAttributeNameProvider.LOTS;
+import static com.yuditsky.auction.controller.provider.RequestParameterNameProvider.CURRENT_PAGE;
+import static com.yuditsky.auction.controller.provider.RequestParameterNameProvider.PAGES_NUMBER;
+import static com.yuditsky.auction.controller.provider.SessionAttributeNameProvider.ID;
 
+/**
+ * Serves the awaiting_payments_lots request.
+ * This command available only for authorized users.
+ */
 public class AwaitingPaymentLotsCommand extends AbstractCommand {
     private final static Logger logger = LogManager.getLogger(AwaitingPaymentLotsCommand.class);
 

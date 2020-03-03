@@ -16,10 +16,14 @@ import java.io.IOException;
 import java.math.BigDecimal;
 
 import static com.yuditsky.auction.controller.provider.JspPageProvider.ERROR_PAGE;
-import static com.yuditsky.auction.controller.provider.RequestAttributesNameProvider.REPLENISH_SUM;
+import static com.yuditsky.auction.controller.provider.RequestAttributeNameProvider.REPLENISH_SUM;
 import static com.yuditsky.auction.controller.provider.ServletPathProvider.USER_BALANCE;
-import static com.yuditsky.auction.controller.provider.SessionAttributesNameProvider.ID;
+import static com.yuditsky.auction.controller.provider.SessionAttributeNameProvider.ID;
 
+/**
+ * Serves the replenish_balance request.
+ * This command available only for authorized users.
+ */
 public class ReplenishBalanceCommand extends AbstractCommand {
     private final static Logger logger = LogManager.getLogger(ReplenishBalanceCommand.class);
 

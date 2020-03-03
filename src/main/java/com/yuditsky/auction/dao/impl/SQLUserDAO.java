@@ -135,24 +135,4 @@ public class SQLUserDAO extends SQLAbstractDAO<User> implements UserDAO {
             connectionPool.closeConnection(connection, statement, resultSet);
         }
     }
-
-    @Override
-    public void blockDebtors() throws DAOException {
-        Connection connection = null;
-        PreparedStatement statement = null;
-        try {
-            connection = connectionPool.takeConnection();
-            statement = connection.prepareStatement(QueryProvider.BLOCK_DEBTORS);
-
-            statement.executeUpdate();
-        } catch (SQLException e) {
-            logger.log(Level.ERROR, "SQL error", e);
-            throw new DAOException(e);
-        } catch (ConnectionPoolException e) {
-            logger.log(Level.ERROR, "Can't take connection", e);
-            throw new DAOException(e);
-        } finally {
-            connectionPool.closeConnection(connection, statement);
-        }
-    }
 }

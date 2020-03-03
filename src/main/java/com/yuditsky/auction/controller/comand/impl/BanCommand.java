@@ -9,8 +9,12 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
 import static com.yuditsky.auction.controller.provider.JspPageProvider.BAN_PAGE;
-import static com.yuditsky.auction.controller.provider.SessionAttributesNameProvider.*;
+import static com.yuditsky.auction.controller.provider.SessionAttributeNameProvider.*;
 
+/**
+ * Serves the ban request.
+ * This command available only for admin.
+ */
 public class BanCommand extends AbstractCommand {
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {

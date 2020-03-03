@@ -1,5 +1,8 @@
 package com.yuditsky.auction.controller.comand;
 
+/**
+ * Contains all command name
+ */
 public enum CommandName {
     SIGN_IN,
     SIGN_UP,

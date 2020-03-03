@@ -9,6 +9,10 @@ import java.io.IOException;
 
 import static com.yuditsky.auction.controller.provider.JspPageProvider.GREETING_PAGE;
 
+/**
+ * Serves the greeting request.
+ * This command available for all users.
+ */
 public class GreetingCommand extends AbstractCommand {
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

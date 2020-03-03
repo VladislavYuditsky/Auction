@@ -1,5 +1,8 @@
 package com.yuditsky.auction.controller.provider;
 
+/**
+ * Contains all servlet paths and provides them.
+ */
 public class ServletPathProvider {
     public static final String AUCTIONS = "/auctions";
     public static final String DENY = "/deny";

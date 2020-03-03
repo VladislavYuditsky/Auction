@@ -5,6 +5,9 @@ import com.yuditsky.auction.controller.comand.impl.*;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Contains all command and provides them
+ */
 public class CommandProvider {
     private final Map<CommandName, Command> repository = new HashMap<>();
 
@@ -49,6 +52,10 @@ public class CommandProvider {
         repository.put(CommandName.WRONG_REQUEST, new WrongRequestCommand());
     }
 
+    /**
+     * @param name command name
+     * @return {@link Command} by given command {@code name}
+     */
     public Command getCommand(String name) {
         CommandName commandName;
         Command command;

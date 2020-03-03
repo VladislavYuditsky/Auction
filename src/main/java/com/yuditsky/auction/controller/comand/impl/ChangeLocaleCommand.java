@@ -9,11 +9,15 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.Locale;
 
-import static com.yuditsky.auction.controller.provider.RequestParametersNameProvider.PAGE;
-import static com.yuditsky.auction.controller.provider.RequestParametersNameProvider.QUERY;
+import static com.yuditsky.auction.controller.provider.RequestParameterNameProvider.PAGE;
+import static com.yuditsky.auction.controller.provider.RequestParameterNameProvider.QUERY;
 import static com.yuditsky.auction.controller.provider.ServletPathProvider.*;
-import static com.yuditsky.auction.controller.provider.SessionAttributesNameProvider.LOCALE;
+import static com.yuditsky.auction.controller.provider.SessionAttributeNameProvider.LOCALE;
 
+/**
+ * Serves the change_locale request.
+ * This command available for all users.
+ */
 public class ChangeLocaleCommand extends AbstractCommand {
     private Locale localeRU = new Locale("ru", "RU");
     private Locale localeEN = new Locale("en", "US");

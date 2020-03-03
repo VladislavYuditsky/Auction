@@ -17,10 +17,11 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 import static com.yuditsky.auction.controller.provider.JspPageProvider.ERROR_PAGE;
-import static com.yuditsky.auction.controller.provider.RequestAttributesNameProvider.*;
-import static com.yuditsky.auction.controller.provider.RequestParametersNameProvider.LOT_ID;
+import static com.yuditsky.auction.controller.provider.RequestAttributeNameProvider.*;
+import static com.yuditsky.auction.controller.provider.RequestParameterNameProvider.LOT_ID;
 import static com.yuditsky.auction.controller.provider.ServletPathProvider.DIRECT_AUCTION;
 import static com.yuditsky.auction.controller.provider.ServletPathProvider.REVERS_AUCTION;
+
 
 public class AuctionCommand extends AbstractCommand {
     private final static Logger logger = LogManager.getLogger(AuctionCommand.class);

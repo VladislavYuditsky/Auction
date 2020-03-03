@@ -16,8 +16,12 @@ import java.util.List;
 
 import static com.yuditsky.auction.controller.provider.JspPageProvider.ERROR_PAGE;
 import static com.yuditsky.auction.controller.provider.JspPageProvider.USERS_PAGE;
-import static com.yuditsky.auction.controller.provider.RequestAttributesNameProvider.USERS;
+import static com.yuditsky.auction.controller.provider.RequestAttributeNameProvider.USERS;
 
+/**
+ * Serves the users request.
+ * This command available only for admin.
+ */
 public class UsersCommand extends AbstractCommand {
     private final static Logger logger = LogManager.getLogger(UsersCommand.class);
 

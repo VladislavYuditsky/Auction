@@ -9,6 +9,10 @@ import java.io.IOException;
 
 import static com.yuditsky.auction.controller.provider.JspPageProvider.NOT_FOUND_PAGE;
 
+/**
+ * Serves the wrong request.
+ * This command available for all users.
+ */
 public class WrongRequestCommand extends AbstractCommand {
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {

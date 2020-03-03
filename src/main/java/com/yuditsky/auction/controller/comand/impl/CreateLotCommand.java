@@ -16,11 +16,15 @@ import java.io.IOException;
 import java.math.BigDecimal;
 
 import static com.yuditsky.auction.controller.provider.JspPageProvider.ERROR_PAGE;
-import static com.yuditsky.auction.controller.provider.RequestParametersNameProvider.*;
+import static com.yuditsky.auction.controller.provider.RequestParameterNameProvider.*;
 import static com.yuditsky.auction.controller.provider.ServletPathProvider.USER_LOTS;
-import static com.yuditsky.auction.controller.provider.SessionAttributesNameProvider.ID;
+import static com.yuditsky.auction.controller.provider.SessionAttributeNameProvider.ID;
 import static java.math.BigDecimal.ROUND_DOWN;
 
+/**
+ * Serves the create_lot request.
+ * This command available only for authorized users.
+ */
 public class CreateLotCommand extends AbstractCommand {
     private final static Logger logger = LogManager.getLogger(CreateLotCommand.class);
 

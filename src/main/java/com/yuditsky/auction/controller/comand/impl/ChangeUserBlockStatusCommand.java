@@ -14,11 +14,15 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 import static com.yuditsky.auction.controller.provider.JspPageProvider.ERROR_PAGE;
-import static com.yuditsky.auction.controller.provider.RequestParametersNameProvider.AUCTION_ID;
-import static com.yuditsky.auction.controller.provider.RequestParametersNameProvider.USER_ID;
+import static com.yuditsky.auction.controller.provider.RequestParameterNameProvider.AUCTION_ID;
+import static com.yuditsky.auction.controller.provider.RequestParameterNameProvider.USER_ID;
 import static com.yuditsky.auction.controller.provider.ServletPathProvider.DENY;
 import static com.yuditsky.auction.controller.provider.ServletPathProvider.USERS;
 
+/**
+ * Serves the change_user_block_status request.
+ * This command available only for admin.
+ */
 public class ChangeUserBlockStatusCommand extends AbstractCommand {
     private final static Logger logger = LogManager.getLogger(ChangeUserBlockStatusCommand.class);
 

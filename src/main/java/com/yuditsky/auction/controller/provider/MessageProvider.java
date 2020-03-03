@@ -1,5 +1,8 @@
 package com.yuditsky.auction.controller.provider;
 
+/**
+ * Contains all messages and provides them.
+ */
 public class MessageProvider {
     public static final String INSUFFICIENT_FUNDS = "message.insufficient_funds";
     public static final String BID_NOT_CREATED = "message.bid_not_created";

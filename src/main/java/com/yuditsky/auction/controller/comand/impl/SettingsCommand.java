@@ -16,9 +16,13 @@ import java.io.IOException;
 
 import static com.yuditsky.auction.controller.provider.JspPageProvider.ERROR_PAGE;
 import static com.yuditsky.auction.controller.provider.JspPageProvider.SETTINGS_PAGE;
-import static com.yuditsky.auction.controller.provider.RequestAttributesNameProvider.EMAIL;
-import static com.yuditsky.auction.controller.provider.SessionAttributesNameProvider.ID;
+import static com.yuditsky.auction.controller.provider.RequestAttributeNameProvider.EMAIL;
+import static com.yuditsky.auction.controller.provider.SessionAttributeNameProvider.ID;
 
+/**
+ * Serves the settings request.
+ * This command available only for authorized users.
+ */
 public class SettingsCommand extends AbstractCommand {
     private final static Logger logger = LogManager.getLogger(SettingsCommand.class);
 

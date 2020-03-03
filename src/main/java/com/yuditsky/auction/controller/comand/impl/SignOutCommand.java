@@ -9,8 +9,12 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
 import static com.yuditsky.auction.controller.provider.JspPageProvider.SIGN_IN_PAGE;
-import static com.yuditsky.auction.controller.provider.SessionAttributesNameProvider.*;
+import static com.yuditsky.auction.controller.provider.SessionAttributeNameProvider.*;
 
+/**
+ * Serves the sign_out request.
+ * This command available only for authorized users.
+ */
 public class SignOutCommand extends AbstractCommand {
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

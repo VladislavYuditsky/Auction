@@ -6,8 +6,11 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.Locale;
 
-import static com.yuditsky.auction.controller.provider.SessionAttributesNameProvider.LOCALE;
+import static com.yuditsky.auction.controller.provider.SessionAttributeNameProvider.LOCALE;
 
+/**
+ * Sets default locale for request.
+ */
 public class LocaleFilter implements Filter {
     private static final Locale DEFAULT_LOCALE = new Locale("en", "US");
 

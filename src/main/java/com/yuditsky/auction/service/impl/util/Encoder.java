@@ -1,4 +1,4 @@
-package com.yuditsky.auction.service.util;
+package com.yuditsky.auction.service.impl.util;
 
 import org.mindrot.jbcrypt.BCrypt;
 

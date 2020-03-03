@@ -11,6 +11,9 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
+/**
+ * Manages users blocking.
+ */
 public class UserBlockManager {
     private final static Logger logger = LogManager.getLogger(UserBlockManager.class);
 
@@ -19,7 +22,6 @@ public class UserBlockManager {
 
     public UserBlockManager() {
         ServiceFactory factory = ServiceFactory.getInstance();
-        UserService userService = factory.getUserService();
         CreditService creditService = factory.getCreditService();
 
         Timer timer = new Timer();
@@ -30,7 +32,7 @@ public class UserBlockManager {
                 List<Integer> debtorsId = null;
                 try {
                     debtorsId = creditService.findDebtors();
-                    userService.blockDebtors();
+                    creditService.blockDebtors();
                 } catch (ServiceException e) {
                     logger.error("UserBlockManager failed", e);
                 }

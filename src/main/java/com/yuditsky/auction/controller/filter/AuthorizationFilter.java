@@ -7,8 +7,11 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
 import static com.yuditsky.auction.controller.provider.ServletPathProvider.*;
-import static com.yuditsky.auction.controller.provider.SessionAttributesNameProvider.ID;
+import static com.yuditsky.auction.controller.provider.SessionAttributeNameProvider.ID;
 
+/**
+ * Filters user requests depending on whether they are authorized or not.
+ */
 public class AuthorizationFilter implements Filter {
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain chain) throws IOException, ServletException {

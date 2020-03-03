@@ -17,9 +17,13 @@ import java.io.IOException;
 
 import static com.yuditsky.auction.controller.provider.JspPageProvider.DIRECT_AUCTION_PAGE;
 import static com.yuditsky.auction.controller.provider.JspPageProvider.ERROR_PAGE;
-import static com.yuditsky.auction.controller.provider.RequestAttributesNameProvider.BID;
-import static com.yuditsky.auction.controller.provider.RequestParametersNameProvider.LOT_ID;
+import static com.yuditsky.auction.controller.provider.RequestAttributeNameProvider.BID;
+import static com.yuditsky.auction.controller.provider.RequestParameterNameProvider.LOT_ID;
 
+/**
+ * Serves the direct_auction request.
+ * This command available only for authorized users.
+ */
 public class DirectAuctionCommand extends AbstractCommand {
     private final static Logger logger = LogManager.getLogger(DirectAuctionCommand.class);
 

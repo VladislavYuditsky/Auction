@@ -3,14 +3,13 @@ package com.yuditsky.auction.service.impl;
 import com.yuditsky.auction.dao.CreditDAO;
 import com.yuditsky.auction.dao.DAOException;
 import com.yuditsky.auction.dao.DAOFactory;
-import com.yuditsky.auction.dao.UserDAO;
 import com.yuditsky.auction.entity.Credit;
 import com.yuditsky.auction.entity.User;
 import com.yuditsky.auction.service.CreditService;
 import com.yuditsky.auction.service.ServiceException;
 import com.yuditsky.auction.service.ServiceFactory;
 import com.yuditsky.auction.service.UserService;
-import com.yuditsky.auction.service.util.Validator;
+import com.yuditsky.auction.service.impl.util.Validator;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -18,8 +17,8 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import static com.yuditsky.auction.service.util.Constant.CREDIT_PERCENT;
-import static com.yuditsky.auction.service.util.Constant.NULL;
+import static com.yuditsky.auction.service.impl.util.Constant.CREDIT_PERCENT;
+import static com.yuditsky.auction.service.impl.util.Constant.NULL;
 import static java.math.BigDecimal.ROUND_DOWN;
 
 public class CreditServiceImpl implements CreditService {
@@ -126,6 +125,16 @@ public class CreditServiceImpl implements CreditService {
         try {
             return creditDAO.findDebtors();
         } catch (DAOException e){
+            logger.error("Can't blockDebtors debtors", e);
+            throw new ServiceException(e);
+        }
+    }
+
+    @Override
+    public void blockDebtors() throws ServiceException {
+        try {
+            creditDAO.blockDebtors();
+        } catch (DAOException e) {
             logger.error("Can't blockDebtors debtors", e);
             throw new ServiceException(e);
         }

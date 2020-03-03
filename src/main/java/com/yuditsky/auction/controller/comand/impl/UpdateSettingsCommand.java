@@ -15,11 +15,15 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
 import static com.yuditsky.auction.controller.provider.JspPageProvider.ERROR_PAGE;
-import static com.yuditsky.auction.controller.provider.RequestParametersNameProvider.EMAIL;
-import static com.yuditsky.auction.controller.provider.RequestParametersNameProvider.PASSWORD;
+import static com.yuditsky.auction.controller.provider.RequestParameterNameProvider.EMAIL;
+import static com.yuditsky.auction.controller.provider.RequestParameterNameProvider.PASSWORD;
 import static com.yuditsky.auction.controller.provider.ServletPathProvider.SETTINGS;
-import static com.yuditsky.auction.controller.provider.SessionAttributesNameProvider.ID;
+import static com.yuditsky.auction.controller.provider.SessionAttributeNameProvider.ID;
 
+/**
+ * Serves the update_settings request.
+ * This command available only for authorized users.
+ */
 public class UpdateSettingsCommand extends AbstractCommand {
     private final static Logger logger = LogManager.getLogger(UpdateSettingsCommand.class);
 

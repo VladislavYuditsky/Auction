@@ -9,6 +9,10 @@ import java.io.IOException;
 
 import static com.yuditsky.auction.controller.provider.JspPageProvider.SIGN_UP_PAGE;
 
+/**
+ * Serves the sign_up request.
+ * This command available for not authorized users.
+ */
 public class SignUpCommand extends AbstractCommand {
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {

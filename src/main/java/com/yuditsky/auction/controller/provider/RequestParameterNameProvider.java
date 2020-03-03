@@ -1,6 +1,9 @@
 package com.yuditsky.auction.controller.provider;
 
-public class RequestParametersNameProvider {
+/**
+ * Contains all request parameter names and provides them.
+ */
+public class RequestParameterNameProvider {
     public static final String LOT_ID = "lotId";
     public static final String USER_ID = "userId";
     public static final String AUCTION_ID = "auctionId";

@@ -1,5 +1,8 @@
 package com.yuditsky.auction.controller.provider;
 
+/**
+ * Contains all jsp page paths and provides them.
+ */
 public class JspPageProvider {
     public static final String SIGN_IN_PAGE = "/jsp/sign_in.jsp";
     public static final String AUCTIONS_PAGE = "/jsp/auctions.jsp";

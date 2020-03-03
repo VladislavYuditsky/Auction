@@ -7,8 +7,11 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
 import static com.yuditsky.auction.controller.provider.ServletPathProvider.BAN;
-import static com.yuditsky.auction.controller.provider.SessionAttributesNameProvider.BLOCKED;
+import static com.yuditsky.auction.controller.provider.SessionAttributeNameProvider.BLOCKED;
 
+/**
+ * Filters user requests depending on whether they are blocked or not.
+ */
 public class BlockedFilter implements Filter {
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain chain) throws IOException, ServletException {

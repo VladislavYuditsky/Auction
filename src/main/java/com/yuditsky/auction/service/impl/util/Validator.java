@@ -1,4 +1,4 @@
-package com.yuditsky.auction.service.util;
+package com.yuditsky.auction.service.impl.util;
 
 import com.yuditsky.auction.entity.Bid;
 import com.yuditsky.auction.entity.Lot;
@@ -8,12 +8,12 @@ import java.math.BigDecimal;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static com.yuditsky.auction.service.util.Constant.NULL;
+import static com.yuditsky.auction.service.impl.util.Constant.NULL;
 
 public class Validator {
     private Pattern loginPattern = Pattern.compile("^[a-zA-Z1-9]{3,10}$");
     private Pattern passwordPattern = Pattern.compile("^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=\\S+$).{5,10}$");
-    private Pattern emailPattern = Pattern.compile("^\\S+@\\S+\\.\\S+$");
+    private Pattern emailPattern = Pattern.compile("^\\S+@\\S+.\\S+${3,127}$");
 
     public boolean checkLogin(String login) {
         return checkString(login, loginPattern);

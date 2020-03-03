@@ -19,12 +19,16 @@ import java.math.BigDecimal;
 
 import static com.yuditsky.auction.controller.provider.JspPageProvider.ERROR_PAGE;
 import static com.yuditsky.auction.controller.provider.MessageProvider.INSUFFICIENT_FUNDS;
-import static com.yuditsky.auction.controller.provider.RequestAttributesNameProvider.MESSAGE;
-import static com.yuditsky.auction.controller.provider.RequestParametersNameProvider.CREDIT_ID;
-import static com.yuditsky.auction.controller.provider.RequestParametersNameProvider.REPAID_SUM;
+import static com.yuditsky.auction.controller.provider.RequestAttributeNameProvider.MESSAGE;
+import static com.yuditsky.auction.controller.provider.RequestParameterNameProvider.CREDIT_ID;
+import static com.yuditsky.auction.controller.provider.RequestParameterNameProvider.REPAID_SUM;
 import static com.yuditsky.auction.controller.provider.ServletPathProvider.USER_CREDITS;
-import static com.yuditsky.auction.controller.provider.SessionAttributesNameProvider.ID;
+import static com.yuditsky.auction.controller.provider.SessionAttributeNameProvider.ID;
 
+/**
+ * Serves the repay_credit request.
+ * This command available only for authorized users.
+ */
 public class RepayCreditCommand extends AbstractCommand {
     private final static Logger logger = LogManager.getLogger(RepayCreditCommand.class);
 

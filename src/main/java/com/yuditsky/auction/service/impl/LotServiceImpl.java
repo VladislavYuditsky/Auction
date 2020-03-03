@@ -5,7 +5,7 @@ import com.yuditsky.auction.dao.DAOFactory;
 import com.yuditsky.auction.dao.LotDAO;
 import com.yuditsky.auction.entity.*;
 import com.yuditsky.auction.service.*;
-import com.yuditsky.auction.service.util.Validator;
+import com.yuditsky.auction.service.impl.util.Validator;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

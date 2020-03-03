@@ -17,9 +17,13 @@ import java.math.BigDecimal;
 
 import static com.yuditsky.auction.controller.provider.JspPageProvider.ERROR_PAGE;
 import static com.yuditsky.auction.controller.provider.JspPageProvider.USER_BALANCE_PAGE;
-import static com.yuditsky.auction.controller.provider.RequestAttributesNameProvider.BALANCE;
-import static com.yuditsky.auction.controller.provider.SessionAttributesNameProvider.ID;
+import static com.yuditsky.auction.controller.provider.RequestAttributeNameProvider.BALANCE;
+import static com.yuditsky.auction.controller.provider.SessionAttributeNameProvider.ID;
 
+/**
+ * Serves the user_balance request.
+ * This command available only for authorized users.
+ */
 public class UserBalanceCommand extends AbstractCommand {
     private final static Logger logger = LogManager.getLogger(UserBalanceCommand.class);
 

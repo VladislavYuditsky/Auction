@@ -7,8 +7,8 @@ import com.yuditsky.auction.entity.User;
 import com.yuditsky.auction.entity.UserRole;
 import com.yuditsky.auction.service.ServiceException;
 import com.yuditsky.auction.service.UserService;
-import com.yuditsky.auction.service.util.Encoder;
-import com.yuditsky.auction.service.util.Validator;
+import com.yuditsky.auction.service.impl.util.Encoder;
+import com.yuditsky.auction.service.impl.util.Validator;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -33,7 +33,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public boolean save(User user) throws ServiceException {
         try {
-            if(!validator.checkUser(user)){
+            if (!validator.checkUser(user)) {
                 throw new ServiceException("Invalid user data");
             }
 
@@ -59,7 +59,7 @@ public class UserServiceImpl implements UserService {
         try {
             User user = userDAO.findByLogin(login);
 
-            if(user != null && !encoder.checkPassword(password, user.getPassword())){
+            if (user != null && !encoder.checkPassword(password, user.getPassword())) {
                 user = null;
             }
 
@@ -103,17 +103,15 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void updateSettings(User user, String email, String password) throws ServiceException {
-        if (password != null && !password.equals("")) {
+        if (validator.checkPassword(password)) {
             updatePassword(user, password);
         }
 
-        if (email != null && !email.equals("")) {
+        if (validator.checkEmail(email)) {
             user.setEmail(email);
         }
 
-        if (password != null | email != null) {
-            update(user);
-        }
+        update(user);
     }
 
     @Override
@@ -128,7 +126,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void addBalance(User user, BigDecimal sum) throws ServiceException {
-        if(!validator.checkBigDecimal(sum)){
+        if (!validator.checkBigDecimal(sum)) {
             throw new ServiceException("Invalid sum data");
         }
 
@@ -139,7 +137,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void subtractBalance(User user, BigDecimal sum) throws ServiceException {
-        if(!validator.checkBigDecimal(sum)){
+        if (!validator.checkBigDecimal(sum)) {
             throw new ServiceException("Invalid sum data");
         }
 
@@ -150,7 +148,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void changeBlockStatus(User user) throws ServiceException {
-        if(user.isBlocked()){
+        if (user.isBlocked()) {
             user.setBlocked(false);
         } else {
             user.setBlocked(true);
@@ -170,18 +168,8 @@ public class UserServiceImpl implements UserService {
         }
     }
 
-    @Override
-    public void blockDebtors() throws ServiceException {
-        try {
-            userDAO.blockDebtors();
-        } catch (DAOException e) {
-            logger.error("Can't blockDebtors debtors", e);
-            throw new ServiceException(e);
-        }
-    }
-
     private void updatePassword(User user, String password) throws ServiceException {
-        if(!validator.checkPassword(password)){
+        if (!validator.checkPassword(password)) {
             throw new ServiceException("Invalid password");
         }
 

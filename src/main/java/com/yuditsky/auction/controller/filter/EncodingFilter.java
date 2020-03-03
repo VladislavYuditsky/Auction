@@ -3,6 +3,9 @@ package com.yuditsky.auction.controller.filter;
 import javax.servlet.*;
 import java.io.IOException;
 
+/**
+ * Sets utf-8 encoding for request.
+ */
 public class EncodingFilter implements Filter {
     private static final String ENCODING = "UTF-8";
 

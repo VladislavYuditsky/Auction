@@ -22,4 +22,6 @@ public interface CreditService {
     void createCredit(int borrowerId, BigDecimal sum) throws ServiceException;
 
     List<Integer> findDebtors() throws ServiceException;
+
+    void blockDebtors() throws ServiceException;
 }

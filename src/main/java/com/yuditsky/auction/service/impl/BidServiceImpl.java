@@ -5,7 +5,7 @@ import com.yuditsky.auction.dao.DAOException;
 import com.yuditsky.auction.dao.DAOFactory;
 import com.yuditsky.auction.entity.*;
 import com.yuditsky.auction.service.*;
-import com.yuditsky.auction.service.util.Validator;
+import com.yuditsky.auction.service.impl.util.Validator;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -13,8 +13,8 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import static com.yuditsky.auction.service.util.Constant.NULL;
-import static com.yuditsky.auction.service.util.Constant.REVERS_AUCTION_COEFFICIENT;
+import static com.yuditsky.auction.service.impl.util.Constant.NULL;
+import static com.yuditsky.auction.service.impl.util.Constant.REVERS_AUCTION_COEFFICIENT;
 import static java.math.BigDecimal.ROUND_DOWN;
 
 public class BidServiceImpl implements BidService {

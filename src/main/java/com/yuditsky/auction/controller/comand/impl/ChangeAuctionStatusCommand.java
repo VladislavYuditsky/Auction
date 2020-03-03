@@ -15,10 +15,14 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 import static com.yuditsky.auction.controller.provider.JspPageProvider.ERROR_PAGE;
-import static com.yuditsky.auction.controller.provider.RequestParametersNameProvider.AUCTION_ID;
+import static com.yuditsky.auction.controller.provider.RequestParameterNameProvider.AUCTION_ID;
 import static com.yuditsky.auction.controller.provider.ServletPathProvider.AUCTIONS;
 import static com.yuditsky.auction.controller.provider.ServletPathProvider.PROPOSED_AUCTIONS;
 
+/**
+ * Serves the change_auction_status request.
+ * This command available only for admin.
+ */
 public class ChangeAuctionStatusCommand extends AbstractCommand {
     private final static Logger logger = LogManager.getLogger(ChangeAuctionStatusCommand.class);
 

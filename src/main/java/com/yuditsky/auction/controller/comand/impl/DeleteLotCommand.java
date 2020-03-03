@@ -17,11 +17,15 @@ import java.io.IOException;
 
 import static com.yuditsky.auction.controller.provider.JspPageProvider.ERROR_PAGE;
 import static com.yuditsky.auction.controller.provider.MessageProvider.AUCTION_NOT_DELETED;
-import static com.yuditsky.auction.controller.provider.RequestAttributesNameProvider.MESSAGE;
-import static com.yuditsky.auction.controller.provider.RequestParametersNameProvider.LOT_ID;
+import static com.yuditsky.auction.controller.provider.RequestAttributeNameProvider.MESSAGE;
+import static com.yuditsky.auction.controller.provider.RequestParameterNameProvider.LOT_ID;
 import static com.yuditsky.auction.controller.provider.ServletPathProvider.USER_LOTS;
-import static com.yuditsky.auction.controller.provider.SessionAttributesNameProvider.ID;
+import static com.yuditsky.auction.controller.provider.SessionAttributeNameProvider.ID;
 
+/**
+ * Serves the delete_lot request.
+ * This command available only for authorized users.
+ */
 public class DeleteLotCommand extends AbstractCommand {
     private final static Logger logger = LogManager.getLogger(DeleteLotCommand.class);
 

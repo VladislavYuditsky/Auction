@@ -9,6 +9,4 @@ import java.util.List;
 public interface UserDAO extends GenericDAO<User> {
 
     User findByLogin(String login) throws DAOException;
-
-    void blockDebtors() throws DAOException;
 }

@@ -14,4 +14,6 @@ public interface CreditDAO extends GenericDAO<Credit> {
     void updateBalance(Credit credit, BigDecimal newBalance) throws DAOException;
 
     List<Integer> findDebtors() throws DAOException;
+
+    void blockDebtors() throws DAOException;
 }

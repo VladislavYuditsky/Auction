@@ -19,9 +19,13 @@ import java.util.List;
 import static com.yuditsky.auction.controller.comand.impl.util.PaginationHelper.NUMBER_OF_RECORDS_ON_PAGE;
 import static com.yuditsky.auction.controller.provider.JspPageProvider.AUCTIONS_PAGE;
 import static com.yuditsky.auction.controller.provider.JspPageProvider.ERROR_PAGE;
-import static com.yuditsky.auction.controller.provider.RequestAttributesNameProvider.LOTS;
-import static com.yuditsky.auction.controller.provider.RequestParametersNameProvider.*;
+import static com.yuditsky.auction.controller.provider.RequestAttributeNameProvider.LOTS;
+import static com.yuditsky.auction.controller.provider.RequestParameterNameProvider.*;
 
+/**
+ * Serves the auctions request.
+ * This command available for all users.
+ */
 public class AuctionsCommand extends AbstractCommand {
     private final static Logger logger = LogManager.getLogger(AuctionsCommand.class);
 

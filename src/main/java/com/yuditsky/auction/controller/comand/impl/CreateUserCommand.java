@@ -16,9 +16,13 @@ import java.io.IOException;
 import static com.yuditsky.auction.controller.provider.JspPageProvider.ERROR_PAGE;
 import static com.yuditsky.auction.controller.provider.JspPageProvider.SIGN_UP_PAGE;
 import static com.yuditsky.auction.controller.provider.MessageProvider.USER_ALREADY_EXISTS;
-import static com.yuditsky.auction.controller.provider.RequestParametersNameProvider.*;
+import static com.yuditsky.auction.controller.provider.RequestParameterNameProvider.*;
 import static com.yuditsky.auction.controller.provider.ServletPathProvider.SIGN_IN;
 
+/**
+ * Serves the create_user request.
+ * This command available only for not authorized users.
+ */
 public class CreateUserCommand extends AbstractCommand {
     private final static Logger logger = LogManager.getLogger(CreateUserCommand.class);
 
