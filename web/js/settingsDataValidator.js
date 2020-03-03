@@ -3,7 +3,7 @@ document.getElementById("form").addEventListener('submit',
         let isValid = true;
 
         const passwordPattern = /^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=\S+$).{5,10}$/;
-        const emailPattern = /^\S+@\S+\.\S+$/;
+        const emailPattern = /^\S+@\S+\.\S+${3,127}$/;
 
         let password = document.getElementById("password").value;
         let email = document.getElementById("email").value;

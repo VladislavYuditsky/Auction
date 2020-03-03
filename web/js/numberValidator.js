@@ -2,7 +2,7 @@ document.getElementById("formWithNumber").addEventListener('submit',
     function validate(e) {
         let isValid = true;
 
-        const numberPattern = /^[0-9]+$/;
+        const numberPattern = /^[0-9.]+$/;
 
         let number = document.getElementById("number").value;
 
